@@ -40,9 +40,9 @@ public class Team01Driver {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				userType = userSelect.getSelection();
-				userSelect.setVisible(false);
-				mainMenu.setVisible(true);
+				userType = userSelect.getSelection(); // set the global userType
+				userSelect.setVisible(false); // hide the user selection menu
+				mainMenu.setVisible(true); // show the main menu frame
 			}
 			
 		});
