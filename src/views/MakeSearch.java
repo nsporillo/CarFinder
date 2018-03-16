@@ -1,13 +1,24 @@
 package views;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import main.Team01Driver;
+import java.awt.GridBagLayout;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.JSpinner;
+import javax.swing.JTree;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class MakeSearch extends JFrame {
 
@@ -19,11 +30,10 @@ public class MakeSearch extends JFrame {
 	public MakeSearch() {
 		setTitle("Search By Make");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, Team01Driver.WIDTH, Team01Driver.HEIGHT);
+		setBounds(100, 100, 800, 500);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		contentPane.setLayout(null);
 	}
-
 }
