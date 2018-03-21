@@ -13,6 +13,7 @@ import views.UserSelect;
 public class Team01Driver {
 	
 	private static Team01Driver driver;
+	private static DBConnector dbConnector;
 
 	private UserSelect userSelect;
 	private MainMenu mainMenu;
@@ -24,13 +25,21 @@ public class Team01Driver {
 	
 	private UserType userType;
 	
-	
 	public static void main(String[] args) {
 		driver = new Team01Driver();
+		//TODO: Get DB setup and maybe load credentials from a config file?
+		//dbConnector = new DBConnector(null, null, null);
 	}
-	
+
+	/*
+	 * Singleton patterns for the driver and db connector.
+	 */
 	public static Team01Driver getDriver() {
 		return driver;
+	}
+	
+	public static DBConnector getDB() {
+		return dbConnector;
 	}
 	
 	public Team01Driver() {
@@ -49,6 +58,7 @@ public class Team01Driver {
 			public void actionPerformed(ActionEvent e) {
 				userType = userSelect.getSelection(); // set the global userType
 				userSelect.setVisible(false); // hide the user selection menu
+				userSelect = null; // we can destroy this, wont be needed anymore
 				mainMenu.setVisible(true); // show the main menu frame
 			}
 			
@@ -86,6 +96,10 @@ public class Team01Driver {
 	}
 
 	public UserType getUserType() {
+		if (userType == null) {
+			return UserType.NONE;
+		}
+		
 		return userType;
 	}
 }
