@@ -2,6 +2,6 @@ package main;
 
 public enum UserType {
 
-	CUSTOMER, EMPLOYEE, ANALYST;
+	NONE, CUSTOMER, EMPLOYEE, ANALYST;
 
 }
