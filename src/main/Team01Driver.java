@@ -6,7 +6,7 @@ import views.DealerSearch;
 import views.DealerView;
 import views.MainMenu;
 import views.MakeSearch;
-import views.MakeView;
+import views.VehicleView;
 import views.SalesView;
 import views.UserSelect;
 
@@ -19,7 +19,7 @@ public class Team01Driver {
 	private MainMenu mainMenu;
 	private MakeSearch makeSearch;
 	private DealerSearch dealerSearch;
-	private MakeView makeView;
+	private VehicleView makeView;
 	private DealerView dealerView;
 	private SalesView salesView;
 	
@@ -47,7 +47,7 @@ public class Team01Driver {
 		mainMenu = new MainMenu();
 		makeSearch = new MakeSearch();
 		dealerSearch = new DealerSearch();
-		makeView = new MakeView();
+		makeView = new VehicleView();
 		dealerView = new DealerView();
 		salesView = new SalesView();
 		
@@ -83,7 +83,7 @@ public class Team01Driver {
 		return dealerSearch;
 	}
 
-	public MakeView getMakeView() {
+	public VehicleView getMakeView() {
 		return makeView;
 	}
 

@@ -16,7 +16,7 @@ import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
 import main.Team01Driver;
-import objects.Dealer;
+import models.Dealer;
 
 public class DealerSearch extends JFrame {
 

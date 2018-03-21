@@ -1,4 +1,4 @@
-package objects;
+package models;
 
 public class Customer {
 

@@ -15,7 +15,7 @@ import javax.swing.border.EmptyBorder;
 
 import main.Team01Driver;
 import main.UserType;
-import objects.Dealer;
+import models.Dealer;
 
 public class DealerView extends JFrame {
 
@@ -39,10 +39,12 @@ public class DealerView extends JFrame {
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 300);
+		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		setContentPane(contentPane);
+
 		
 		JLabel lblNewLabel = new JLabel("Name:");
 		lblNewLabel.setBounds(5, 13, 55, 14);
