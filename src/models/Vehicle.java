@@ -7,22 +7,19 @@ public class Vehicle {
 	private String model;
 	private int year;
 	private int price;
-	private String interiorColor, exteriorColor;
-	private String engine, transmission, drivetrain, trim;
+	private String color;
+	private String engine, transmission;
 	
-	public Vehicle(String vin, String brand, String model, int year, int price, String interiorColor,
-			String exteriorColor, String engine, String transmission, String drivetrain, String trim) {
+	public Vehicle(String vin, String brand, String model, int year, int price, String color,
+				   String engine, String transmission) {
 		this.vin = vin;
 		this.brand = brand;
 		this.model = model;
 		this.year = year;
 		this.price = price;
-		this.interiorColor = interiorColor;
-		this.exteriorColor = exteriorColor;
+		this.color = color;
 		this.engine = engine;
 		this.transmission = transmission;
-		this.drivetrain = drivetrain;
-		this.trim = trim;
 	}
 
 	public String getVin() {
@@ -65,20 +62,12 @@ public class Vehicle {
 		this.price = price;
 	}
 
-	public String getInteriorColor() {
-		return interiorColor;
+	public String getColor() {
+		return this.color;
 	}
 
-	public void setInteriorColor(String interiorColor) {
-		this.interiorColor = interiorColor;
-	}
-
-	public String getExteriorColor() {
-		return exteriorColor;
-	}
-
-	public void setExteriorColor(String exteriorColor) {
-		this.exteriorColor = exteriorColor;
+	public void setColor(String color) {
+		this.color = color;
 	}
 
 	public String getEngine() {
@@ -95,21 +84,5 @@ public class Vehicle {
 
 	public void setTransmission(String transmission) {
 		this.transmission = transmission;
-	}
-
-	public String getDrivetrain() {
-		return drivetrain;
-	}
-
-	public void setDrivetrain(String drivetrain) {
-		this.drivetrain = drivetrain;
-	}
-
-	public String getTrim() {
-		return trim;
-	}
-
-	public void setTrim(String trim) {
-		this.trim = trim;
 	}
 }

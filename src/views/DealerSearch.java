@@ -63,16 +63,14 @@ public class DealerSearch extends JFrame {
 		gbc_textField.gridy = 0;
 		contentPane.add(nameField, gbc_textField);
 		
-		btnFilterByName.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String value = (String) nameField.getText();
-				
-				//TODO: Add more validation?
-				if (value != null) {
-					filterDealersByName(value);
-				}
-			}
-		});
+		btnFilterByName.addActionListener(e -> {
+            String value = nameField.getText();
+
+            //TODO: Add more validation?
+            if (value != null) {
+                filterDealersByName(value);
+            }
+        });
 		
 		GridBagConstraints gbc_btnFilterByName = new GridBagConstraints();
 		gbc_btnFilterByName.insets = new Insets(0, 0, 5, 5);
@@ -96,16 +94,14 @@ public class DealerSearch extends JFrame {
 		gbc_textField_1.gridy = 0;
 		contentPane.add(idField, gbc_textField_1);
 		
-		btnFindByID.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String value = (String) idField.getText();
-				
-				//TODO: Add more validation?
-				if (value != null) {
-					loadDealerById(value);
-				}
-			}
-		});
+		btnFindByID.addActionListener(e -> {
+            String value = idField.getText();
+
+            //TODO: Add more validation?
+            if (value != null) {
+                loadDealerById(value);
+            }
+        });
 		GridBagConstraints gbc_btnSearch = new GridBagConstraints();
 		gbc_btnSearch.insets = new Insets(0, 0, 5, 5);
 		gbc_btnSearch.gridx = 7;
@@ -134,7 +130,6 @@ public class DealerSearch extends JFrame {
 		String old = textArea.getText();
 		textArea.setText(old + " -> " + name);
 	}
-	
 
 	private void loadDealerById(String id) {
 		// TODO: Load dealer view for the specified dealer
