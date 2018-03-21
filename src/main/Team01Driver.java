@@ -96,10 +96,6 @@ public class Team01Driver {
 	}
 
 	public UserType getUserType() {
-		if (userType == null) {
-			return UserType.NONE;
-		}
-		
 		return userType;
 	}
 }
