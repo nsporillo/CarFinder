@@ -11,6 +11,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import main.Team01Driver;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 public class MainMenu extends JFrame {
 
 	private JPanel contentPane;
@@ -24,13 +28,13 @@ public class MainMenu extends JFrame {
 		setBounds(100, 100, 650, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		setContentPane(contentPane);
 		contentPane.setLayout(new GridLayout(0, 1, 0, 0));
 		
 		JButton btnSearchDealers = new JButton("Search Dealers");
 		btnSearchDealers.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
+			public void actionPerformed(ActionEvent e) {
+				//MainMenu.this.setVisible(false);
+				Team01Driver.getDriver().getDealerSearch().setVisible(true);
 			}
 		});
 		btnSearchDealers.setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -41,13 +45,16 @@ public class MainMenu extends JFrame {
 		JButton btnSearchCars = new JButton("Search Cars");
 		btnSearchCars.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				//MainMenu.this.setVisible(false);
+				Team01Driver.getDriver().getMakeSearch().setVisible(true);
 			}
 		});
 		btnSearchCars.setForeground(Color.BLACK);
 		btnSearchCars.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnSearchCars.setBackground(Color.GREEN);
 		contentPane.add(btnSearchCars);
+		
+		setContentPane(contentPane);
 	}
 
 }
