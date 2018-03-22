@@ -2,28 +2,48 @@ package models;
 
 public class Customer {
 
-	private String name;
-	private String street, city, zip;
+	private int id;
+	private String firstName;
+	private String lastName;
+	private String street, city, state;
+	private int zip;
 	private String phone;
-	private String gender;
+	private int gender;
 	private int annualIncome;
 
-	public Customer(String name, String street, String city, String zip, String phone, String gender, int annualIncome) {
-		this.name = name;
+	public Customer(int customerID, String firstName, String lastName, String street, String state, int zip, String phone, int gender, int annualIncome) {
+		this.id = customerID;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.street = street;
 		this.city = city;
 		this.zip = zip;
+		this.state = state;
 		this.phone = phone;
 		this.gender = gender;
 		this.annualIncome = annualIncome;
 	}
 
-	public String getName() {
-		return name;
+	public int getID() { return this.id; }
+
+	public void setID(int id) {
+		this.id = id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getFirstName() {
+		return this.firstName;
+	}
+
+	public void setFirstName(String name) {
+		this.firstName = name;
+	}
+
+	public String getLastName() {
+		return this.lastName;
+	}
+
+	public void setLastName(String name) {
+		this.lastName = name;
 	}
 
 	public String getStreet() {
@@ -42,13 +62,17 @@ public class Customer {
 		this.city = city;
 	}
 
-	public String getZip() {
+	public int getZip() {
 		return zip;
 	}
 
-	public void setZip(String zip) {
+	public void setZip(int zip) {
 		this.zip = zip;
 	}
+
+	public String getState() {return state;}
+
+	public void setState(String state) {this.state = state;}
 
 	public String getPhone() {
 		return phone;
@@ -58,11 +82,11 @@ public class Customer {
 		this.phone = phone;
 	}
 
-	public String getGender() {
+	public int getGender() {
 		return gender;
 	}
 
-	public void setGender(String gender) {
+	public void setGender(int gender) {
 		this.gender = gender;
 	}
 

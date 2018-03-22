@@ -88,10 +88,12 @@ public class DBConnector {
     }
 
     try {
-      customerTable.populateCustomerTableFromCSV(main.getConnection(), "CustomerData.csv");
+      customerTable.populateCustomerTableFromCSV(main.getConnection(), "tempCustomerData.csv");
     } catch (SQLException e) {
       e.printStackTrace();
     }
+
+    customerTable.printCustomerTable(main.getConnection());
 
   }
 }
