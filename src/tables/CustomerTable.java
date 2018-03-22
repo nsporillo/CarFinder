@@ -25,7 +25,7 @@ public class CustomerTable {
       String street, String city, int zip, String state, int phone, int gender, int income) {
 
     String query = String.format("INSERT INTO Customer "
-            + "VALUES(%d,\'%s\',\'%s\',\'%s\',\'%s\',\'%d\'\'%s\'\'%d\'\'%d\'\'%d\');", customerID,
+            + "VALUES(%d,\'%s\',\'%s\',\'%s\',\'%s\',\'%d\',\'%s\',\'%d\',\'%d\',\'%d\');", customerID,
         firstName, lastName, street, city, zip, state, phone, gender, income);
 
     try {
