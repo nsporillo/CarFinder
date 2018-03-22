@@ -25,7 +25,7 @@ import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-public class MakeSearch extends JFrame {
+public class MakeSearchView extends JFrame {
 
 	private JPanel mainContentPane;
 
@@ -42,7 +42,7 @@ public class MakeSearch extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public MakeSearch() {
+	public MakeSearchView() {
 		setResizable(false);
 		setTitle("Search By Make");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

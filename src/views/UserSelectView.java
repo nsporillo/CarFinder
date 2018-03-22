@@ -21,7 +21,7 @@ import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
 import javax.swing.SpringLayout;
 
-public class UserSelect extends JFrame {
+public class UserSelectView extends JFrame {
 
 	private JPanel contentPane;
 	private JButton btnBegin;
@@ -31,7 +31,7 @@ public class UserSelect extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public UserSelect() {
+	public UserSelectView() {
 		setTitle("User Selection");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 300, 150);
