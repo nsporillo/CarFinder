@@ -5,20 +5,23 @@ public class Customer {
 	private int id;
 	private String firstName;
 	private String lastName;
-	private String street, city, state;
+	private String street;
+	private String city;
+	private String state;
 	private int zip;
 	private String phone;
 	private int gender;
 	private int annualIncome;
 
-	public Customer(int customerID, String firstName, String lastName, String street, String state, int zip, String phone, int gender, int annualIncome) {
+	public Customer(int customerID, String firstName, String lastName, String street,
+      String city, String state, int zip, String phone, int gender, int annualIncome) {
 		this.id = customerID;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.street = street;
 		this.city = city;
-		this.zip = zip;
 		this.state = state;
+    this.zip = zip;
 		this.phone = phone;
 		this.gender = gender;
 		this.annualIncome = annualIncome;
@@ -62,6 +65,10 @@ public class Customer {
 		this.city = city;
 	}
 
+  public String getState() {return state;}
+
+  public void setState(String state) {this.state = state;}
+
 	public int getZip() {
 		return zip;
 	}
@@ -69,10 +76,6 @@ public class Customer {
 	public void setZip(int zip) {
 		this.zip = zip;
 	}
-
-	public String getState() {return state;}
-
-	public void setState(String state) {this.state = state;}
 
 	public String getPhone() {
 		return phone;
