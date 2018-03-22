@@ -19,8 +19,8 @@ public class CustomerTable {
    *
    * Does not create the table. It must already be created
    *
-   * @param conn: database connection to work with
-   * @param fileName
+   * @param conn     database connection to work with
+   * @param fileName fileName of CSV file containing customer table data
    * @throws SQLException
    */
   public static void populateCustomerTableFromCSV(Connection conn, String fileName) throws SQLException {
@@ -47,23 +47,24 @@ public class CustomerTable {
   /**
    * Adds a single customer to the database
    *
-   * @param conn
-   * @param customerID
-   * @param firstName
-   * @param lastName
-   * @param street
-   * @param zip
-   * @param state
-   * @param phone
-   * @param gender
-   * @param income
+   * @param conn        connection
+   * @param customerID  customer primary key
+   * @param firstName   first name
+   * @param lastName    last name
+   * @param street      street address
+   * @param city        city of address
+   * @param state       state of address
+   * @param zip         zip code of address
+   * @param phone       phone number
+   * @param gender      gender
+   * @param income      annual income
    */
   public static void addCustomer(Connection conn, int customerID, String firstName, String lastName,
-      String street, int zip, String state, int phone, int gender, int income) {
+      String street, String city, String state, int zip, int phone, int gender, int income) {
 
     String query = String.format("INSERT INTO Customer "
-            + "VALUES(%d,\'%s\',\'%s\',\'%s\',\'%d\',\'%s\',\'%s\',\'%d\',\'%d\');", customerID,
-        firstName, lastName, street, zip, state, phone, gender, income);
+            + "VALUES(%d,\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%d\',\'%s\',\'%d\',\'%d\');", customerID,
+        firstName, lastName, street, city, state, zip, phone, gender, income);
 
     try {
       /**
