@@ -16,7 +16,7 @@ public class ModelTable {
    */
   public static void addModel(Connection conn, int modelID, String brandName, String bodyStyle) {
 
-    String query = String.format("INSERT INTO Customer "
+    String query = String.format("INSERT INTO Model "
             + "VALUES(%d,\'%s\',\'%s\');", modelID, brandName, bodyStyle);
 
     try {
