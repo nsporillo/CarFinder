@@ -1,8 +1,13 @@
 package main;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DBConnector {
 
@@ -56,13 +61,29 @@ public class DBConnector {
 
     main.createConnection(location, user, password);
 
-    /**
-    try {
+    String fileName = "SQLTables.txt";
+    String line = null;
 
+    try { // Reads and Executes SQL commands to create tables under /tables
+      FileReader fileReader = new FileReader(fileName);
+      BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+      while ((line = bufferedReader.readLine()) != null) {
+        Statement stmt = main.getConnection().createStatement();
+        stmt.execute(line);
+      }
+
+      bufferedReader.close();
+
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
     } catch (SQLException e) {
       e.printStackTrace();
     }
-     */
+
+
 
   }
 }
