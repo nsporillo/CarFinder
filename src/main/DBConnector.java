@@ -57,7 +57,7 @@ public class DBConnector {
     DBConnector main = new DBConnector();
     CustomerTable customerTable = new CustomerTable();
 
-    File file = new File("database/SQLTables.txt");
+    File file = new File("database/SQLTables.sql");
     String path = file.getAbsolutePath();
     String line = null;
 
