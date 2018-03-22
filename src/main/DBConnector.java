@@ -1,6 +1,7 @@
 package main;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -63,11 +64,12 @@ public class DBConnector {
 
     main.createConnection(location, user, password);
 
-    String fileName = "SQLTables.txt";
+    File file = new File("database/SQLTables.txt");
+    String path = file.getAbsolutePath();
     String line = null;
 
     try { // Reads and Executes SQL commands to create tables under /tables
-      FileReader fileReader = new FileReader(fileName);
+      FileReader fileReader = new FileReader(path);
       BufferedReader bufferedReader = new BufferedReader(fileReader);
 
       while ((line = bufferedReader.readLine()) != null) {
@@ -86,7 +88,7 @@ public class DBConnector {
     }
 
     try {
-      customerTable.populateCustomerTableFromCSV(main.getConnection(), "/CustomerData.csv");
+      customerTable.populateCustomerTableFromCSV(main.getConnection(), "CustomerData.csv");
     } catch (SQLException e) {
       e.printStackTrace();
     }
