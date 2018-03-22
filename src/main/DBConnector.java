@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import tables.CustomerTable;
 
 public class DBConnector {
 
@@ -53,6 +54,7 @@ public class DBConnector {
 
   public static void main(String[] args) {
     DBConnector main = new DBConnector();
+    CustomerTable customerTable = new CustomerTable();
 
     // Location of the database
     String location = "~/database"; // TODO maybe change location/user/pw to not be hardcoded
@@ -83,7 +85,11 @@ public class DBConnector {
       e.printStackTrace();
     }
 
-
+    try {
+      customerTable.populateCustomerTableFromCSV(main.getConnection(), "/CustomerData.csv");
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
 
   }
 }
