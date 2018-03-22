@@ -2,23 +2,23 @@ package main;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import views.DealerSearch;
+import views.DealerSearchView;
 import views.DealerView;
-import views.MainMenu;
-import views.MakeSearch;
+import views.MainMenuView;
+import views.MakeSearchView;
 import views.VehicleView;
 import views.SalesView;
-import views.UserSelect;
+import views.UserSelectView;
 
 public class Team01Driver {
 	
 	private static Team01Driver driver;
 	private static DBConnector dbConnector;
 
-	private UserSelect userSelect;
-	private MainMenu mainMenu;
-	private MakeSearch makeSearch;
-	private DealerSearch dealerSearch;
+	private UserSelectView userSelect;
+	private MainMenuView mainMenu;
+	private MakeSearchView makeSearch;
+	private DealerSearchView dealerSearch;
 	private VehicleView makeView;
 	private DealerView dealerView;
 	private SalesView salesView;
@@ -43,10 +43,10 @@ public class Team01Driver {
 	}
 	
 	public Team01Driver() {
-		userSelect = new UserSelect();
-		mainMenu = new MainMenu();
-		makeSearch = new MakeSearch();
-		dealerSearch = new DealerSearch();
+		userSelect = new UserSelectView();
+		mainMenu = new MainMenuView();
+		makeSearch = new MakeSearchView();
+		dealerSearch = new DealerSearchView();
 		makeView = new VehicleView();
 		dealerView = new DealerView();
 		salesView = new SalesView();
@@ -67,19 +67,19 @@ public class Team01Driver {
 		userSelect.setVisible(true);
 	}
 
-	public UserSelect getUserSelect() {
+	public UserSelectView getUserSelect() {
 		return userSelect;
 	}
 
-	public MainMenu getMainMenu() {
+	public MainMenuView getMainMenu() {
 		return mainMenu;
 	}
 
-	public MakeSearch getMakeSearch() {
+	public MakeSearchView getMakeSearch() {
 		return makeSearch;
 	}
 
-	public DealerSearch getDealerSearch() {
+	public DealerSearchView getDealerSearch() {
 		return dealerSearch;
 	}
 

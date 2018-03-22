@@ -18,7 +18,7 @@ import javax.swing.border.EmptyBorder;
 import main.Team01Driver;
 import models.Dealer;
 
-public class DealerSearch extends JFrame {
+public class DealerSearchView extends JFrame {
 
 	private JPanel contentPane;
 	private JFormattedTextField nameField; // dealer name search field
@@ -28,7 +28,7 @@ public class DealerSearch extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public DealerSearch() {
+	public DealerSearchView() {
 		setTitle("Search Dealers");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 800, 500);
