@@ -88,7 +88,7 @@ public class DBConnector {
     }
 
     try {
-      customerTable.populateCustomerTableFromCSV(main.getConnection(), "tempCustomerData.csv");
+      customerTable.populateCustomerTableFromCSV(main.getConnection(), "newCustomerData.csv"); // TODO
     } catch (SQLException e) {
       e.printStackTrace();
     }

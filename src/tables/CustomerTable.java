@@ -30,11 +30,13 @@ public class CustomerTable {
       String line;
       while((line = br.readLine()) != null){
         String[] split = line.split(",");
-        customer.add(new Customer(Integer.parseInt(split[0]), split[1], split[2], split[3], split[4],
-            Integer.parseInt(split[5]), split[6], Integer.parseInt(split[7]), Integer.parseInt(split[8])));
+        customer.add(new Customer(Integer.parseInt(split[0]), split[1], split[2], (split[3] + " " + split[4]), split[5],
+            split[6], Integer.parseInt(split[7]), split[8], Integer.parseInt(split[9]), Integer.parseInt(split[10])));
       }
       br.close();
     } catch (IOException e) {
+      e.printStackTrace();
+    } catch (NumberFormatException e) {
       e.printStackTrace();
     }
 
@@ -60,7 +62,7 @@ public class CustomerTable {
    * @param income      annual income
    */
   public static void addCustomer(Connection conn, int customerID, String firstName, String lastName,
-      String street, String city, String state, int zip, int phone, int gender, int income) {
+      String street, String city, String state, int zip, String phone, int gender, int income) {
 
     String query = String.format("INSERT INTO Customer "
             + "VALUES(%d,\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%d\',\'%s\',\'%d\',\'%d\');", customerID,
@@ -80,13 +82,13 @@ public class CustomerTable {
   public static String createCustomerInsertSQL(ArrayList<Customer> customer) {
     StringBuilder sb = new StringBuilder();
 
-    sb.append("INSERT INTO Customer (CustomerID, FirstName, LastName, Street, ZIP, State, Phone, Gender, Income) VALUES");
+    sb.append("INSERT INTO Customer (CustomerID, FirstName, LastName, Street, City, State, ZIP, Phone, Gender, Income) VALUES");
 
     for(int i = 0; i < customer.size(); i++){
       Customer c = customer.get(i);
-      sb.append(String.format("(%d,\'%s\',\'%s\',\'%s\',\'%d\',\'%s\',\'%s\',\'%d\',\'%d\')",
-          c.getID(), c.getFirstName(), c.getLastName(), c.getStreet(), c.getZip(),
-          c.getState(), c.getPhone(), c.getGender(), c.getAnnualIncome()));
+      sb.append(String.format("(%d,\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%d\',\'%s\',\'%d\',\'%d\')",
+          c.getID(), c.getFirstName(), c.getLastName(), c.getStreet(), c.getCity(), c.getState(),
+          c.getZip(), c.getPhone(), c.getGender(), c.getAnnualIncome()));
       if( i != customer.size()-1){
         sb.append(",");
       }
@@ -106,16 +108,17 @@ public class CustomerTable {
       ResultSet result = stmt.executeQuery(query);
 
       while(result.next()){
-        System.out.printf("Customer %d: %s %s %s %s %d %s %d %d\n",
+        System.out.printf("Customer %d: %s %s %s %s %s %d %s %d %d\n",
             result.getInt(1),
             result.getString(2),
             result.getString(3),
             result.getString(4),
             result.getString(5),
-            result.getInt(6),
-            result.getString(7),
-            result.getInt(8),
-            result.getInt(9));
+            result.getString(6),
+            result.getInt(7),
+            result.getString(8),
+            result.getInt(9),
+            result.getInt(10));
       }
     } catch (SQLException e) {
       e.printStackTrace();
