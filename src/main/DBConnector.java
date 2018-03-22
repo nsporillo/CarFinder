@@ -26,7 +26,7 @@ public class DBConnector {
   private void createConnection(String location, String user, String password) {
     try {
       // This needs to be on the front of your location
-      String url = "jdbc:h2:" + location;
+      String url = "jdbc:h2:file:" + location;
 
       // This tells it to use the h2 driver
       Class.forName("org.h2.Driver");
@@ -57,16 +57,16 @@ public class DBConnector {
     DBConnector main = new DBConnector();
     CustomerTable customerTable = new CustomerTable();
 
+    File file = new File("database/SQLTables.txt");
+    String path = file.getAbsolutePath();
+    String line = null;
+
     // Location of the database
-    String location = "~/database"; // TODO maybe change location/user/pw to not be hardcoded
+    String location = path;
     String user = "admin";
     String password = "password";
 
     main.createConnection(location, user, password);
-
-    File file = new File("database/SQLTables.txt");
-    String path = file.getAbsolutePath();
-    String line = null;
 
     try { // Reads and Executes SQL commands to create tables under /tables
       FileReader fileReader = new FileReader(path);
