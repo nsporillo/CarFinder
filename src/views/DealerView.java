@@ -136,7 +136,7 @@ public class DealerView extends JFrame {
 		this.dealer = dealer;
 		setTitle("Viewing " + dealer.getName());
 		this.nameField.setText(dealer.getName());
-		this.idField.setText(dealer.getId());
+		this.idField.setText(String.valueOf(dealer.getId()));
 		this.phoneField.setText(dealer.getPhone());
 		this.addressField.setText(dealer.getAddress());
 	}

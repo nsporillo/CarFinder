@@ -134,12 +134,5 @@ public class DealerSearchView extends JFrame {
 	private void loadDealerById(String id) {
 		// TODO: Load dealer view for the specified dealer
 		
-		// Debug code
-		Dealer dealer = new Dealer("BMW of Rochester", id, "4250 W Henrietta Rd Rochester, NY 14623", "(585) 598-1757");
-		super.dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
-		DealerView view = Team01Driver.getDriver().getDealerView();
-		view.prepareView();
-		view.setDealer(dealer);
-		view.setVisible(true);
 	}
 }

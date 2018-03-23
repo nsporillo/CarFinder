@@ -38,4 +38,8 @@ public class Dealer {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+	
+	public String getAddress() {
+		return street + ", " + state + ", " + zip;
+	}
 }
