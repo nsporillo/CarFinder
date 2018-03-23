@@ -2,13 +2,16 @@ package models;
 
 public class Dealer {
 
-	private String name, id, address, phone;
+	private String name, street, state, phone;
+	private int zip, id;
 
-	public Dealer(String name, String id, String address, String phone) {
+	public Dealer(String name, int id, String Street, String State, int zip, String phone) {
 		super();
 		this.name = name;
 		this.id = id;
-		this.address = address;
+		this.street = Street;
+		this.state = State;
+		this.zip = zip;
 		this.phone = phone;
 	}
 
@@ -20,20 +23,12 @@ public class Dealer {
 		this.name = name;
 	}
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
 	}
 
 	public String getPhone() {
