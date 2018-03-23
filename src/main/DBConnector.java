@@ -97,6 +97,7 @@ public class DBConnector {
     }
 
     customerTable.printCustomerTable(main.getConnection());
+    optionTable.printOptionTable(main.getConnection());
 
   }
 }
