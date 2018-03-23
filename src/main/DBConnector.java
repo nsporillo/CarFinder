@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import tables.CustomerTable;
+import tables.OptionTable;
 
 public class DBConnector {
 
@@ -56,6 +57,7 @@ public class DBConnector {
   public static void main(String[] args) {
     DBConnector main = new DBConnector();
     CustomerTable customerTable = new CustomerTable();
+    OptionTable optionTable = new OptionTable();
 
     File file = new File("database/SQLTables.sql");
     String path = file.getAbsolutePath();
@@ -89,6 +91,7 @@ public class DBConnector {
 
     try {
       customerTable.populateCustomerTableFromCSV(main.getConnection(), "newCustomerData.csv"); // TODO
+      optionTable.populateOptionTableFromCSV(main.getConnection(), "CarOptions.csv");
     } catch (SQLException e) {
       e.printStackTrace();
     }
