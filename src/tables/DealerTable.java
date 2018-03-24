@@ -48,7 +48,7 @@ public class DealerTable {
   
   private static String nameGen(String name){
     Random r = new Random();
-    int coolified = r.nextInt() % 5;
+    int coolified = r.nextInt() % 6;
     switch(coolified){
       case(0):
         name += " Motors";
@@ -64,6 +64,9 @@ public class DealerTable {
         return name;
       case(4):
         name += " Vehicles";
+        return name;
+      case(5):
+        name += " Customs";
         return name;
     }
     return "errored";
