@@ -16,7 +16,12 @@ public class DBConnector {
 
   // The connection to the database
   private Connection conn;
+  private String databasePath = new File("database/SQLTables.sql").getAbsolutePath();
 
+  public DBConnector() {
+	  createConnection(databasePath, "admin", "password");
+  }
+  
   /**
    * Create a database connection with the given params
    *
