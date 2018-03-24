@@ -6,6 +6,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -17,6 +18,7 @@ import javax.swing.border.EmptyBorder;
 
 import main.Team01Driver;
 import models.Dealer;
+import tables.DealerTable;
 
 public class DealerSearchView extends JFrame {
 
@@ -121,14 +123,16 @@ public class DealerSearchView extends JFrame {
 	}
 	
 	private void filterDealersByName(String name) {
-		// TODO: Query database for all dealers by this name
-		// TODO: use testArea to display all matching dealers
-		// TODO: All entries will be clickable links which 
-		// TODO: load a DealerView for the clicked dealer
+		List<Dealer> dealers = DealerTable.filterDealersByName(Team01Driver.getDB().getConnection(), name);
 		
-		// Debug code
-		String old = textArea.getText();
-		textArea.setText(old + " -> " + name);
+		if (dealers == null) {
+			textArea.setText("Error");
+		} else {
+			String old = textArea.getText();
+			for (Dealer d : dealers) {
+				textArea.setText(old + "\n" + d.toString());
+			}
+		}
 	}
 
 	private void loadDealerById(String id) {

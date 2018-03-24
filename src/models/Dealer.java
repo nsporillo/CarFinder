@@ -76,4 +76,10 @@ public class Dealer {
 	public String getAddress() {
 		return street + ", " + state + ", " + zip;
 	}
+
+	@Override
+	public String toString() {
+		return "Dealer [name=" + name + ", street=" + street + ", city=" + city + ", state=" + state + ", phone="
+				+ phone + ", zip=" + zip + ", id=" + id + "]";
+	}
 }
