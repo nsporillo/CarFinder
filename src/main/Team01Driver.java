@@ -5,10 +5,10 @@ import java.awt.event.ActionListener;
 import views.DealerSearchView;
 import views.DealerView;
 import views.MainMenuView;
-import views.MakeSearchView;
 import views.VehicleView;
 import views.SalesView;
 import views.UserSelectView;
+import views.VehicleSearchView;
 
 public class Team01Driver {
 	
@@ -17,7 +17,7 @@ public class Team01Driver {
 
 	private UserSelectView userSelect;
 	private MainMenuView mainMenu;
-	private MakeSearchView makeSearch;
+	private VehicleSearchView vehicleSearch;
 	private DealerSearchView dealerSearch;
 	private VehicleView makeView;
 	private DealerView dealerView;
@@ -45,7 +45,7 @@ public class Team01Driver {
 	public Team01Driver() {
 		userSelect = new UserSelectView();
 		mainMenu = new MainMenuView();
-		makeSearch = new MakeSearchView();
+		vehicleSearch = new VehicleSearchView();
 		dealerSearch = new DealerSearchView();
 		makeView = new VehicleView();
 		dealerView = new DealerView();
@@ -75,8 +75,8 @@ public class Team01Driver {
 		return mainMenu;
 	}
 
-	public MakeSearchView getMakeSearch() {
-		return makeSearch;
+	public VehicleSearchView getVehicleSearch() {
+		return vehicleSearch;
 	}
 
 	public DealerSearchView getDealerSearch() {

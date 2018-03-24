@@ -47,7 +47,7 @@ public class MainMenuView extends JFrame {
 		btnSearchCars.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//MainMenu.this.setVisible(false);
-				Team01Driver.getDriver().getMakeSearch().setVisible(true);
+				Team01Driver.getDriver().getVehicleSearch().setVisible(true);
 			}
 		});
 		btnSearchCars.setForeground(Color.BLACK);
