@@ -39,7 +39,7 @@ public class OptionTable {
       e.printStackTrace();
     }
 
-    String sql = createCustomerInsertSQL(option);
+    String sql = createOptionInsertSQL(option);
 
     Statement stmt = conn.createStatement();
     stmt.execute(sql);
@@ -70,7 +70,7 @@ public class OptionTable {
     }
   }
 
-  public static String createCustomerInsertSQL(ArrayList<Option> option) {
+  public static String createOptionInsertSQL(ArrayList<Option> option) {
     StringBuilder sb = new StringBuilder();
 
     sb.append("INSERT INTO Option (OptionID, Color, Engine, Transmission) VALUES");
