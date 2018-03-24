@@ -1,88 +1,91 @@
 package models;
 
+/**
+ * Class containing Vehicle details: VIN, ModelID, OptionID, SaleID, Year, Price
+ */
 public class Vehicle {
 
-	private String vin;
-	private String brand;
-	private String model;
-	private int year;
-	private int price;
-	private String color;
-	private String engine, transmission;
-	
-	public Vehicle(String vin, String brand, String model, int year, int price, String color,
-				   String engine, String transmission) {
-		this.vin = vin;
-		this.brand = brand;
-		this.model = model;
-		this.year = year;
-		this.price = price;
-		this.color = color;
-		this.engine = engine;
-		this.transmission = transmission;
-	}
+    private String vin;
+    private String brand;
+    private String model;
+    private int year;
+    private int price;
+    private String color;
+    private String engine, transmission;
 
-	public String getVin() {
-		return vin;
-	}
+    public Vehicle(String vin, String brand, String model, int year, int price, String color,
+                   String engine, String transmission) {
+        this.vin = vin;
+        this.brand = brand;
+        this.model = model;
+        this.year = year;
+        this.price = price;
+        this.color = color;
+        this.engine = engine;
+        this.transmission = transmission;
+    }
 
-	public void setVin(String vin) {
-		this.vin = vin;
-	}
+    public String getVin() {
+        return vin;
+    }
 
-	public String getBrand() {
-		return brand;
-	}
+    public void setVin(String vin) {
+        this.vin = vin;
+    }
 
-	public void setBrand(String brand) {
-		this.brand = brand;
-	}
+    public String getBrand() {
+        return brand;
+    }
 
-	public String getModel() {
-		return model;
-	}
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
 
-	public void setModel(String model) {
-		this.model = model;
-	}
+    public String getModel() {
+        return model;
+    }
 
-	public int getYear() {
-		return year;
-	}
+    public void setModel(String model) {
+        this.model = model;
+    }
 
-	public void setYear(int year) {
-		this.year = year;
-	}
+    public int getYear() {
+        return year;
+    }
 
-	public int getPrice() {
-		return price;
-	}
+    public void setYear(int year) {
+        this.year = year;
+    }
 
-	public void setPrice(int price) {
-		this.price = price;
-	}
+    public int getPrice() {
+        return price;
+    }
 
-	public String getColor() {
-		return this.color;
-	}
+    public void setPrice(int price) {
+        this.price = price;
+    }
 
-	public void setColor(String color) {
-		this.color = color;
-	}
+    public String getColor() {
+        return this.color;
+    }
 
-	public String getEngine() {
-		return engine;
-	}
+    public void setColor(String color) {
+        this.color = color;
+    }
 
-	public void setEngine(String engine) {
-		this.engine = engine;
-	}
+    public String getEngine() {
+        return engine;
+    }
 
-	public String getTransmission() {
-		return transmission;
-	}
+    public void setEngine(String engine) {
+        this.engine = engine;
+    }
 
-	public void setTransmission(String transmission) {
-		this.transmission = transmission;
-	}
+    public String getTransmission() {
+        return transmission;
+    }
+
+    public void setTransmission(String transmission) {
+        this.transmission = transmission;
+    }
 }

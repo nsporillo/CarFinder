@@ -1,5 +1,8 @@
 package models;
 
+/**
+ * Class containing Model: ModelID, Brand Name and Body Style
+ */
 public class Model {
 
     private int id;
