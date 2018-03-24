@@ -2,6 +2,9 @@ package models;
 
 import java.sql.Timestamp;
 
+/**
+ * Class containing Sale details: SaleID, DealerID, CustomerID, Date, and VIN
+ */
 public class Sale {
 
     private int id;
