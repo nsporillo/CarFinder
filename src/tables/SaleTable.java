@@ -91,6 +91,11 @@ public class SaleTable {
         return sb.toString();
     }
 
+    /**
+     * Prints out SaleTable
+     *
+     * @param conn connection
+     */
     public static void printSaleTable(Connection conn) {
 
         String query = "SELECT * FROM Sale;";

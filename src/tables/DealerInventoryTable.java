@@ -1,6 +1,5 @@
 package tables;
 
-import models.Customer;
 import models.DealerInventory;
 
 import java.sql.Connection;
@@ -52,6 +51,11 @@ public class DealerInventoryTable {
         return sb.toString();
     }
 
+    /**
+     * Prints out DealerInventory
+     *
+     * @param conn connection
+     */
     public static void printDealerInventoryTable(Connection conn) {
 
         String query = "SELECT * FROM DealerInventory;";

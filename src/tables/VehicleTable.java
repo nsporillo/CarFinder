@@ -36,6 +36,11 @@ public class VehicleTable {
         }
     }
 
+    /**
+     * Prints out Vehicle
+     *
+     * @param conn connection
+     */
     public static void printVehicleTable(Connection conn) {
 
         String query = "SELECT * FROM Vehicle;";
