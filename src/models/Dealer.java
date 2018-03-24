@@ -5,79 +5,84 @@ package models;
  */
 public class Dealer {
 
-    private String name, street, city, state, phone;
-    private int zip, id;
+	private String name, street, city, state, phone;
+	private int zip, id;
 
-    public Dealer() {
-    }
+	public Dealer() {}
+	
+	public Dealer(String name, int id, String street, String city, String state, int zip, String phone) {
+		this.name = name;
+		this.id = id;
+		this.street = street;
+		this.city = city;
+		this.state = state;
+		this.zip = zip;
+		this.phone = phone;
+	}
+	
+	public String getName() {
+		return name;
+	}
 
-    public Dealer(String name, int id, String street, String city, String state, int zip, String phone) {
-        this.name = name;
-        this.id = id;
-        this.street = street;
-        this.city = city;
-        this.state = state;
-        this.zip = zip;
-        this.phone = phone;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getStreet() {
+		return street;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setStreet(String street) {
+		this.street = street;
+	}
+	
+	public String getCity() {
+		return city;
+	}
 
-    public String getStreet() {
-        return street;
-    }
+	public void setCity(String city) {
+		this.city = city;
+	}
 
-    public void setStreet(String street) {
-        this.street = street;
-    }
+	public String getState() {
+		return state;
+	}
 
-    public String getCity() {
-        return city;
-    }
+	public void setState(String state) {
+		this.state = state;
+	}
 
-    public void setCity(String city) {
-        this.city = city;
-    }
+	public String getPhone() {
+		return phone;
+	}
 
-    public String getState() {
-        return state;
-    }
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
-    public void setState(String state) {
-        this.state = state;
-    }
+	public int getZip() {
+		return zip;
+	}
 
-    public String getPhone() {
-        return phone;
-    }
+	public void setZip(int zip) {
+		this.zip = zip;
+	}
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+	public int getId() {
+		return id;
+	}
 
-    public int getZip() {
-        return zip;
-    }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public void setZip(int zip) {
-        this.zip = zip;
-    }
+	public String getAddress() {
+		return street + ", " + state + ", " + zip;
+	}
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getAddress() {
-        return street + ", " + state + ", " + zip;
-    }
+	@Override
+	public String toString() {
+		return "Dealer [name=" + name + ", street=" + street + ", city=" + city + ", state=" + state + ", phone="
+				+ phone + ", zip=" + zip + ", id=" + id + "]";
+	}
 }
