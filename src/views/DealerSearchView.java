@@ -113,7 +113,7 @@ public class DealerSearchView extends JFrame {
 	}
 	
 	private void filterDealersByName(String name) {
-		List<Dealer> dealers = DealerTable.filterDealersByName(Team01Driver.getDB().getConnection(), name);
+		List<Dealer> dealers = DealerTable.filterDealersByName(Team01Driver.getDriver().getDB().getConnection(), name);
 		
 		if (dealers == null) {
 			textArea.setText("Error");
