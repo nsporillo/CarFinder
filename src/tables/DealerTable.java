@@ -82,11 +82,11 @@ public class DealerTable {
      * @param phone
      */
     public static void addDealer(Connection conn, int dealerID, String name,
-                                 String street, String city, int zip, String state, int phone) {
+                                 String street, String city, String state, int zip, int phone) {
 
         String query = String.format("INSERT INTO " + table + " "
-                        + "VALUES(%d,\'%s\',\'%s\',\'%s\',\'%d\',\'%s\',\'%d\');", dealerID,
-                name, state, city, zip, state, phone);
+                        + "VALUES(%d,\'%s\',\'%s\',\'%s\',\'%s\',\'%d\',\'%s\');", dealerID,
+                name, street, city, state, zip, phone);
 
         try {
             /**
