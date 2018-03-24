@@ -1,7 +1,6 @@
 package tables;
 
 import models.Model;
-import models.Option;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -22,14 +21,14 @@ public class ModelTable {
    * @param fileName fileName of CSV file containing model table data
    * @throws SQLException
    */
-  public static void populateOptionTableFromCSV(Connection conn, String fileName) throws SQLException {
-    ArrayList<Model> model = new ArrayList<>();
+  public static void populateModelTableFromCSV(Connection conn, String fileName) throws SQLException {
+    ArrayList<Model> models = new ArrayList<>();
     try {
       BufferedReader br = new BufferedReader(new FileReader(fileName));
       String line;
       while((line = br.readLine()) != null){
         String[] split = line.split(",");
-        model.add(new Model(Integer.parseInt(split[0]), split[1], split[2]));
+        models.add(new Model(Integer.parseInt(split[0]), split[1], split[2]));
       }
       br.close();
     } catch (IOException e) {
@@ -38,7 +37,7 @@ public class ModelTable {
       e.printStackTrace();
     }
 
-    String sql = createModelInsertSQL(model);
+    String sql = createModelInsertSQL(models);
 
     Statement stmt = conn.createStatement();
     stmt.execute(sql);

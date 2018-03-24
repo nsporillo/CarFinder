@@ -1,11 +1,49 @@
 package tables;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.SQLException;
-import java.sql.Statement;
+import models.Sale;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class SaleTable {
+
+  /**
+   * Reads a cvs file for data and adds them to the Sale table
+   *
+   * Does not create the table. It must already be created
+   *
+   * @param conn     database connection to work with
+   * @param fileName fileName of CSV file containing model table data
+   * @throws SQLException
+   */
+  public static void populateSaleTableFromCSV(Connection conn, String fileName) throws SQLException {
+    ArrayList<Sale> sales = new ArrayList<>();
+    try {
+      BufferedReader br = new BufferedReader(new FileReader(fileName));
+      String line;
+      while((line = br.readLine()) != null){
+        String[] split = line.split(",");
+        sales.add(new Sale(Integer.parseInt(split[0]),
+                Integer.parseInt(split[1]),
+                Integer.parseInt(split[2]),
+                new Timestamp(Long.parseLong(split[3])),
+                Integer.parseInt(split[4])));
+      }
+      br.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (NumberFormatException e) {
+      e.printStackTrace();
+    }
+
+    String sql = createSaleInsertSQL(sales);
+
+    Statement stmt = conn.createStatement();
+    stmt.execute(sql);
+  }
 
   /**
    * Adds a single sale to the database
@@ -31,6 +69,27 @@ public class SaleTable {
     } catch (SQLException e) {
       e.printStackTrace();
     }
+  }
+
+
+  public static String createSaleInsertSQL(ArrayList<Sale> sale) {
+    StringBuilder sb = new StringBuilder();
+
+    sb.append("INSERT INTO Sale (SaleID, DealerID, CustomerID, Timestamp, VIN) VALUES");
+
+    for(int i = 0; i < sale.size(); i++){
+      Sale s = sale.get(i);
+      sb.append(String.format("(%d,\'%d\',\'%d\',\'%tD\',\'%d\')",
+              s.getId(), s.getDealerID(), s.getCustomerID(), s.getTimestamp(), s.getVin()));
+      if( i != sale.size()-1){
+        sb.append(",");
+      }
+      else{
+        sb.append(";");
+      }
+    }
+
+    return sb.toString();
   }
 
 }
