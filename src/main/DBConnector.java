@@ -9,8 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import tables.CustomerTable;
-import tables.OptionTable;
+import tables.*;
 
 public class DBConnector {
 
@@ -97,12 +96,14 @@ public class DBConnector {
     try {
       customerTable.populateCustomerTableFromCSV(main.getConnection(), "newCustomerData.csv"); // TODO
       optionTable.populateOptionTableFromCSV(main.getConnection(), "CarOptions.csv");
+      DealerTable.populateDealerTableFromCSV(main.getConnection(), "DealershipData.csv");
     } catch (SQLException e) {
       e.printStackTrace();
     }
 
     customerTable.printCustomerTable(main.getConnection());
     optionTable.printOptionTable(main.getConnection());
+    DealerTable.printDealerTables(main.getConnection());
 
   }
 }

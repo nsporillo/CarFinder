@@ -32,10 +32,10 @@ public class DealerTable {
         dealer.setName(nameGen(split[0]));
         dealer.setId(dealerID++);
         dealer.setStreet(split[1]);
-        //TODO: Set city
-        dealer.setState(split[2]);
-        dealer.setZip(Integer.parseInt(split[3]));
-        dealer.setPhone(split[4]);
+        dealer.setCity(split[2]);
+        dealer.setState(split[3]);
+        dealer.setZip(Integer.parseInt(split[4]));
+        dealer.setPhone(split[5]);
         dealers.add(dealer);
       }
       br.close();
@@ -44,11 +44,48 @@ public class DealerTable {
     } catch (IOException e) {
       e.printStackTrace();
     }
+    String sql = createDealerInsertSQL(dealers);
+    Statement stmt = conn.createStatement();
+    stmt.execute(sql);
+  }
+  public static String createDealerInsertSQL(ArrayList<Dealer> dealers){
+    StringBuilder sb = new StringBuilder();
+    sb.append("INSERT INTO Dealer (DealerID, Name, Street, City, State, ZIP, Phone) VALUES ");
+    for( Dealer i : dealers){
+      sb.append(String.format("(%d,\'%s\',\'%s\',\'%s\',\'%s\',\'%d\',\'%s\')",
+              i.getId(),i.getName(),i.getStreet(),
+              i.getCity(),i.getState(),i.getZip(),
+              i.getPhone()));
+      sb.append(",");
+    }
+    sb.deleteCharAt(sb.length()-1);
+    sb.append(";");
+    return sb.toString();
+  }
+
+  public static void printDealerTables(Connection conn){
+    String query = "SELECT * FROM Dealer;";
+    try{
+      Statement stmt = conn.createStatement();
+      ResultSet result = stmt.executeQuery(query);
+      while(result.next()){
+        System.out.printf("Dealer %d: %s %s %s %s %d %s\n",
+                result.getInt(1),
+                result.getString(2),
+                result.getString(3),
+                result.getString(4),
+                result.getString(5),
+                result.getInt(6),
+                result.getString(7));
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
   }
   
   private static String nameGen(String name){
     Random r = new Random();
-    int coolified = r.nextInt() % 6;
+    int coolified = Math.abs(r.nextInt() % 6);
     switch(coolified){
       case(0):
         name += " Motors";
