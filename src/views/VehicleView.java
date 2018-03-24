@@ -144,10 +144,10 @@ public class VehicleView extends JFrame {
 
 	public void setVehicle(Vehicle vehicle) {
 		this.vehicle = vehicle;
-		this.vinField.setText(vehicle.getVin());
-		this.makeField.setText(vehicle.getBrand());
-		this.engineField.setText(vehicle.getEngine());
-		this.modelField.setText(vehicle.getModel());
+		//this.vinField.setText(vehicle.getVin());
+		//this.makeField.setText(vehicle.getBrand());
+		//this.engineField.setText(vehicle.getEngine());
+		//this.modelField.setText(vehicle.getModel());
 		this.priceField.setText(String.valueOf(vehicle.getPrice()));
 		
 	}
