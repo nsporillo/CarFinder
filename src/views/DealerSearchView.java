@@ -1,24 +1,13 @@
 package views;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextPane;
-import javax.swing.border.EmptyBorder;
-
 import main.Team01Driver;
 import models.Dealer;
 import tables.DealerTable;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.util.List;
 
 public class DealerSearchView extends JFrame {
 
@@ -31,6 +20,7 @@ public class DealerSearchView extends JFrame {
 	 * Create the frame.
 	 */
 	public DealerSearchView() {
+		setResizable(false);
 		setTitle("Search Dealers");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 800, 500);

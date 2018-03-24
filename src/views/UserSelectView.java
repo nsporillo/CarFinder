@@ -32,6 +32,7 @@ public class UserSelectView extends JFrame {
 	 * Create the frame.
 	 */
 	public UserSelectView() {
+		setResizable(false);
 		setTitle("User Selection");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 300, 150);

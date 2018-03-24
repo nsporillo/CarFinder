@@ -23,6 +23,7 @@ public class MainMenuView extends JFrame {
 	 * Create the frame.
 	 */
 	public MainMenuView() {
+		setResizable(false);
 		setTitle("Main Menu");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 650, 400);
