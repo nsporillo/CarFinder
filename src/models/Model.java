@@ -9,6 +9,10 @@ public class Model {
     private String brandName;
     private String bodyStyle;
 
+    public Model(String brand, String body) {
+        this(-1, brand, body);
+    }
+
     public Model(int modelID, String brandName, String bodystyle) {
         this.id = modelID;
         this.brandName = brandName;
@@ -39,5 +43,12 @@ public class Model {
         this.bodyStyle = bodyStyle;
     }
 
-
+    @Override
+    public String toString() {
+        return "Model{" +
+                "id=" + id +
+                ", brandName='" + brandName + '\'' +
+                ", bodyStyle='" + bodyStyle + '\'' +
+                '}';
+    }
 }

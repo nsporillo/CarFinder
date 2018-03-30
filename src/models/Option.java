@@ -48,4 +48,14 @@ public class Option {
     public void setTransmission(String transmission) {
         this.transmission = transmission;
     }
+
+    @Override
+    public String toString() {
+        return "Option{" +
+                "id=" + id +
+                ", color='" + color + '\'' +
+                ", engine='" + engine + '\'' +
+                ", transmission='" + transmission + '\'' +
+                '}';
+    }
 }
