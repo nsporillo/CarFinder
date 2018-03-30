@@ -40,13 +40,13 @@ public class VehicleTable {
 					for (Option option : options) {
 						if (lineOpId == option.getId()) {
 							Vehicle vehicle = new Vehicle();
-							vehicle.setVin(StringUtils.capitalize(UUID.randomUUID().toString().replaceAll("-", "").substring(0,17)));
+							vehicle.setVin(UUID.randomUUID().toString().replaceAll("-", "").substring(0,17));
 							vehicle.setYear(year);
 							vehicle.setPrice(price);
 							vehicle.setModel(model);
 							vehicle.setOption(option);
 							vehicles.add(vehicle);
-							System.out.println(vehicle.toString());
+							//System.out.println(vehicle.toString());
 						}
 					}
 
@@ -62,10 +62,32 @@ public class VehicleTable {
 			e.printStackTrace();
 		}
 
-		String sql = createVehicleInsertSQL(vehicles);
-		System.out.println(sql);
-		Statement stmt = conn.createStatement();
-		stmt.execute(sql);
+		for (List<Vehicle> lst : partition(vehicles, 999)) {
+			String sql = createVehicleInsertSQL(lst);
+			System.out.println(sql);
+			Statement stmt = conn.createStatement();
+			stmt.execute(sql);
+		}
+	}
+
+	private static List<List<Vehicle>> partition(List<Vehicle> vehicles, Integer size) {
+		if (vehicles == null) {
+			return Collections.emptyList();
+		}
+
+		List<Vehicle> list = new ArrayList<>(vehicles);
+
+		if (size == null || size <= 0 || size > list.size()) {
+			size = list.size();
+		}
+
+		int numPages = (int) Math.ceil((double)list.size() / (double)size);
+		List<List<Vehicle>> pages = new ArrayList<>(numPages);
+
+		for (int pageNum = 0; pageNum < numPages;) {
+			pages.add(list.subList(pageNum * size, Math.min(++pageNum * size, list.size())));
+		}
+		return pages;
 	}
 
 	/**
@@ -97,11 +119,11 @@ public class VehicleTable {
 	public static String createVehicleInsertSQL(List<Vehicle> vehicles) {
 		StringBuilder sb = new StringBuilder();
 
-		sb.append("INSERT INTO Vehicle (VIN, modelID, optionID, year, price) VALUES");
+		sb.append("INSERT INTO Vehicle (VIN, ModelID, OptionID, Year, Price) VALUES");
 
 		for (int i = 0; i < vehicles.size(); i++) {
 			Vehicle vehicle = vehicles.get(i);
-			sb.append(String.format("(%s,\'%d\',\'%d\',\'%d\',\'%d\')",
+			sb.append(String.format("(\'%s',\'%d\',\'%d\',\'%d\',\'%d\')",
 					vehicle.getVin(), vehicle.getModelID(), vehicle.getOptionID(), vehicle.getYear(), vehicle.getPrice()));
 			if (i != vehicles.size() - 1) {
 				sb.append(",");
