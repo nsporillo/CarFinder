@@ -5,19 +5,19 @@ package models;
  */
 public class DealerInventory {
 
-    private int vin;
+    private String vin;
     private int dealerID;
 
-    public DealerInventory(int vin, int dealerID) {
+    public DealerInventory(String vin, int dealerID) {
         this.vin = vin;
         this.dealerID = dealerID;
     }
 
-    public int getVin() {
+    public String getVin() {
         return vin;
     }
 
-    public void setVin(int vin) {
+    public void setVin(String vin) {
         this.vin = vin;
     }
 

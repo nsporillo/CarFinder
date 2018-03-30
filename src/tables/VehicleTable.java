@@ -35,7 +35,7 @@ public class VehicleTable {
 					for (Option option : options) {
 						if (Integer.parseInt(optionSplit[1]) == option.getId()) {
 							Vehicle vehicle = new Vehicle();
-							//vehicle.setVin(UUID.randomUUID().toString().replaceAll("-", "").substring(0,17));
+							vehicle.setVin(UUID.randomUUID().toString().replaceAll("-", "").substring(0,17));
 							vehicle.setYear(Integer.parseInt(carSplit[1]));
 							vehicle.setPrice(Integer.parseInt(carSplit[4]));
 							vehicle.setModel(new Model(ModelTable.getModelId(conn, carSplit[2], carSplit[3]), carSplit[2], carSplit[3]));
@@ -96,7 +96,7 @@ public class VehicleTable {
 
 		for (int i = 0; i < vehicles.size(); i++) {
 			Vehicle vehicle = vehicles.get(i);
-			sb.append(String.format("(%d,\'%d\',\'%d\',\'%d\',\'%d\')",
+			sb.append(String.format("(%s,\'%d\',\'%d\',\'%d\',\'%d\')",
 					vehicle.getVin(), vehicle.getModelID(), vehicle.getOptionID(), vehicle.getYear(), vehicle.getPrice()));
 			if (i != vehicles.size() - 1) {
 				sb.append(",");

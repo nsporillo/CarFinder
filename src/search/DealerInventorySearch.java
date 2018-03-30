@@ -179,7 +179,7 @@ public class DealerInventorySearch extends Search {
 						rs.getString("Color"),
 						rs.getString("Engine"),
 						rs.getString("Transmission"));
-				Vehicle vehicle = new Vehicle(rs.getInt("VIN"),
+				Vehicle vehicle = new Vehicle(rs.getString("VIN"),
 						model, option, rs.getInt("Year"), rs.getInt("Price"));
 
 				vehicles.add(vehicle);

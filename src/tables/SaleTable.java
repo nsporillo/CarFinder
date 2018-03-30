@@ -30,7 +30,7 @@ public class SaleTable {
                         Integer.parseInt(split[1]),
                         Integer.parseInt(split[2]),
                         new Timestamp(Long.parseLong(split[3])),
-                        Integer.parseInt(split[4])));
+                        split[4]));
             }
             br.close();
         } catch (IOException e) {

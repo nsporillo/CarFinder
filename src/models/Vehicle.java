@@ -5,7 +5,7 @@ package models;
  */
 public class Vehicle {
 
-    private int vin;
+    private String vin;
     private Model model;
     private Option option;
     private int year;
@@ -13,18 +13,18 @@ public class Vehicle {
 
     public Vehicle(){}
 
-    public Vehicle(int vin, Model model, Option option, int year, int price) {
+    public Vehicle(String vin, Model model, Option option, int year, int price) {
         this.vin = vin;
         this.model = model;
         this.year = year;
         this.price = price;
     }
 
-    public int getVin() {
+    public String getVin() {
         return vin;
     }
 
-    public void setVin(int vin) {
+    public void setVin(String vin) {
         this.vin = vin;
     }
 

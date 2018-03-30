@@ -17,10 +17,10 @@ public class DealerInventoryTable {
      * @param vin
      * @param dealerID
      */
-    public static void addVehicle(Connection conn, int vin, int dealerID) {
+    public static void addVehicle(Connection conn, String vin, int dealerID) {
 
         String query = String.format("INSERT INTO DealerInventory "
-                + "VALUES(%d,\'%d\');", vin, dealerID);
+                + "VALUES(%s,\'%d\');", vin, dealerID);
 
         try {
             /**
@@ -40,7 +40,7 @@ public class DealerInventoryTable {
 
         for (int i = 0; i < dealerInv.size(); i++) {
             DealerInventory di = dealerInv.get(i);
-            sb.append(String.format("(%d,\'%d\')", di.getVin(), di.getDealerID()));
+            sb.append(String.format("(%s,\'%d\')", di.getVin(), di.getDealerID()));
             if (i != dealerInv.size() - 1) {
                 sb.append(",");
             } else {
@@ -64,8 +64,8 @@ public class DealerInventoryTable {
             ResultSet result = stmt.executeQuery(query);
 
             while (result.next()) {
-                System.out.printf("DealerInventory %d: %d\n",
-                        result.getInt(1),
+                System.out.printf("DealerInventory %s: %d\n",
+                        result.getString(1),
                         result.getInt(2));
             }
         } catch (SQLException e) {

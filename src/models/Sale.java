@@ -11,9 +11,9 @@ public class Sale {
     private int dealerID;
     private int customerID;
     private Timestamp timestamp;
-    private int vin;
+    private String vin;
 
-    public Sale(int saleID, int dealerID, int customerID, Timestamp timestamp, int vin) {
+    public Sale(int saleID, int dealerID, int customerID, Timestamp timestamp, String vin) {
         this.id = saleID;
         this.dealerID = dealerID;
         this.customerID = customerID;
@@ -41,8 +41,8 @@ public class Sale {
 
     public void setTimestamp(Timestamp timestamp) { this.timestamp = timestamp; }
 
-    public int getVin() { return vin; }
+    public String getVin() { return vin; }
 
-    public void setVin(int vin) { this.vin = vin; }
+    public void setVin(String vin) { this.vin = vin; }
 
 }
