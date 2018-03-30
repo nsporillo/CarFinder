@@ -1,8 +1,5 @@
 package models;
 
-/**
- *
- */
 public class Dealer {
 
 	private String name, street, city, state, phone;

@@ -1,6 +1,5 @@
 package tables;
 
-import com.sun.xml.internal.ws.util.StringUtils;
 import models.Model;
 import models.Option;
 import models.Vehicle;
@@ -11,7 +10,10 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 public class VehicleTable {
 
@@ -92,7 +94,6 @@ public class VehicleTable {
 	 * @param conn connection
 	 */
 	public static void printVehicleTable(Connection conn) {
-
 		String query = "SELECT * FROM Vehicle;";
 		try {
 			Statement stmt = conn.createStatement();
@@ -114,7 +115,7 @@ public class VehicleTable {
 
 	public static PreparedStatement createVehicleInsertSQL(Connection conn, List<Vehicle> vehicles) throws SQLException {
 		StringBuilder sb = new StringBuilder();
-		sb.append("INSERT INTO Vehicle (VIN, ModelID, OptionID, Year, Price) VALUES");
+		sb.append("INSERT INTO Vehicle (VIN, ModelID, OptionID, Year, Price) VALUES ");
 
 		for (int i = 0; i < vehicles.size(); i++) {
 			sb.append("(?,?,?,?,?)");

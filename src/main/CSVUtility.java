@@ -20,7 +20,7 @@ public class CSVUtility {
 				String[] split = scanner.nextLine().split(",");
 				if (split.length > 1 && split[0].length() > 0) {
 					for (int i = 1; i <= 84; i++) {
-						if (Math.random() > .75) {
+						if (Math.random() > .95) {
 							String line = split[0] + "," + i + "\n";
 							writer.write(line, 0, line.length());
 						}

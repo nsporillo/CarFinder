@@ -33,9 +33,7 @@ public class OptionTable {
                 option.add(new Option(Integer.parseInt(split[0]), split[1], split[2], split[3]));
             }
             br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
+        } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }
 
@@ -127,9 +125,9 @@ public class OptionTable {
         } else {
             for (int i = 0; i < columns.size(); i++) {
                 if (i != columns.size() - 1) {
-                    sb.append(columns.get(i) + ", ");
+                    sb.append(columns.get(i)).append(", ");
                 } else {
-                    sb.append(columns.get(i) + " ");
+                    sb.append(columns.get(i)).append(" ");
                 }
             }
         }
@@ -147,7 +145,7 @@ public class OptionTable {
             sb.append("WHERE ");
             for (int i = 0; i < whereClauses.size(); i++) {
                 if (i != whereClauses.size() - 1) {
-                    sb.append(whereClauses.get(i) + " AND ");
+                    sb.append(whereClauses.get(i)).append(" AND ");
                 } else {
                     sb.append(whereClauses.get(i));
                 }

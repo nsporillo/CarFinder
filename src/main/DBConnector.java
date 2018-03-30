@@ -25,24 +25,18 @@ public class DBConnector {
   public DBConnector() {
 	  createConnection(databasePath, "admin", "password");
   }
-  
+
   /**
    * Create a database connection with the given params
    *
    * @param location: path of where to place the database
-   * @param user: user name for the owner of the database
+   * @param user:     user name for the owner of the database
    * @param password: password of the database owner
    */
   private void createConnection(String location, String user, String password) {
     try {
-      // This needs to be on the front of your location
-      String url = "jdbc:h2:file:" + location;
-
-      // This tells it to use the h2 driver
       Class.forName("org.h2.Driver");
-
-      // creates the connection
-      conn = DriverManager.getConnection(url, user, password);
+      conn = DriverManager.getConnection("jdbc:h2:file:" + location, user, password);
     } catch (SQLException | ClassNotFoundException e) {
       e.printStackTrace();
     }
@@ -106,7 +100,7 @@ public class DBConnector {
 
     //CustomerTable.printCustomerTable(main.getConnection());
     //OptionTable.printOptionTable(main.getConnection());
-    ModelTable.printModelTable(main.getConnection());
+    //ModelTable.printModelTable(main.getConnection());
     //DealerTable.printDealerTables(main.getConnection());
     //VehicleTable.printVehicleTable(main.getConnection());
   }
