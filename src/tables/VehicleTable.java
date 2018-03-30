@@ -1,5 +1,6 @@
 package tables;
 
+import com.sun.xml.internal.ws.util.StringUtils;
 import models.Model;
 import models.Option;
 import models.Vehicle;
@@ -31,14 +32,18 @@ public class VehicleTable {
 
 				while (op != null && op.length() != 0 && carSplit[0].equals(op.split(",")[0])) {
 					String[] optionSplit = op.split(",");
+					Model model = new Model(ModelTable.getModelId(conn, carSplit[2], carSplit[3]), carSplit[2], carSplit[3]);
+					int lineOpId = Integer.parseInt(optionSplit[1]);
+					int year = Integer.parseInt(carSplit[1]);
+					int price = Integer.parseInt(carSplit[4]);
 
 					for (Option option : options) {
-						if (Integer.parseInt(optionSplit[1]) == option.getId()) {
+						if (lineOpId == option.getId()) {
 							Vehicle vehicle = new Vehicle();
-							vehicle.setVin(UUID.randomUUID().toString().replaceAll("-", "").substring(0,17));
-							vehicle.setYear(Integer.parseInt(carSplit[1]));
-							vehicle.setPrice(Integer.parseInt(carSplit[4]));
-							vehicle.setModel(new Model(ModelTable.getModelId(conn, carSplit[2], carSplit[3]), carSplit[2], carSplit[3]));
+							vehicle.setVin(StringUtils.capitalize(UUID.randomUUID().toString().replaceAll("-", "").substring(0,17)));
+							vehicle.setYear(year);
+							vehicle.setPrice(price);
+							vehicle.setModel(model);
 							vehicle.setOption(option);
 							vehicles.add(vehicle);
 							System.out.println(vehicle.toString());
