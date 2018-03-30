@@ -9,6 +9,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+
+import models.Model;
+import models.Option;
+import models.Vehicle;
 import tables.*;
 
 public class DBConnector {
@@ -85,25 +90,24 @@ public class DBConnector {
 
       bufferedReader.close();
 
-    } catch (FileNotFoundException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (SQLException e) {
+    } catch (SQLException | IOException e) {
       e.printStackTrace();
     }
 
     try {
-      customerTable.populateCustomerTableFromCSV(main.getConnection(), "newCustomerData.csv"); // TODO
-      optionTable.populateOptionTableFromCSV(main.getConnection(), "CarOptions.csv");
+      CustomerTable.populateCustomerTableFromCSV(main.getConnection(), "newCustomerData.csv"); // TODO
+      List<Option> optionList = OptionTable.populateOptionTableFromCSV(main.getConnection(), "CarOptions.csv");
+      ModelTable.populateModelTableFromCSV(main.getConnection(), "Vehicles.csv");
       DealerTable.populateDealerTableFromCSV(main.getConnection(), "DealershipData.csv");
+      VehicleTable.populateVehicleTableFromCSV(optionList, main.getConnection(), "Vehicles.csv", "VehicleOptions.csv");
     } catch (SQLException e) {
       e.printStackTrace();
     }
 
-    customerTable.printCustomerTable(main.getConnection());
-    optionTable.printOptionTable(main.getConnection());
-    DealerTable.printDealerTables(main.getConnection());
-
+    //CustomerTable.printCustomerTable(main.getConnection());
+    //OptionTable.printOptionTable(main.getConnection());
+    ModelTable.printModelTable(main.getConnection());
+    //DealerTable.printDealerTables(main.getConnection());
+    //VehicleTable.printVehicleTable(main.getConnection());
   }
 }

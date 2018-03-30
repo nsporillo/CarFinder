@@ -5,11 +5,9 @@ import models.Model;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ModelTable {
 
@@ -22,19 +20,17 @@ public class ModelTable {
      * @param fileName fileName of CSV file containing model table data
      * @throws SQLException
      */
-    public static void populateModelTableFromCSV(Connection conn, String fileName) throws SQLException {
-        ArrayList<Model> models = new ArrayList<>();
+    public static List<Model> populateModelTableFromCSV(Connection conn, String fileName) throws SQLException {
+        List<Model> models = new ArrayList<>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             String line;
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(",");
-                models.add(new Model(Integer.parseInt(split[0]), split[1], split[2]));
+                models.add(new Model(split[2], split[3]));
             }
             br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
+        } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
         }
 
@@ -42,6 +38,8 @@ public class ModelTable {
 
         Statement stmt = conn.createStatement();
         stmt.execute(sql);
+
+        return models;
     }
 
     /**
@@ -68,15 +66,14 @@ public class ModelTable {
         }
     }
 
-    public static String createModelInsertSQL(ArrayList<Model> model) {
+    public static String createModelInsertSQL(List<Model> model) {
         StringBuilder sb = new StringBuilder();
 
-        sb.append("INSERT INTO Model (ModelID, BrandName, BodyStyle) VALUES");
+        sb.append("INSERT INTO Model (BrandName, BodyStyle) VALUES");
 
         for (int i = 0; i < model.size(); i++) {
             Model m = model.get(i);
-            sb.append(String.format("(%d,\'%s\',\'%s\')",
-                    m.getId(), m.getBrandName(), m.getBodyStyle()));
+            sb.append(String.format("(\'%s\',\'%s\')", m.getBrandName(), m.getBodyStyle()));
             if (i != model.size() - 1) {
                 sb.append(",");
             } else {
@@ -85,6 +82,38 @@ public class ModelTable {
         }
 
         return sb.toString();
+    }
+
+    public static int getModelId(Connection conn, String brandName, String bodyStyle) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT ModelID FROM Model WHERE BrandName=? AND BodyStyle=?");
+        stmt.setString(1, brandName);
+        stmt.setString(2, bodyStyle);
+        ResultSet rs = stmt.executeQuery();
+
+        if (rs.next()) {
+            rs.getInt(1);
+        }
+        return 0;
+    }
+
+    public static List<Model> getAllModels(Connection conn) {
+        List<Model> models = new ArrayList<>();
+
+        String query = "SELECT * FROM Model;";
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet result = stmt.executeQuery(query);
+
+            while (result.next()) {
+                models.add(new Model(result.getInt(1),
+                        result.getString(2),
+                        result.getString(3)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return models;
     }
 
     /**

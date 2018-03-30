@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 public class OptionTable {
 
@@ -22,7 +23,7 @@ public class OptionTable {
      * @param fileName fileName of CSV file containing option table data
      * @throws SQLException
      */
-    public static void populateOptionTableFromCSV(Connection conn, String fileName) throws SQLException {
+    public static List<Option> populateOptionTableFromCSV(Connection conn, String fileName) throws SQLException {
         ArrayList<Option> option = new ArrayList<>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(fileName));
@@ -42,6 +43,8 @@ public class OptionTable {
 
         Statement stmt = conn.createStatement();
         stmt.execute(sql);
+
+        return option;
     }
 
     /**
