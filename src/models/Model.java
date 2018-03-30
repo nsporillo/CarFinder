@@ -5,25 +5,25 @@ package models;
  */
 public class Model {
 
-    private int id;
+    private Integer id;
     private String brandName;
     private String bodyStyle;
 
     public Model(String brand, String body) {
-        this(-1, brand, body);
+        this(null, brand, body);
     }
 
-    public Model(int modelID, String brandName, String bodystyle) {
+    public Model(Integer modelID, String brandName, String bodystyle) {
         this.id = modelID;
         this.brandName = brandName;
         this.bodyStyle = bodystyle;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -84,16 +84,17 @@ public class ModelTable {
         return sb.toString();
     }
 
-    public static int getModelId(Connection conn, String brandName, String bodyStyle) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement("SELECT ModelID FROM Model WHERE BrandName=? AND BodyStyle=?");
-        stmt.setString(1, brandName);
-        stmt.setString(2, bodyStyle);
+    public static Integer getModelId(Connection conn, String brandName, String bodyStyle) throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Model WHERE BrandName = ? AND BodyStyle = ?");
+        stmt.setString(1, brandName.toUpperCase());
+        stmt.setString(2, bodyStyle.toUpperCase());
         ResultSet rs = stmt.executeQuery();
 
         if (rs.next()) {
-            rs.getInt(1);
+            return rs.getInt("ModelID");
         }
-        return 0;
+
+        return null;
     }
 
     public static List<Model> getAllModels(Connection conn) {

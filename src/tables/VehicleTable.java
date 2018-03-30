@@ -10,10 +10,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
 
 public class VehicleTable {
@@ -26,7 +23,7 @@ public class VehicleTable {
 			BufferedReader opReader = Files.newBufferedReader(Paths.get(opCSV), Charset.forName("US-ASCII"));
 
 			String car = carReader.readLine();
-			while(car != null && car.length()!= 0) {
+			while (car != null && car.length() != 0) {
 				String op = opReader.readLine();
 				String[] carSplit = car.split(",");
 
@@ -40,7 +37,7 @@ public class VehicleTable {
 					for (Option option : options) {
 						if (lineOpId == option.getId()) {
 							Vehicle vehicle = new Vehicle();
-							vehicle.setVin(UUID.randomUUID().toString().replaceAll("-", "").substring(0,17));
+							vehicle.setVin(UUID.randomUUID().toString().replaceAll("-", "").substring(0, 17));
 							vehicle.setYear(year);
 							vehicle.setPrice(price);
 							vehicle.setModel(model);
@@ -63,10 +60,9 @@ public class VehicleTable {
 		}
 
 		for (List<Vehicle> lst : partition(vehicles, 999)) {
-			String sql = createVehicleInsertSQL(lst);
-			System.out.println(sql);
-			Statement stmt = conn.createStatement();
-			stmt.execute(sql);
+			PreparedStatement stmt = createVehicleInsertSQL(conn, lst);
+			System.out.println(stmt.toString());
+			stmt.executeUpdate();
 		}
 	}
 
@@ -81,10 +77,10 @@ public class VehicleTable {
 			size = list.size();
 		}
 
-		int numPages = (int) Math.ceil((double)list.size() / (double)size);
+		int numPages = (int) Math.ceil((double) list.size() / (double) size);
 		List<List<Vehicle>> pages = new ArrayList<>(numPages);
 
-		for (int pageNum = 0; pageNum < numPages;) {
+		for (int pageNum = 0; pageNum < numPages; ) {
 			pages.add(list.subList(pageNum * size, Math.min(++pageNum * size, list.size())));
 		}
 		return pages;
@@ -116,15 +112,13 @@ public class VehicleTable {
 		}
 	}
 
-	public static String createVehicleInsertSQL(List<Vehicle> vehicles) {
+	public static PreparedStatement createVehicleInsertSQL(Connection conn, List<Vehicle> vehicles) throws SQLException {
 		StringBuilder sb = new StringBuilder();
-
 		sb.append("INSERT INTO Vehicle (VIN, ModelID, OptionID, Year, Price) VALUES");
 
 		for (int i = 0; i < vehicles.size(); i++) {
-			Vehicle vehicle = vehicles.get(i);
-			sb.append(String.format("(\'%s',\'%d\',\'%d\',\'%d\',\'%d\')",
-					vehicle.getVin(), vehicle.getModelID(), vehicle.getOptionID(), vehicle.getYear(), vehicle.getPrice()));
+			sb.append("(?,?,?,?,?)");
+
 			if (i != vehicles.size() - 1) {
 				sb.append(",");
 			} else {
@@ -132,7 +126,17 @@ public class VehicleTable {
 			}
 		}
 
-		return sb.toString();
-	}
+		PreparedStatement stmt = conn.prepareStatement(sb.toString());
 
+		for (int i = 0; i < vehicles.size(); i++) {
+			Vehicle vehicle = vehicles.get(i);
+			stmt.setString(1 + (i * 5), vehicle.getVin());
+			stmt.setInt(2 + (i * 5), vehicle.getModelID());
+			stmt.setInt(3 + (i * 5), vehicle.getOptionID());
+			stmt.setInt(4 + (i * 5), vehicle.getYear());
+			stmt.setInt(5 + (i * 5), vehicle.getPrice());
+		}
+
+		return stmt;
+	}
 }

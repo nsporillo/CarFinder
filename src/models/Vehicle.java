@@ -36,7 +36,7 @@ public class Vehicle {
         this.model = model;
     }
 
-    public int getModelID() {
+    public Integer getModelID() {
         return model.getId();
     }
 
@@ -44,7 +44,7 @@ public class Vehicle {
 
     public void setOption(Option option){ this.option = option; }
 
-    public int getOptionID() {
+    public Integer getOptionID() {
         return option.getId();
     }
 
