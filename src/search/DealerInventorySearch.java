@@ -8,7 +8,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class DealerInventorySearch extends Search {
 
@@ -16,7 +19,7 @@ public class DealerInventorySearch extends Search {
 	private Map<String, Object> vehicleFields = new HashMap<>();
 	private Map<String, Object> modelFields = new HashMap<>();
 	private Map<String, Object> optionFields = new HashMap<>();
-	private Map<Integer, Object> parameterIndex = new TreeMap<>();
+
 
 	public void setDealerID(int dealerId) {
 		dealerFields.put("DealerID", dealerId);
@@ -60,10 +63,6 @@ public class DealerInventorySearch extends Search {
 		optionFields.put("Transmission", transmission);
 	}
 
-	private int nextParameterIndex() {
-		return parameterIndex.size() + 1;
-	}
-
 	/**
 	 * Test method for simulating PreparedStatement
 	 *
@@ -72,7 +71,7 @@ public class DealerInventorySearch extends Search {
 	private String injectParameters() {
 		String sql = prepareSQL();
 
-		for (Map.Entry<Integer, Object> entry : parameterIndex.entrySet()) {
+		for (Map.Entry<Integer, Object> entry : super.getParameterIndex().entrySet()) {
 			Object e = entry.getValue();
 
 			sql = sql.replaceFirst("\\?", e.toString());
@@ -97,7 +96,7 @@ public class DealerInventorySearch extends Search {
 					builder.append("Vehicle.").append(entry.getKey()).append("=? AND ");
 				}
 
-				parameterIndex.put(nextParameterIndex(), entry.getValue());
+				super.setParameterIndex(entry.getValue());
 			}
 
 			query += builder.substring(0, builder.lastIndexOf("?") + 1);
@@ -107,7 +106,7 @@ public class DealerInventorySearch extends Search {
 
 			for (Map.Entry<String, Object> entry : modelFields.entrySet()) {
 				builder.append("Model.").append(entry.getKey()).append("=? AND ");
-				parameterIndex.put(nextParameterIndex(), entry.getValue());
+				super.setParameterIndex(entry.getValue());
 			}
 
 			query += builder.substring(0, builder.lastIndexOf("?") + 1);
@@ -120,7 +119,7 @@ public class DealerInventorySearch extends Search {
 
 			for (Map.Entry<String, Object> entry : optionFields.entrySet()) {
 				builder.append("Option.").append(entry.getKey()).append("=? AND ");
-				parameterIndex.put(nextParameterIndex(), entry.getValue());
+				super.setParameterIndex(entry.getValue());
 			}
 
 			query += builder.substring(0, builder.lastIndexOf("?") + 1);
@@ -129,8 +128,8 @@ public class DealerInventorySearch extends Search {
 		/* Filter results by dealerID */
 		if (dealerFields.containsKey("DealerID") && dealerFields.size() == 1) {
 			query += " WHERE DealerInventory.DealerID=?";
-			parameterIndex.put(nextParameterIndex(), dealerFields.get("DealerID"));
-		} else if (dealerFields.size() > 0){
+			super.setParameterIndex(dealerFields.get("DealerID"));
+		} else if (dealerFields.size() > 0) {
 			StringBuilder builder = new StringBuilder();
 			builder.append(" INNER JOIN Dealer ON ");
 
@@ -141,7 +140,7 @@ public class DealerInventorySearch extends Search {
 					builder.append("Dealer.").append(entry.getKey()).append("=? AND ");
 				}
 
-				parameterIndex.put(nextParameterIndex(), entry.getValue());
+				super.setParameterIndex(entry.getValue());
 			}
 
 			query += builder.substring(0, builder.lastIndexOf("?") + 1);
@@ -153,23 +152,10 @@ public class DealerInventorySearch extends Search {
 	@Override
 	public List<Vehicle> execute(Connection connection) {
 		List<Vehicle> vehicles = new ArrayList<>();
-		PreparedStatement ps = null;
-
 		try {
-			ps = connection.prepareStatement(prepareSQL());
-
-			for (Map.Entry<Integer, Object> entry : parameterIndex.entrySet()) {
-				Object e = entry.getValue();
-
-				if (e instanceof String) {
-					ps.setString(entry.getKey(), (String) e);
-				} else if (e instanceof Integer) {
-					ps.setInt(entry.getKey(), (Integer) e);
-				}
-			}
-
+			PreparedStatement ps = super.prepareStatement(connection);
 			ResultSet rs = ps.executeQuery();
-			parameterIndex.clear();
+			super.clearParameterIndex();
 
 			while (rs.next()) {
 				Model model = new Model(rs.getInt("ModelID"),
