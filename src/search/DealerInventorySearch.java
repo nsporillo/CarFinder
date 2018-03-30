@@ -12,18 +12,32 @@ import java.util.*;
 
 public class DealerInventorySearch extends Search {
 
-	private int dealerId = -1;
+	private Map<String, Object> dealerFields = new HashMap<>();
 	private Map<String, Object> vehicleFields = new HashMap<>();
 	private Map<String, Object> modelFields = new HashMap<>();
 	private Map<String, Object> optionFields = new HashMap<>();
 	private Map<Integer, Object> parameterIndex = new TreeMap<>();
 
-	public void setDealer(int dealerId) {
-		this.dealerId = dealerId;
+	public void setDealerID(int dealerId) {
+		dealerFields.put("DealerID", dealerId);
+	}
+
+	public void setDealerName(String dealerName) {
+		if (!dealerFields.containsKey("DealerID")) {
+			dealerFields.put("LikeDealerName", "%" + dealerName + "%");
+		}
+	}
+
+	public void setNearZip(int zipCode) {
+		dealerFields.put("NearZIP", zipCode);
 	}
 
 	public void setYear(int year) {
 		vehicleFields.put("Year", year);
+	}
+
+	public void setMaxPrice(int maxPrice) {
+		vehicleFields.put("MaxPrice", maxPrice);
 	}
 
 	public void setBrandName(String brandName) {
@@ -69,16 +83,27 @@ public class DealerInventorySearch extends Search {
 
 	@Override
 	public String prepareSQL() {
-		String query = "SELECT * FROM DealerInventory INNER JOIN Vehicle";
+		String query = "SELECT * FROM DealerInventory INNER JOIN Vehicle ";
 
 		/* Filter results by any number of vehicle or model fields */
 		if (vehicleFields.size() > 0 || modelFields.size() > 0) {
 			StringBuilder builder = new StringBuilder();
-			builder.append(" INNER JOIN Model ON ");
 			for (Map.Entry<String, Object> entry : vehicleFields.entrySet()) {
-				builder.append("Vehicle.").append(entry.getKey()).append("=? AND ");
+				/* Support for handling max price, max anything... */
+				if (entry.getKey().startsWith("Max")) {
+					String key = entry.getKey().replaceAll("Max", "");
+					builder.append("Vehicle.").append(key).append("<=? AND ");
+				} else {
+					builder.append("Vehicle.").append(entry.getKey()).append("=? AND ");
+				}
+
 				parameterIndex.put(nextParameterIndex(), entry.getValue());
 			}
+
+			query += builder.substring(0, builder.lastIndexOf("?") + 1);
+			builder = new StringBuilder();
+			builder.append(" INNER JOIN Model ON ");
+
 
 			for (Map.Entry<String, Object> entry : modelFields.entrySet()) {
 				builder.append("Model.").append(entry.getKey()).append("=? AND ");
@@ -102,9 +127,24 @@ public class DealerInventorySearch extends Search {
 		}
 
 		/* Filter results by dealerID */
-		if (dealerId > 0) {
+		if (dealerFields.containsKey("DealerID") && dealerFields.size() == 1) {
 			query += " WHERE DealerInventory.DealerID=?";
-			parameterIndex.put(nextParameterIndex(), dealerId);
+			parameterIndex.put(nextParameterIndex(), dealerFields.get("DealerID"));
+		} else if (dealerFields.size() > 0){
+			StringBuilder builder = new StringBuilder();
+			builder.append(" INNER JOIN Dealer ON ");
+
+			for (Map.Entry<String, Object> entry : dealerFields.entrySet()) {
+				if (entry.getKey().startsWith("Like")) {
+					builder.append("Dealer.").append(entry.getKey().replaceAll("Like", "")).append(" LIKE ? AND ");
+				} else {
+					builder.append("Dealer.").append(entry.getKey()).append("=? AND ");
+				}
+
+				parameterIndex.put(nextParameterIndex(), entry.getValue());
+			}
+
+			query += builder.substring(0, builder.lastIndexOf("?") + 1);
 		}
 
 		return query;
@@ -155,6 +195,7 @@ public class DealerInventorySearch extends Search {
 
 	public static void main(String[] args) {
 		DealerInventorySearch search = new DealerInventorySearch();
+		search.setDealerName("Sick Autos");
 		search.setColor("Silver");
 		search.setBodyStyle("325xi");
 		search.setBrandName("BMW");
