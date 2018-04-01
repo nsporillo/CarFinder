@@ -1,5 +1,10 @@
 package views;
 
+import main.Team01Driver;
+import models.DealerInventory;
+import models.Vehicle;
+import search.DealerInventorySearch;
+
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -157,7 +162,24 @@ public class VehicleSearchView extends JFrame {
 		btnSearch.setFont(new Font("Tahoma", Font.BOLD, 18));
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO: Perform search based on the criteria
+				try {
+					DealerInventorySearch dealerInventorySearch = createSearch();
+					List<Vehicle> results = dealerInventorySearch.execute(Team01Driver.getDriver().getDB().getConnection());
+
+					if (results == null || results.size() == 0) {
+						System.out.println("No results");
+						return;
+					} else if (results.size() > 1000) {
+						results = results.subList(0, 1000);
+					}
+
+					for (Vehicle v : results) {
+						searchResultPane.add(new JButton(v.getVin()));
+					}
+				} catch(Exception ex) {
+					ex.printStackTrace(System.err);
+					searchResultPane.setText(ex.getMessage());
+				}
 			}
 		});
 
@@ -176,6 +198,47 @@ public class VehicleSearchView extends JFrame {
 		searchResultPane.setEditable(false);
 		searchResultPane.setBounds(210, 30, 575, 430);
 		mainContentPane.add(searchResultPane);
+	}
+
+	private  DealerInventorySearch createSearch() {
+		DealerInventorySearch dealerInventorySearch = new DealerInventorySearch();
+		String make = (String) makeBox.getSelectedItem();
+		String model = (String) modelBox.getSelectedItem();
+		String maxPrice = (String) priceBox.getSelectedItem();
+		String year = (String) yearBox.getSelectedItem();
+		String color = (String) colorBox.getSelectedItem();
+		String engine = (String) engineBox.getSelectedItem();
+		String tranny = (String) trannyBox.getSelectedItem();
+
+		if (make != null && !make.equals("All Makes")) {
+			dealerInventorySearch.setBrandName(make);
+		}
+
+		if (model != null && !model.equals("All Models")) {
+			dealerInventorySearch.setBodyStyle(model);
+		}
+
+		if (maxPrice != null && !maxPrice.equals("No Max Price")) {
+			dealerInventorySearch.setMaxPrice(Integer.parseInt(maxPrice.substring(0, maxPrice.length()-1)));
+		}
+
+		if (year != null && !year.equals("Any")) {
+			dealerInventorySearch.setYear(Integer.parseInt(year));
+		}
+
+		if (color != null && !color.equals("Any")) {
+			dealerInventorySearch.setColor(color);
+		}
+
+		if (engine != null && !engine.equals("Any")) {
+			dealerInventorySearch.setEngine(engine);
+		}
+
+		if (tranny != null && !tranny.equals("Any")) {
+			dealerInventorySearch.setTransmission(tranny);
+		}
+
+		return dealerInventorySearch;
 	}
 
 	public void setMakes(List<String> makes) {
@@ -241,7 +304,7 @@ public class VehicleSearchView extends JFrame {
 		engineBox.setModel(new DefaultComboBoxModel<String>(base.toArray(new String[base.size()])));
 	}
 
-	private void setTrannies(List<String> trannies) {
+	public void setTrannies(List<String> trannies) {
 		List<String> base = new ArrayList<>();
 		base.add("Any");
 		base.addAll(trannies);

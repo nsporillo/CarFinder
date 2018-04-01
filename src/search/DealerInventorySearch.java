@@ -20,7 +20,6 @@ public class DealerInventorySearch extends Search {
 	private Map<String, Object> modelFields = new HashMap<>();
 	private Map<String, Object> optionFields = new HashMap<>();
 
-
 	public void setDealerID(int dealerId) {
 		dealerFields.put("DealerID", dealerId);
 	}
@@ -65,7 +64,7 @@ public class DealerInventorySearch extends Search {
 
 	/**
 	 * Test method for simulating PreparedStatement
-	 *
+	 * Do not call before .execute(), only replace .execute() with this.
 	 * @return full SQL query with parameters injected
 	 */
 	private String injectParameters() {
@@ -82,11 +81,11 @@ public class DealerInventorySearch extends Search {
 
 	@Override
 	public String prepareSQL() {
-		String query = "SELECT * FROM DealerInventory INNER JOIN Vehicle ";
+		String query = "SELECT * FROM DealerInventory";
 
 		/* Filter results by any number of vehicle or model fields */
 		if (vehicleFields.size() > 0 || modelFields.size() > 0) {
-			StringBuilder builder = new StringBuilder();
+			StringBuilder builder = new StringBuilder(" INNER JOIN Vehicle ");
 			for (Map.Entry<String, Object> entry : vehicleFields.entrySet()) {
 				/* Support for handling max price, max anything... */
 				if (entry.getKey().startsWith("Max")) {
@@ -102,7 +101,6 @@ public class DealerInventorySearch extends Search {
 			query += builder.substring(0, builder.lastIndexOf("?") + 1);
 			builder = new StringBuilder();
 			builder.append(" INNER JOIN Model ON ");
-
 
 			for (Map.Entry<String, Object> entry : modelFields.entrySet()) {
 				builder.append("Model.").append(entry.getKey()).append("=? AND ");
@@ -146,7 +144,7 @@ public class DealerInventorySearch extends Search {
 			query += builder.substring(0, builder.lastIndexOf("?") + 1);
 		}
 
-		return query;
+		return query + ";";
 	}
 
 	@Override
