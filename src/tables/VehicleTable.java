@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class VehicleTable {
 
-	public static void populateVehicleTableFromCSV(List<Option> options, Connection conn, String carCSV, String opCSV) throws SQLException {
+	public static List<Vehicle> populateVehicleTableFromCSV(List<Option> options, Connection conn, String carCSV, String opCSV) throws SQLException {
 		List<Vehicle> vehicles = new ArrayList<>();
 
 		try {
@@ -63,9 +63,10 @@ public class VehicleTable {
 
 		for (List<Vehicle> lst : partition(vehicles, 999)) {
 			PreparedStatement stmt = createVehicleInsertSQL(conn, lst);
-			System.out.println(stmt.toString());
 			stmt.executeUpdate();
 		}
+
+		return vehicles;
 	}
 
 	private static List<List<Vehicle>> partition(List<Vehicle> vehicles, Integer size) {

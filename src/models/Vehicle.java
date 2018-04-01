@@ -1,5 +1,8 @@
 package models;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 /**
  * Class containing Vehicle details: VIN, ModelID, OptionID, SaleID, Year, Price
  */
@@ -73,5 +76,14 @@ public class Vehicle {
                 ", year=" + year +
                 ", price=" + price +
                 '}';
+    }
+
+    public String getSearchView() {
+        String template = "%d %s %s %s";
+        return String.format(template, year, model.getBrandName(), model.getBodyStyle(), price());
+    }
+
+    private String price() {
+        return NumberFormat.getCurrencyInstance(new Locale("en", "US")).format(price);
     }
 }

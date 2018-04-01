@@ -14,8 +14,8 @@ public class DealerTable {
 
 	private static final String table = "Dealer";
 
-	public static void populateDealerTableFromCSV(Connection conn, String filename) throws SQLException {
-		ArrayList<Dealer> dealers = new ArrayList<>();
+	public static List<Dealer> populateDealerTableFromCSV(Connection conn, String filename) throws SQLException {
+		List<Dealer> dealers = new ArrayList<>();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filename));
 			String line;
@@ -40,9 +40,11 @@ public class DealerTable {
 		String sql = createDealerInsertSQL(dealers);
 		Statement stmt = conn.createStatement();
 		stmt.execute(sql);
+
+		return dealers;
 	}
 
-	public static String createDealerInsertSQL(ArrayList<Dealer> dealers) {
+	public static String createDealerInsertSQL(List<Dealer> dealers) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("INSERT INTO Dealer (DealerID, Name, Street, City, State, ZIP, Phone) VALUES ");
 		for (Dealer i : dealers) {
@@ -141,11 +143,11 @@ public class DealerTable {
 	public static List<Dealer> filterDealersByName(Connection conn, String name) {
 		List<Dealer> dealers = new ArrayList<>();
 		PreparedStatement ps = null;
-		String query = "SELECT * FROM " + table + " WHERE name LIKE %?%";
+		String query = "SELECT * FROM " + table + " WHERE name LIKE ?";
 
 		try {
 			ps = conn.prepareStatement(query);
-			ps.setString(1, name);
+			ps.setString(1, "%name%");
 			ResultSet rs = ps.executeQuery();
 
 			Dealer dealer = new Dealer();

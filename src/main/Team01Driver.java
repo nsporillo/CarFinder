@@ -2,6 +2,8 @@ package main;
 
 import views.ViewManager;
 
+import javax.swing.*;
+
 public class Team01Driver {
 
 	private static Team01Driver driver;
@@ -23,8 +25,12 @@ public class Team01Driver {
 
 	public Team01Driver() {
 		dbConnector = new DBConnector();
-		viewManager = new ViewManager();
-		viewManager.setupUserSelect();
+
+		SwingUtilities.invokeLater(() -> {
+			viewManager = new ViewManager();
+			viewManager.setupUserSelect();
+		});
+
 	}
 
 	public DBConnector getDB() {

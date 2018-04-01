@@ -20,6 +20,8 @@ public abstract class Search {
 
 		ps = connection.prepareStatement(prepareSQL());
 
+		System.out.println(ps.toString());
+
 		for (Map.Entry<Integer, Object> entry : parameterIndex.entrySet()) {
 			Object e = entry.getValue();
 

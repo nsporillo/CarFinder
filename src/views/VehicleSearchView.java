@@ -1,12 +1,10 @@
 package views;
 
 import main.Team01Driver;
-import models.DealerInventory;
 import models.Vehicle;
 import search.DealerInventorySearch;
 
-import java.awt.Component;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -17,17 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.JTextPane;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class VehicleSearchView extends JFrame {
@@ -41,7 +29,8 @@ public class VehicleSearchView extends JFrame {
 	private JComboBox<String> engineBox;
 	private JComboBox<String> colorBox;
 	private JComboBox<String> trannyBox;
-	private JTextPane searchResultPane;
+	private JScrollPane searchScroll;
+	private JPanel searchResultPanel;
 	private JLabel lblDisplayResults;
 
 	/**
@@ -173,12 +162,15 @@ public class VehicleSearchView extends JFrame {
 						results = results.subList(0, 1000);
 					}
 
+					lblDisplayResults.setText("Displaying " + results.size() + " Results");
+
 					for (Vehicle v : results) {
-						searchResultPane.add(new JButton(v.getVin()));
+						searchResultPanel.add(fromVehicle(v));
 					}
+
+					searchResultPanel.revalidate();
 				} catch(Exception ex) {
 					ex.printStackTrace(System.err);
-					searchResultPane.setText(ex.getMessage());
 				}
 			}
 		});
@@ -193,14 +185,28 @@ public class VehicleSearchView extends JFrame {
 		lblDisplayResults = new JLabel("Displaying 0 Results");
 		lblDisplayResults.setBounds(210, 8, 140, 14);
 		mainContentPane.add(lblDisplayResults);
+		
+		JScrollPane scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBounds(210, 30, 575, 430);
+		mainContentPane.add(scrollPane);
 
-		searchResultPane = new JTextPane();
-		searchResultPane.setEditable(false);
-		searchResultPane.setBounds(210, 30, 575, 430);
-		mainContentPane.add(searchResultPane);
+		searchResultPanel = new JPanel();
+		searchResultPanel.setLayout(new BoxLayout(searchResultPanel, BoxLayout.PAGE_AXIS));
+		scrollPane.setViewportView(searchResultPanel);
 	}
 
-	private  DealerInventorySearch createSearch() {
+	private JButton fromVehicle(final Vehicle vehicle) {
+		JButton jButton = new JButton(vehicle.getSearchView());
+		jButton.addActionListener(e -> {
+			VehicleView view = Team01Driver.getDriver().getViewManager().getMakeView();
+			view.setVehicle(vehicle);
+			view.setVisible(true);
+		});
+
+		return jButton;
+	}
+
+	private DealerInventorySearch createSearch() {
 		DealerInventorySearch dealerInventorySearch = new DealerInventorySearch();
 		String make = (String) makeBox.getSelectedItem();
 		String model = (String) modelBox.getSelectedItem();
