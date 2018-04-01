@@ -11,9 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import models.Model;
-import models.Option;
-import models.Vehicle;
+import models.*;
 import tables.*;
 
 public class DBConnector {
@@ -92,8 +90,9 @@ public class DBConnector {
       CustomerTable.populateCustomerTableFromCSV(main.getConnection(), "newCustomerData.csv"); // TODO
       List<Option> optionList = OptionTable.populateOptionTableFromCSV(main.getConnection(), "CarOptions.csv");
       ModelTable.populateModelTableFromCSV(main.getConnection(), "Vehicles.csv");
-      DealerTable.populateDealerTableFromCSV(main.getConnection(), "DealershipData.csv");
-      VehicleTable.populateVehicleTableFromCSV(optionList, main.getConnection(), "Vehicles.csv", "VehicleOptions.csv");
+      List<Dealer> dealers = DealerTable.populateDealerTableFromCSV(main.getConnection(), "DealershipData.csv");
+      List<Vehicle> vehicles = VehicleTable.populateVehicleTableFromCSV(optionList, main.getConnection(), "Vehicles.csv", "VehicleOptions.csv");
+      DealerInventoryTable.addAllVehiclesToAllDealers(main.getConnection(), vehicles, dealers);
     } catch (SQLException e) {
       e.printStackTrace();
     }

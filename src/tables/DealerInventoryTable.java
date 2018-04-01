@@ -1,5 +1,6 @@
 package tables;
 
+import models.Dealer;
 import models.Vehicle;
 
 import java.sql.*;
@@ -15,6 +16,19 @@ public class DealerInventoryTable {
 			stmt.execute(query);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+
+
+	public static void addAllVehiclesToAllDealers(Connection conn, List<Vehicle> vehicles, List<Dealer> dealers) throws SQLException {
+		int dealerSize = dealers.size();
+
+		for (int i = 0; i < dealerSize; i++) {
+			int mod = (int)(vehicles.size() / dealerSize);
+
+			System.out.println(String.format("Putting vehicles (%d,%d) into Dealer %d", (i * mod), (i * mod + mod), dealers.get(i).getId()));
+			PreparedStatement ps = createDealerInventoryInsert(conn, vehicles.subList(i * mod, i * mod + mod), dealers.get(i).getId());
+			ps.executeUpdate();
 		}
 	}
 
