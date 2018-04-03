@@ -146,6 +146,45 @@ public class DealerInventorySearch extends Search {
 		return query;
 	}
 
+	public Integer findPrice(Connection connection, String func) {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			String preparedSQL = prepareSQL();
+			preparedSQL = preparedSQL.replace("*", func + "(Vehicle.Price)");
+
+			ps = super.prepareStatement(connection, preparedSQL);
+			rs = ps.executeQuery();
+
+			super.clearParameterIndex();
+
+			if (rs.next()) {
+				return rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return null;
+	}
+
 	public List<String> findRemainingColumnRows(Connection connection, String column) {
 		List<String> rows = new ArrayList<>();
 		PreparedStatement ps = null;

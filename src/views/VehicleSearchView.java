@@ -13,6 +13,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.Connection;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -20,23 +21,27 @@ import java.util.Locale;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.NumberFormatter;
 
 public class VehicleSearchView extends JFrame {
 
+	private static final NumberFormat currency = NumberFormat.getCurrencyInstance(new Locale("en", "US"));
 	private JPanel mainContentPane;
 
-	private static JComboBox<String> makeBox;
-	private static JComboBox<String> modelBox;
-	private static JComboBox<String> priceBox;
-	private static JComboBox<String> yearBox;
-	private static JComboBox<String> engineBox;
-	private static JComboBox<String> colorBox;
-	private static JComboBox<String> trannyBox;
-	private JScrollPane searchScroll;
+	private JComboBox<String> makeBox;
+	private JComboBox<String> modelBox;
+	private JComboBox<String> priceBox;
+	private JComboBox<String> yearBox;
+	private JComboBox<String> engineBox;
+	private JComboBox<String> colorBox;
+	private JComboBox<String> trannyBox;
+	private JFormattedTextField zipField;
+	private JFormattedTextField dealerField;
 	private JPanel searchResultPanel;
 	private JLabel lblDisplayResults;
 
 	private DealerInventorySearch dealerInventorySearch;
+
 
 	/**
 	 * Create the frame.
@@ -118,10 +123,39 @@ public class VehicleSearchView extends JFrame {
 		});
 		trannyBox = new JComboBox<>();
 
-		// TODO: Add zip code validation
-		JFormattedTextField zipField = new JFormattedTextField();
-		// TODO: Add dealer name (or id) validation
-		JFormattedTextField dealerField = new JFormattedTextField();
+		NumberFormatter zipFormatter = new NumberFormatter(NumberFormat.getIntegerInstance()){
+
+			@Override
+			public Object stringToValue(String text) throws ParseException {
+				if (text.length() == 0) {
+					return null;
+				}
+				return super.stringToValue(text);
+			}
+		};
+		zipFormatter.setValueClass(Integer.class);
+		zipFormatter.setAllowsInvalid(false);
+		zipFormatter.setMinimum(0);
+		zipFormatter.setMaximum(99999);
+		zipField = new JFormattedTextField(zipFormatter);
+
+		NumberFormatter dealerFormatter = new NumberFormatter(NumberFormat.getIntegerInstance()){
+
+			@Override
+			public Object stringToValue(String text) throws ParseException {
+				if (text.length() == 0) {
+					return null;
+				}
+				return super.stringToValue(text);
+			}
+		};
+		dealerFormatter.setValueClass(Integer.class);
+		dealerFormatter.setAllowsInvalid(false);
+		dealerFormatter.setMinimum(0);
+
+		//numberFormatter.setMaximum();
+
+		dealerField = new JFormattedTextField(dealerFormatter);
 
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 		panel.add(lblMake);
@@ -152,9 +186,7 @@ public class VehicleSearchView extends JFrame {
 		setEngines(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Engine"));
 		setColors(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Color"));
 		setTrannies(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Transmission"));
-
-		//TODO: Add better detection for range of dealer inventories for year and price
-		setPrices(5304, 16540);
+		setPrices(dealerInventorySearch.findPrice(dbConnection, "MIN"), dealerInventorySearch.findPrice(dbConnection, "MAX"));
 
 		JButton btnSearch = new JButton("Search");
 		btnSearch.setBounds(5, 396, 190, 64);
@@ -225,12 +257,13 @@ public class VehicleSearchView extends JFrame {
 		return jButton;
 	}
 
-	private static DealerInventorySearch createSearch() {
+	private DealerInventorySearch createSearch() {
 		DealerInventorySearch dealerInventorySearch = new DealerInventorySearch();
 		String make = (String) makeBox.getSelectedItem();
 		String model = (String) modelBox.getSelectedItem();
 		String maxPrice = (String) priceBox.getSelectedItem();
 		String year = (String) yearBox.getSelectedItem();
+		String dealer = dealerField.getText();
 		String color = (String) colorBox.getSelectedItem();
 		String engine = (String) engineBox.getSelectedItem();
 		String tranny = (String) trannyBox.getSelectedItem();
@@ -244,7 +277,17 @@ public class VehicleSearchView extends JFrame {
 		}
 
 		if (maxPrice != null && !maxPrice.equals("No Max Price")) {
-			dealerInventorySearch.setMaxPrice(Integer.parseInt(maxPrice.substring(0, maxPrice.length()-1)));
+			Number number;
+			try {
+				number = currency.parse(maxPrice);
+				dealerInventorySearch.setMaxPrice(number.intValue());
+			} catch (ParseException ex) {
+				ex.printStackTrace(System.err);
+			}
+		}
+
+		if (dealer != null && dealer.length() != 0) {
+			dealerInventorySearch.setDealerID(Integer.parseInt(dealer));
 		}
 
 		if (year != null && !year.equals("Any")) {
@@ -289,7 +332,7 @@ public class VehicleSearchView extends JFrame {
 			int end = (int) (Math.ceil(largestPrice / 1000) * 1000);
 
 			for (int i = start; i <= end; i += Math.min(2000, end - start)) {
-				String amount = NumberFormat.getCurrencyInstance(new Locale("en", "US")).format(i);
+				String amount = currency.format(i);
 				base.add(amount);
 			}
 		}
