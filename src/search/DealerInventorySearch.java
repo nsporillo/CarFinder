@@ -96,7 +96,11 @@ public class DealerInventorySearch extends Search {
 				"INNER JOIN Option ON Vehicle.OptionID = Option.OptionID";
 
 		if (dealerFields.size() > 0) {
-			query += " INNER JOIN Dealer ON Dealer.DealerID = DealerInventory.DealerID";
+			if (dealerFields.containsKey("DealerID")) {
+				query += " INNER JOIN Dealer ON Dealer.DealerID = " + dealerFields.get("DealerID");
+			} else {
+				query += " INNER JOIN Dealer ON Dealer.DealerID = DealerInventory.DealerID";
+			}
 		}
 
 		/* Filter results by any number of vehicle or model fields */

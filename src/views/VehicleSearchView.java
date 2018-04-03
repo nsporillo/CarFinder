@@ -263,7 +263,7 @@ public class VehicleSearchView extends JFrame {
 		String model = (String) modelBox.getSelectedItem();
 		String maxPrice = (String) priceBox.getSelectedItem();
 		String year = (String) yearBox.getSelectedItem();
-		String dealer = dealerField.getText();
+
 		String color = (String) colorBox.getSelectedItem();
 		String engine = (String) engineBox.getSelectedItem();
 		String tranny = (String) trannyBox.getSelectedItem();
@@ -286,8 +286,14 @@ public class VehicleSearchView extends JFrame {
 			}
 		}
 
-		if (dealer != null && dealer.length() != 0) {
-			dealerInventorySearch.setDealerID(Integer.parseInt(dealer));
+		Integer dealer = null;
+
+		try {
+			dealer = (Integer) dealerField.getFormatter().stringToValue(dealerField.getText());
+		} catch (ParseException e) {}
+		
+		if (dealer != null) {
+			dealerInventorySearch.setDealerID(dealer);
 		}
 
 		if (year != null && !year.equals("Any")) {
