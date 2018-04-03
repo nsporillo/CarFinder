@@ -23,6 +23,7 @@ public class ViewManager {
 		dealerSearch = new DealerSearchView();
 		makeView = new VehicleView();
 		dealerView = new DealerView();
+		dealerView.prepareView();
 		salesView = new SalesView();
 		customerView = new CustomerView();
 	}

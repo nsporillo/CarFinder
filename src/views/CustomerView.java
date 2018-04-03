@@ -1,5 +1,7 @@
 package views;
 
+import models.Customer;
+
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,6 +18,9 @@ public class CustomerView extends JFrame {
 	private JTextField txtGender;
 	private JTextField txtIncome_1;
 	private JTextField txtIncome;
+
+	private Customer customer;
+
 	/**
 	 * Create the frame.
 	 */
@@ -74,5 +79,15 @@ public class CustomerView extends JFrame {
 		txtpnVehiclenvehicle.setText("Vehicle 1\r\nVehicle 2\r\n....");
 		txtpnVehiclenvehicle.setBounds(10, 322, 474, 138);
 		contentPane.add(txtpnVehiclenvehicle);
+	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer(Customer customer) {
+		this.customer = customer;
+
+		//TODO: Update all fields with customer data
 	}
 }

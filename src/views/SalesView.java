@@ -1,13 +1,7 @@
 package views;
 
-import java.awt.BorderLayout;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JTextPane;
-import javax.swing.JTable;
 
 public class SalesView extends JFrame {
 
@@ -25,11 +19,11 @@ public class SalesView extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JLabel lblSalesReportFor = new JLabel("Sales report for %dealer%");
 		lblSalesReportFor.setBounds(10, 11, 160, 14);
 		contentPane.add(lblSalesReportFor);
-		
+
 		JTable textPane = new JTable();
 		textPane.setBounds(10, 36, 624, 324);
 		contentPane.add(textPane);

@@ -130,6 +130,5 @@ public class VehicleView extends JFrame {
 		this.transmissionField.setText(vehicle.getOption().getTransmission());
 		this.modelField.setText(vehicle.getModel().getBodyStyle());
 		this.priceField.setText(vehicle.price());
-
 	}
 }

@@ -1,11 +1,12 @@
 package views;
 
 import main.Team01Driver;
-import models.Model;
-import models.Option;
 import models.Vehicle;
 import search.DealerInventorySearch;
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,13 +16,8 @@ import java.sql.Connection;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.text.NumberFormatter;
 
 public class VehicleSearchView extends JFrame {
 
@@ -69,8 +65,14 @@ public class VehicleSearchView extends JFrame {
 		JLabel lblEngine = new JLabel("Engine");
 		JLabel lblYear = new JLabel("Year");
 		JLabel lblTransmission = new JLabel("Transmission");
-		lblMake.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+		/* TODO
+		  Currently this assumes the user selects search options from top to bottom
+		  We should be able to start from an arbitrary search option and continue refining
+		  until we want to search. The idea is to dynamically update the search options in the
+		  comboboxes as the user makes more selections. If any conflicts arise when narrowing
+		  down options, we should open an error popup detailing the issue.
+		 */
 		makeBox = new JComboBox<>();
 		makeBox.addItemListener(e -> {
 			SwingUtilities.invokeLater(() -> {
@@ -122,8 +124,14 @@ public class VehicleSearchView extends JFrame {
 			setTrannies(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Transmission"));
 		});
 		trannyBox = new JComboBox<>();
+		trannyBox.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				//TODO
+			}
+		});
 
-		NumberFormatter zipFormatter = new NumberFormatter(NumberFormat.getIntegerInstance()){
+		NumberFormatter zipFormatter = new NumberFormatter(NumberFormat.getIntegerInstance()) {
 
 			@Override
 			public Object stringToValue(String text) throws ParseException {
@@ -136,10 +144,10 @@ public class VehicleSearchView extends JFrame {
 		zipFormatter.setValueClass(Integer.class);
 		zipFormatter.setAllowsInvalid(false);
 		zipFormatter.setMinimum(0);
-		zipFormatter.setMaximum(99999);
+		zipFormatter.setMaximum(99999); // dont bother finding "max" zip code in the DB
 		zipField = new JFormattedTextField(zipFormatter);
 
-		NumberFormatter dealerFormatter = new NumberFormatter(NumberFormat.getIntegerInstance()){
+		NumberFormatter dealerFormatter = new NumberFormatter(NumberFormat.getIntegerInstance()) {
 
 			@Override
 			public Object stringToValue(String text) throws ParseException {
@@ -153,7 +161,8 @@ public class VehicleSearchView extends JFrame {
 		dealerFormatter.setAllowsInvalid(false);
 		dealerFormatter.setMinimum(0);
 
-		//numberFormatter.setMaximum();
+		//TODO: Query DealerInventory for the max dealer id
+		//dealerFormatter.setMaximum();
 
 		dealerField = new JFormattedTextField(dealerFormatter);
 
@@ -191,37 +200,7 @@ public class VehicleSearchView extends JFrame {
 		JButton btnSearch = new JButton("Search");
 		btnSearch.setBounds(5, 396, 190, 64);
 		btnSearch.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btnSearch.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					dealerInventorySearch = createSearch();
-					List<Vehicle> results = dealerInventorySearch.execute(Team01Driver.getDriver().getDB().getConnection());
-
-					if (results == null || results.size() == 0) {
-						System.out.println("No results");
-						return;
-					} else if (results.size() > 1000) {
-						results = results.subList(0, 1000);
-					}
-
-					lblDisplayResults.setText("Displaying " + results.size() + " Results");
-
-					// Remove any possible previous results
-					searchResultPanel.removeAll();
-
-					// Add header
-					searchResultPanel.add(fromVehicle(Vehicle.label(), false));
-					
-					for (Vehicle v : results) {
-						searchResultPanel.add(fromVehicle(v, true));
-					}
-
-					searchResultPanel.revalidate();
-				} catch(Exception ex) {
-					ex.printStackTrace(System.err);
-				}
-			}
-		});
+		btnSearch.addActionListener(searchListener);
 
 		mainContentPane.add(btnSearch);
 
@@ -233,7 +212,7 @@ public class VehicleSearchView extends JFrame {
 		lblDisplayResults = new JLabel("Displaying 0 Results");
 		lblDisplayResults.setBounds(210, 8, 140, 14);
 		mainContentPane.add(lblDisplayResults);
-		
+
 		JScrollPane scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBounds(210, 30, 575, 430);
 		mainContentPane.add(scrollPane);
@@ -243,6 +222,43 @@ public class VehicleSearchView extends JFrame {
 		scrollPane.setViewportView(searchResultPanel);
 	}
 
+	/**
+	 * ActionListener ror
+	 */
+	final ActionListener searchListener = new ActionListener() {
+		public void actionPerformed(ActionEvent arg0) {
+			try {
+				dealerInventorySearch = createSearch();
+				List<Vehicle> results = dealerInventorySearch.execute(Team01Driver.getDriver().getDB().getConnection());
+
+				// Arbitrary results limit to avoid overloading JScrollPane
+				if (results == null || results.size() == 0) {
+					System.out.println("No results");
+					return;
+				} else if (results.size() > 1000) {
+					results = results.subList(0, 1000);
+				}
+
+				lblDisplayResults.setText("Displaying " + results.size() + " Results");
+
+				// Remove any possible previous results
+				searchResultPanel.removeAll();
+
+				// Add header
+				searchResultPanel.add(fromVehicle(Vehicle.label(), false));
+
+				// Display all vehicle results
+				for (Vehicle v : results) {
+					searchResultPanel.add(fromVehicle(v, true));
+				}
+
+				searchResultPanel.revalidate();
+			} catch (Exception ex) {
+				ex.printStackTrace(System.err);
+			}
+		}
+	};
+
 	private JButton fromVehicle(final Vehicle vehicle, boolean clickable) {
 		JButton jButton = new JButton(vehicle.getSearchView());
 
@@ -250,7 +266,9 @@ public class VehicleSearchView extends JFrame {
 			jButton.addActionListener(e -> {
 				VehicleView view = Team01Driver.getDriver().getViewManager().getMakeView();
 				view.setVehicle(vehicle);
-				view.setVisible(true);
+				if (!view.isVisible()) {
+					view.setVisible(true);
+				}
 			});
 		}
 
@@ -263,7 +281,6 @@ public class VehicleSearchView extends JFrame {
 		String model = (String) modelBox.getSelectedItem();
 		String maxPrice = (String) priceBox.getSelectedItem();
 		String year = (String) yearBox.getSelectedItem();
-
 		String color = (String) colorBox.getSelectedItem();
 		String engine = (String) engineBox.getSelectedItem();
 		String tranny = (String) trannyBox.getSelectedItem();
@@ -276,6 +293,7 @@ public class VehicleSearchView extends JFrame {
 			dealerInventorySearch.setBodyStyle(model);
 		}
 
+		/* Need to parse price back from pretty $ form */
 		if (maxPrice != null && !maxPrice.equals("No Max Price")) {
 			Number number;
 			try {
@@ -289,9 +307,11 @@ public class VehicleSearchView extends JFrame {
 		Integer dealer = null;
 
 		try {
+			/* Parse dealer number from the dealer field*/
 			dealer = (Integer) dealerField.getFormatter().stringToValue(dealerField.getText());
-		} catch (ParseException e) {}
-		
+		} catch (ParseException e) {
+		}
+
 		if (dealer != null) {
 			dealerInventorySearch.setDealerID(dealer);
 		}
@@ -319,14 +339,14 @@ public class VehicleSearchView extends JFrame {
 		List<String> base = new ArrayList<>();
 		base.add("All Makes");
 		base.addAll(makes);
-		makeBox.setModel(new DefaultComboBoxModel<String>(base.toArray(new String[base.size()])));
+		makeBox.setModel(new DefaultComboBoxModel<>(base.toArray(new String[base.size()])));
 	}
 
 	public void setModels(List<String> models) {
 		List<String> base = new ArrayList<>();
 		base.add("All Models");
 		base.addAll(models);
-		modelBox.setModel(new DefaultComboBoxModel<String>(base.toArray(new String[base.size()])));
+		modelBox.setModel(new DefaultComboBoxModel<>(base.toArray(new String[base.size()])));
 	}
 
 	public void setPrices(int smallestPrice, int largestPrice) {
@@ -343,45 +363,34 @@ public class VehicleSearchView extends JFrame {
 			}
 		}
 
-		priceBox.setModel(new DefaultComboBoxModel<String>(base.toArray(new String[base.size()])));
-	}
-
-	public void setYears(int start, int end) {
-		List<String> base = new ArrayList<>();
-		base.add("Any");
-
-		for (int i = start; i <= end; i++) {
-			base.add(String.valueOf(i));
-		}
-
-		yearBox.setModel(new DefaultComboBoxModel<String>(base.toArray(new String[base.size()])));
+		priceBox.setModel(new DefaultComboBoxModel<>(base.toArray(new String[base.size()])));
 	}
 
 	public void setYears(List<String> years) {
 		List<String> base = new ArrayList<>();
 		base.add("Any");
 		base.addAll(years);
-		yearBox.setModel(new DefaultComboBoxModel<String>(base.toArray(new String[base.size()])));
+		yearBox.setModel(new DefaultComboBoxModel<>(base.toArray(new String[base.size()])));
 	}
 
 	public void setColors(List<String> colors) {
 		List<String> base = new ArrayList<>();
 		base.add("Any");
 		base.addAll(colors);
-		colorBox.setModel(new DefaultComboBoxModel<String>(base.toArray(new String[base.size()])));
+		colorBox.setModel(new DefaultComboBoxModel<>(base.toArray(new String[base.size()])));
 	}
 
 	public void setEngines(List<String> engines) {
 		List<String> base = new ArrayList<>();
 		base.add("Any");
 		base.addAll(engines);
-		engineBox.setModel(new DefaultComboBoxModel<String>(base.toArray(new String[base.size()])));
+		engineBox.setModel(new DefaultComboBoxModel<>(base.toArray(new String[base.size()])));
 	}
 
 	public void setTrannies(List<String> trannies) {
 		List<String> base = new ArrayList<>();
 		base.add("Any");
 		base.addAll(trannies);
-		trannyBox.setModel(new DefaultComboBoxModel<String>(base.toArray(new String[base.size()])));
+		trannyBox.setModel(new DefaultComboBoxModel<>(base.toArray(new String[base.size()])));
 	}
 }
