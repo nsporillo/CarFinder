@@ -50,7 +50,7 @@ public class CustomerSaleSearch extends Search {
 		List<Sale> sales = new ArrayList<>();
 
 		try {
-			PreparedStatement ps = super.prepareStatement(connection);
+			PreparedStatement ps = super.prepareStatement(connection, prepareSQL());
 			ResultSet rs = ps.executeQuery();
 			super.clearParameterIndex();
 

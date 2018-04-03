@@ -9,16 +9,24 @@ import java.util.TreeMap;
 
 public abstract class Search {
 
-	private Map<Integer, Object> parameterIndex = new TreeMap<>();
+	private Map<Integer, Object> parameterIndex;
+
+	public Search() {
+		this.parameterIndex = new TreeMap<>();
+	}
 
 	public abstract String prepareSQL();
 
 	public abstract List<?> execute(Connection connection);
 
-	public PreparedStatement prepareStatement(Connection connection) throws SQLException {
-		PreparedStatement ps = null;
+	public PreparedStatement prepareStatement(Connection connection, String sql) throws SQLException {
+		PreparedStatement ps;
 
-		ps = connection.prepareStatement(prepareSQL());
+		if (sql.endsWith(";")) {
+			sql += ";";
+		}
+
+		ps = connection.prepareStatement(sql);
 
 		System.out.println(ps.toString());
 

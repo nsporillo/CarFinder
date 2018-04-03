@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.sql.Connection;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,16 +25,18 @@ public class VehicleSearchView extends JFrame {
 
 	private JPanel mainContentPane;
 
-	private JComboBox<String> makeBox;
-	private JComboBox<String> modelBox;
-	private JComboBox<String> priceBox;
-	private JComboBox<String> yearBox;
-	private JComboBox<String> engineBox;
-	private JComboBox<String> colorBox;
-	private JComboBox<String> trannyBox;
+	private static JComboBox<String> makeBox;
+	private static JComboBox<String> modelBox;
+	private static JComboBox<String> priceBox;
+	private static JComboBox<String> yearBox;
+	private static JComboBox<String> engineBox;
+	private static JComboBox<String> colorBox;
+	private static JComboBox<String> trannyBox;
 	private JScrollPane searchScroll;
 	private JPanel searchResultPanel;
 	private JLabel lblDisplayResults;
+
+	private DealerInventorySearch dealerInventorySearch;
 
 	/**
 	 * Create the frame.
@@ -64,18 +67,24 @@ public class VehicleSearchView extends JFrame {
 		lblMake.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		makeBox = new JComboBox<>();
-		makeBox.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				//TODO: Update all other comboboxes to only display
-				// valid options
-			}
+		makeBox.addItemListener(e -> {
+			SwingUtilities.invokeLater(() -> {
+				dealerInventorySearch = createSearch();
+				Connection dbConnection = Team01Driver.getDriver().getDB().getConnection();
+				setModels(dealerInventorySearch.findRemainingColumnRows(dbConnection, "BodyStyle"));
+				setEngines(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Engine"));
+				setColors(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Color"));
+				setTrannies(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Transmission"));
+			});
+
 		});
 		modelBox = new JComboBox<>();
-		modelBox.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				//TODO: Update all other comboboxes to only display
-				// valid options
-			}
+		modelBox.addItemListener(e -> {
+			dealerInventorySearch = createSearch();
+			Connection dbConnection = Team01Driver.getDriver().getDB().getConnection();
+			setEngines(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Engine"));
+			setColors(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Color"));
+			setTrannies(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Transmission"));
 		});
 		priceBox = new JComboBox<>();
 		priceBox.addItemListener(new ItemListener() {
@@ -87,31 +96,27 @@ public class VehicleSearchView extends JFrame {
 		yearBox = new JComboBox<>();
 		yearBox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
-				//TODO: Update all other comboboxes to only display
-				// valid options
-			}
-		});
-		trannyBox = new JComboBox<>();
-		trannyBox.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				//TODO: Update all other comboboxes to only display
-				// valid options
+				dealerInventorySearch = createSearch();
+				Connection dbConnection = Team01Driver.getDriver().getDB().getConnection();
+				setColors(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Color"));
+				setEngines(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Engine"));
+				setTrannies(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Transmission"));
 			}
 		});
 		colorBox = new JComboBox<>();
-		colorBox.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				//TODO: Update all other comboboxes to only display
-				// valid options
-			}
+		colorBox.addItemListener(e -> {
+			dealerInventorySearch = createSearch();
+			Connection dbConnection = Team01Driver.getDriver().getDB().getConnection();
+			setEngines(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Engine"));
+			setTrannies(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Transmission"));
 		});
 		engineBox = new JComboBox<>();
-		engineBox.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				//TODO: Update all other comboboxes to only display
-				// valid options
-			}
+		engineBox.addItemListener(e -> {
+			dealerInventorySearch = createSearch();
+			Connection dbConnection = Team01Driver.getDriver().getDB().getConnection();
+			setTrannies(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Transmission"));
 		});
+		trannyBox = new JComboBox<>();
 
 		// TODO: Add zip code validation
 		JFormattedTextField zipField = new JFormattedTextField();
@@ -138,15 +143,18 @@ public class VehicleSearchView extends JFrame {
 		panel.add(lblTransmission);
 		panel.add(trannyBox);
 
-		// Supply the UI with some defaults that will be overrided later
-		// Simply for UI testing without DB connection
-		setMakes(Arrays.asList("BMW"));
-		setModels(Arrays.asList("325xi", "540i"));
+		dealerInventorySearch = createSearch();
+		Connection dbConnection = Team01Driver.getDriver().getDB().getConnection();
+
+		setMakes(dealerInventorySearch.findRemainingColumnRows(dbConnection, "BrandName"));
+		setModels(dealerInventorySearch.findRemainingColumnRows(dbConnection, "BodyStyle"));
+		setYears(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Year"));
+		setEngines(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Engine"));
+		setColors(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Color"));
+		setTrannies(dealerInventorySearch.findRemainingColumnRows(dbConnection, "Transmission"));
+
+		//TODO: Add better detection for range of dealer inventories for year and price
 		setPrices(5304, 16540);
-		setYears(1985, 2018);
-		setEngines(Arrays.asList("I4", "V6", "V8"));
-		setColors(Arrays.asList("Black", "White", "Silver"));
-		setTrannies(Arrays.asList("Automatic", "Manual"));
 
 		JButton btnSearch = new JButton("Search");
 		btnSearch.setBounds(5, 396, 190, 64);
@@ -154,7 +162,7 @@ public class VehicleSearchView extends JFrame {
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					DealerInventorySearch dealerInventorySearch = createSearch();
+					dealerInventorySearch = createSearch();
 					List<Vehicle> results = dealerInventorySearch.execute(Team01Driver.getDriver().getDB().getConnection());
 
 					if (results == null || results.size() == 0) {
@@ -166,7 +174,10 @@ public class VehicleSearchView extends JFrame {
 
 					lblDisplayResults.setText("Displaying " + results.size() + " Results");
 
-					// Add header 
+					// Remove any possible previous results
+					searchResultPanel.removeAll();
+
+					// Add header
 					searchResultPanel.add(fromVehicle(Vehicle.label(), false));
 					
 					for (Vehicle v : results) {
@@ -214,7 +225,7 @@ public class VehicleSearchView extends JFrame {
 		return jButton;
 	}
 
-	private DealerInventorySearch createSearch() {
+	private static DealerInventorySearch createSearch() {
 		DealerInventorySearch dealerInventorySearch = new DealerInventorySearch();
 		String make = (String) makeBox.getSelectedItem();
 		String model = (String) modelBox.getSelectedItem();

@@ -15,10 +15,18 @@ import java.util.Map;
 
 public class DealerInventorySearch extends Search {
 
-	private Map<String, Object> dealerFields = new HashMap<>();
-	private Map<String, Object> vehicleFields = new HashMap<>();
-	private Map<String, Object> modelFields = new HashMap<>();
-	private Map<String, Object> optionFields = new HashMap<>();
+	private Map<String, Object> dealerFields;
+	private Map<String, Object> vehicleFields;
+	private Map<String, Object> modelFields;
+	private Map<String, Object> optionFields;
+
+	public DealerInventorySearch() {
+		super();
+		dealerFields = new HashMap<>();
+		vehicleFields = new HashMap<>();
+		modelFields = new HashMap<>();
+		optionFields = new HashMap<>();
+	}
 
 	public void setDealerID(int dealerId) {
 		dealerFields.put("DealerID", dealerId);
@@ -65,6 +73,7 @@ public class DealerInventorySearch extends Search {
 	/**
 	 * Test method for simulating PreparedStatement
 	 * Do not call before .execute(), only replace .execute() with this.
+	 *
 	 * @return full SQL query with parameters injected
 	 */
 	private String injectParameters() {
@@ -134,7 +143,82 @@ public class DealerInventorySearch extends Search {
 			query += builder.substring(0, builder.lastIndexOf("?") + 1);
 		}
 
-		return query + ";";
+		return query;
+	}
+
+	public List<String> findRemainingColumnRows(Connection connection, String column) {
+		List<String> rows = new ArrayList<>();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			String preparedSQL = prepareSQL();
+
+			// We want to replace the * with the proper column to find all distinct given all additional search criteria
+			// Supports makes, models, colors, engines, transmissions
+			// TODO: Other fields must employ additional column searching for full functionality
+			switch(column) {
+				case "BrandName": {
+					preparedSQL = preparedSQL.replace("*", "DISTINCT Model.BrandName");
+					preparedSQL += " ORDER BY Model.BrandName";
+					break;
+				}
+				case "BodyStyle": {
+					preparedSQL = preparedSQL.replace("*", "DISTINCT Model.BodyStyle");
+					preparedSQL += " ORDER BY Model.BodyStyle";
+					break;
+				}
+				case "Year": {
+					preparedSQL = preparedSQL.replace("*", "DISTINCT Vehicle.Year");
+					preparedSQL += " ORDER BY Vehicle.Year";
+					break;
+				}
+				case "Color": {
+					preparedSQL = preparedSQL.replace("*", "DISTINCT Option.Color");
+					preparedSQL += " ORDER BY Option.Color";
+					break;
+				}
+				case "Engine": {
+					preparedSQL = preparedSQL.replace("*", "DISTINCT Option.Engine");
+					preparedSQL += " ORDER BY Option.Engine";
+					break;
+				}
+				case "Transmission": {
+					preparedSQL = preparedSQL.replace("*", "DISTINCT Option.Transmission");
+					preparedSQL += " ORDER BY Option.Transmission";
+				}
+				break;
+			}
+
+			ps = super.prepareStatement(connection, preparedSQL);
+			rs = ps.executeQuery();
+
+			super.clearParameterIndex();
+
+			while (rs.next()) {
+				rows.add(rs.getString(1));
+			}
+
+			return rows;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	@Override
@@ -144,7 +228,7 @@ public class DealerInventorySearch extends Search {
 		ResultSet rs = null;
 
 		try {
-			ps = super.prepareStatement(connection);
+			ps = super.prepareStatement(connection, prepareSQL());
 			rs = ps.executeQuery();
 			super.clearParameterIndex();
 
@@ -187,6 +271,22 @@ public class DealerInventorySearch extends Search {
 				}
 			}
 		}
+	}
+
+	public Map<String, Object> getDealerFields() {
+		return dealerFields;
+	}
+
+	public Map<String, Object> getVehicleFields() {
+		return vehicleFields;
+	}
+
+	public Map<String, Object> getModelFields() {
+		return modelFields;
+	}
+
+	public Map<String, Object> getOptionFields() {
+		return optionFields;
 	}
 
 	public static void main(String[] args) {
