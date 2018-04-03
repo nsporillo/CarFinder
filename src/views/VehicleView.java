@@ -28,7 +28,6 @@ public class VehicleView extends JFrame {
 	private JTextField priceField;
 	private JTextField extColorField;
 	private JTextField transmissionField;
-	private JTextField trimField;
 	private JTextField engineField;
 
 	/**
@@ -113,19 +112,6 @@ public class VehicleView extends JFrame {
 		engineField.setEditable(false);
 		engineField.setColumns(10);
 		
-		JLabel lblTrim = new JLabel("Bodystyle:");
-		panel.add(lblTrim);
-		
-		trimField = new JTextField();
-		panel.add(trimField);
-		trimField.setToolTipText("Vehicle Trim type");
-		trimField.setEditable(false);
-		trimField.setColumns(10);
-		
-		JSeparator separator = new JSeparator();
-		separator.setBounds(5, 150, 444, 2);
-		contentPane.add(separator);
-		
 		JButton btnNewButton = new JButton("View Owner/Dealer");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -146,9 +132,12 @@ public class VehicleView extends JFrame {
 		this.vehicle = vehicle;
 		this.vinField.setText(vehicle.getVin());
 		this.makeField.setText(vehicle.getModel().getBrandName());
+		this.yearField.setText(String.valueOf(vehicle.getYear()));
+		this.extColorField.setText(vehicle.getOption().getColor());
 		this.engineField.setText(vehicle.getOption().getEngine());
+		this.transmissionField.setText(vehicle.getOption().getTransmission());
 		this.modelField.setText(vehicle.getModel().getBodyStyle());
-		this.priceField.setText(String.valueOf(vehicle.getPrice()));
+		this.priceField.setText(vehicle.price());
 		
 	}
 }

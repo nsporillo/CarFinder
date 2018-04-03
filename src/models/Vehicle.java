@@ -19,6 +19,7 @@ public class Vehicle {
     public Vehicle(String vin, Model model, Option option, int year, int price) {
         this.vin = vin;
         this.model = model;
+        this.option = option;
         this.year = year;
         this.price = price;
     }
@@ -79,11 +80,31 @@ public class Vehicle {
     }
 
     public String getSearchView() {
-        String template = "%d %s %s %s";
-        return String.format(template, year, model.getBrandName(), model.getBodyStyle(), price());
+    	// YEAR COLOR MAKE MODEL PRICE ENGINE TRANSMISSION
+        String template = "| %s | %s | %s | %s | %s | %s | %s |";
+        String sYear = year > 0 ? String.valueOf(year) : "YEAR";
+        return String.format(template, 
+        		sYear, 
+        		option.getColor(), 
+        		model.getBrandName(), 
+        		model.getBodyStyle(), 
+        		price(), 
+        		option.getEngine(), 
+        		option.getTransmission());
     }
 
-    private String price() {
+    public String price() {
+    	if (price < 0) {
+    		return "PRICE";
+    	}
+    	
         return NumberFormat.getCurrencyInstance(new Locale("en", "US")).format(price);
+    }
+    
+    public static final Vehicle label() {
+    	return new Vehicle("VIN", 
+				new Model(-1, "MAKE", "MODEL"), 
+				new Option(-1, "COLOR", "ENGINE", "TRANSMISSION"), 
+				-1, -1);
     }
 }

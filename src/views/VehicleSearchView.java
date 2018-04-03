@@ -1,6 +1,8 @@
 package views;
 
 import main.Team01Driver;
+import models.Model;
+import models.Option;
 import models.Vehicle;
 import search.DealerInventorySearch;
 
@@ -164,8 +166,11 @@ public class VehicleSearchView extends JFrame {
 
 					lblDisplayResults.setText("Displaying " + results.size() + " Results");
 
+					// Add header 
+					searchResultPanel.add(fromVehicle(Vehicle.label(), false));
+					
 					for (Vehicle v : results) {
-						searchResultPanel.add(fromVehicle(v));
+						searchResultPanel.add(fromVehicle(v, true));
 					}
 
 					searchResultPanel.revalidate();
@@ -195,13 +200,16 @@ public class VehicleSearchView extends JFrame {
 		scrollPane.setViewportView(searchResultPanel);
 	}
 
-	private JButton fromVehicle(final Vehicle vehicle) {
+	private JButton fromVehicle(final Vehicle vehicle, boolean clickable) {
 		JButton jButton = new JButton(vehicle.getSearchView());
-		jButton.addActionListener(e -> {
-			VehicleView view = Team01Driver.getDriver().getViewManager().getMakeView();
-			view.setVehicle(vehicle);
-			view.setVisible(true);
-		});
+
+		if (clickable) {
+			jButton.addActionListener(e -> {
+				VehicleView view = Team01Driver.getDriver().getViewManager().getMakeView();
+				view.setVehicle(vehicle);
+				view.setVisible(true);
+			});
+		}
 
 		return jButton;
 	}
