@@ -243,6 +243,7 @@ public class VehicleSearchView extends JFrame {
 
 				// Remove any possible previous results
 				searchResultPanel.removeAll();
+				searchResultPanel.revalidate();
 
 				// Add header
 				searchResultPanel.add(fromVehicle(Vehicle.label(), false));
@@ -310,6 +311,7 @@ public class VehicleSearchView extends JFrame {
 			/* Parse dealer number from the dealer field*/
 			dealer = (Integer) dealerField.getFormatter().stringToValue(dealerField.getText());
 		} catch (ParseException e) {
+			e.printStackTrace(System.err);
 		}
 
 		if (dealer != null) {

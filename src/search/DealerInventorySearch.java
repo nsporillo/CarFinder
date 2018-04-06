@@ -98,18 +98,8 @@ public class DealerInventorySearch extends Search {
 				"INNER JOIN Model ON Vehicle.ModelID = Model.ModelID " +
 				"INNER JOIN Option ON Vehicle.OptionID = Option.OptionID";
 
-		if (dealerFields.size() > 0) {
-			if (dealerFields.containsKey("DealerID")) {
-				// Instead of join the dealer table, we can simplify the query by supplying the dealerid
-				query += " WHERE DealerInventory.DealerID = " + dealerFields.get("DealerID");
-			} else {
-				// For things like dealer name searching
-				query += " INNER JOIN Dealer ON Dealer.DealerID = DealerInventory.DealerID";
-			}
-		}
-
 		/* Filter results by any number of vehicle or model fields */
-		if (vehicleFields.size() > 0 || modelFields.size() > 0 || optionFields.size() > 0) {
+		if (vehicleFields.size() > 0 || modelFields.size() > 0 || optionFields.size() > 0 || dealerFields.size() > 0) {
 			StringBuilder builder = new StringBuilder(" WHERE ");
 
 			/* Filter results with vehicle only fields*/
@@ -138,7 +128,7 @@ public class DealerInventorySearch extends Search {
 
 			/* Filter results by dealerID */
 			if (dealerFields.containsKey("DealerID") && dealerFields.size() == 1) {
-				query += "DealerInventory.DealerID=?";
+				builder.append("DealerInventory.DealerID=?");
 				super.setParameterIndex(dealerFields.get("DealerID"));
 			} else {
 				for (Map.Entry<String, Object> entry : dealerFields.entrySet()) {
