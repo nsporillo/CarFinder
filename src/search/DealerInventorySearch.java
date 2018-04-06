@@ -90,6 +90,9 @@ public class DealerInventorySearch extends Search {
 
 	@Override
 	public String prepareSQL() {
+		// To return any vehicle which is in some dealer inventory, we want to join
+		// dealer inventory, vehicle, model, and option
+		// If we want to make dealer specific queries, then add the Dealer table to the join party.
 		String query = "SELECT * FROM DealerInventory " +
 				"INNER JOIN Vehicle ON DealerInventory.VIN = Vehicle.VIN " +
 				"INNER JOIN Model ON Vehicle.ModelID = Model.ModelID " +
@@ -97,8 +100,10 @@ public class DealerInventorySearch extends Search {
 
 		if (dealerFields.size() > 0) {
 			if (dealerFields.containsKey("DealerID")) {
-				query += " INNER JOIN Dealer ON Dealer.DealerID = " + dealerFields.get("DealerID");
+				// Instead of join the dealer table, we can simplify the query by supplying the dealerid
+				query += " WHERE DealerInventory.DealerID = " + dealerFields.get("DealerID");
 			} else {
+				// For things like dealer name searching
 				query += " INNER JOIN Dealer ON Dealer.DealerID = DealerInventory.DealerID";
 			}
 		}
@@ -106,6 +111,8 @@ public class DealerInventorySearch extends Search {
 		/* Filter results by any number of vehicle or model fields */
 		if (vehicleFields.size() > 0 || modelFields.size() > 0 || optionFields.size() > 0) {
 			StringBuilder builder = new StringBuilder(" WHERE ");
+
+			/* Filter results with vehicle only fields*/
 			for (Map.Entry<String, Object> entry : vehicleFields.entrySet()) {
 				/* Support for handling max price, max anything... */
 				if (entry.getKey().startsWith("Max")) {
@@ -118,6 +125,7 @@ public class DealerInventorySearch extends Search {
 				super.setParameterIndex(entry.getValue());
 			}
 
+			/* Filter results with model fields */
 			for (Map.Entry<String, Object> entry : modelFields.entrySet()) {
 				builder.append("Model.").append(entry.getKey()).append("=? AND ");
 				super.setParameterIndex(entry.getValue());

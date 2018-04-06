@@ -7,8 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Super class for all generalized query building sub classes such as DealerInventorySearch, etc
+ */
 public abstract class Search {
 
+	// A map of preparedstatement index -> value
 	private Map<Integer, Object> parameterIndex;
 
 	public Search() {
@@ -20,14 +24,7 @@ public abstract class Search {
 	public abstract List<?> execute(Connection connection);
 
 	public PreparedStatement prepareStatement(Connection connection, String sql) throws SQLException {
-		PreparedStatement ps;
-
-		if (sql.endsWith(";")) {
-			sql += ";";
-		}
-
-		ps = connection.prepareStatement(sql);
-
+		PreparedStatement ps = connection.prepareStatement(sql);
 		System.out.println(ps.toString());
 
 		for (Map.Entry<Integer, Object> entry : parameterIndex.entrySet()) {
