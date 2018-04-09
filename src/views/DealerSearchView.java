@@ -1,20 +1,29 @@
 package views;
 
-import main.Team01Driver;
-import models.Dealer;
-import tables.DealerTable;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.util.List;
 
 public class DealerSearchView extends JFrame {
 
 	private JPanel contentPane;
-	private JFormattedTextField nameField; // dealer name search field
-	private JFormattedTextField idField; // dealer id search field
-	private JTextPane textArea; // main result display component
+	private JTextField nameField;
+	private JTextField streetField;
+	private JTextField cityField;
 
 	/**
 	 * Create the frame.
@@ -27,106 +36,104 @@ public class DealerSearchView extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[]{0, 0, 204, 0, 75, 74, 131, 0, 0, 0};
-		gbl_contentPane.rowHeights = new int[]{0, 0, 0, 0, 0, 0, 0, 0};
-		gbl_contentPane.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_contentPane.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
-		contentPane.setLayout(gbl_contentPane);
-		
-		JLabel lblFilterByName = new JLabel("Filter by name");
-		GridBagConstraints gbc_lblFilterByName = new GridBagConstraints();
-		gbc_lblFilterByName.insets = new Insets(0, 0, 5, 5);
-		gbc_lblFilterByName.anchor = GridBagConstraints.EAST;
-		gbc_lblFilterByName.gridx = 1;
-		gbc_lblFilterByName.gridy = 0;
-		contentPane.add(lblFilterByName, gbc_lblFilterByName);
-		
-		JButton btnFilterByName = new JButton("Search");
-		JButton btnFindByID = new JButton("Search");
-		
-		// TODO: Add some additional error checking and validation on search fields
-		
-		nameField = new JFormattedTextField();
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.gridx = 2;
-		gbc_textField.gridy = 0;
-		contentPane.add(nameField, gbc_textField);
-		
-		btnFilterByName.addActionListener(e -> {
-            String value = nameField.getText();
+		contentPane.setLayout(null);
 
-            //TODO: Add more validation?
-            if (value != null) {
-                filterDealersByName(value);
-            }
-        });
-		
-		GridBagConstraints gbc_btnFilterByName = new GridBagConstraints();
-		gbc_btnFilterByName.insets = new Insets(0, 0, 5, 5);
-		gbc_btnFilterByName.gridx = 3;
-		gbc_btnFilterByName.gridy = 0;
-		contentPane.add(btnFilterByName, gbc_btnFilterByName);
-		
-		JLabel lblFilterById = new JLabel("Load Dealer by ID");
-		GridBagConstraints gbc_lblFilterById = new GridBagConstraints();
-		gbc_lblFilterById.insets = new Insets(0, 0, 5, 5);
-		gbc_lblFilterById.anchor = GridBagConstraints.EAST;
-		gbc_lblFilterById.gridx = 5;
-		gbc_lblFilterById.gridy = 0;
-		contentPane.add(lblFilterById, gbc_lblFilterById);
-		
-		idField = new JFormattedTextField();
-		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_1.gridx = 6;
-		gbc_textField_1.gridy = 0;
-		contentPane.add(idField, gbc_textField_1);
-		
-		btnFindByID.addActionListener(e -> {
-            String value = idField.getText();
+		JPanel panel = new JPanel();
+		panel.setBounds(10, 11, 200, 324);
+		contentPane.add(panel);
+		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
-            //TODO: Add more validation?
-            if (value != null) {
-                loadDealerById(value);
-            }
-        });
-		GridBagConstraints gbc_btnSearch = new GridBagConstraints();
-		gbc_btnSearch.insets = new Insets(0, 0, 5, 5);
-		gbc_btnSearch.gridx = 7;
-		gbc_btnSearch.gridy = 0;
-		contentPane.add(btnFindByID, gbc_btnSearch);
-		
-		textArea = new JTextPane();
-		textArea.setEditable(false);
-		GridBagConstraints gbc_textArea = new GridBagConstraints();
-		gbc_textArea.gridheight = 5;
-		gbc_textArea.gridwidth = 7;
-		gbc_textArea.insets = new Insets(0, 0, 0, 5);
-		gbc_textArea.fill = GridBagConstraints.BOTH;
-		gbc_textArea.gridx = 1;
-		gbc_textArea.gridy = 2;
-		contentPane.add(textArea, gbc_textArea);
-	}
-	
-	private void filterDealersByName(String name) {
-		List<Dealer> dealers = DealerTable.filterDealersByName(Team01Driver.getDriver().getDB().getConnection(), name);
-		
-		if (dealers == null) {
-			textArea.setText("Error");
-		} else {
-			String old = textArea.getText();
-			for (Dealer d : dealers) {
-				textArea.setText(old + "\n" + d.toString());
+		JLabel nameLabel = new JLabel("Name:");
+		nameLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		nameLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		nameLabel.setHorizontalAlignment(SwingConstants.LEFT);
+		panel.add(nameLabel);
+
+		nameField = new JTextField();
+		panel.add(nameField);
+		nameField.setColumns(10);
+
+		JLabel streetLabel = new JLabel("Street:");
+		streetLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		streetLabel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+		streetLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(streetLabel);
+
+		streetField = new JTextField();
+		panel.add(streetField);
+		streetField.setColumns(10);
+
+		JLabel cityLabel = new JLabel("City:   ");
+		cityLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		cityLabel.setAlignmentY(Component.TOP_ALIGNMENT);
+		cityLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(cityLabel);
+
+		cityField = new JTextField();
+		panel.add(cityField);
+		cityField.setColumns(10);
+
+		JLabel zipLabel = new JLabel("ZIP:    ");
+		zipLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		zipLabel.setAlignmentY(Component.TOP_ALIGNMENT);
+		zipLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(zipLabel);
+
+		JFormattedTextField zipField = new JFormattedTextField();
+		panel.add(zipField);
+
+		JLabel phoneLabel = new JLabel("Phone:");
+		phoneLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		phoneLabel.setAlignmentY(Component.TOP_ALIGNMENT);
+		phoneLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(phoneLabel);
+
+		JFormattedTextField phoneField = new JFormattedTextField();
+		panel.add(phoneField);
+
+		Component rigidArea = Box.createRigidArea(new Dimension(150, 20));
+		panel.add(rigidArea);
+
+		JSeparator separator = new JSeparator();
+		panel.add(separator);
+
+		Component rigidArea_1 = Box.createRigidArea(new Dimension(150, 20));
+		panel.add(rigidArea_1);
+
+		JLabel dealerIdLabel = new JLabel("Find by Dealer ID:");
+		dealerIdLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		dealerIdLabel.setAlignmentY(Component.TOP_ALIGNMENT);
+		dealerIdLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(dealerIdLabel);
+
+		JFormattedTextField dealerIDField = new JFormattedTextField();
+		panel.add(dealerIDField);
+
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(220, 11, 551, 400);
+		contentPane.add(panel_1);
+		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.PAGE_AXIS));
+
+		JButton searchButton = new JButton("Search");
+		searchButton.setFont(new Font("Tahoma", Font.BOLD, 18));
+		searchButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
 			}
-		}
+		});
+		searchButton.setBounds(10, 359, 200, 52);
+		contentPane.add(searchButton);
+
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setBounds(10, 346, 200, 2);
+		contentPane.add(separator_1);
+	}
+
+	private void filterDealersByName(String name) {
+
 	}
 
 	private void loadDealerById(String id) {
 		// TODO: Load dealer view for the specified dealer
-		
+
 	}
 }
