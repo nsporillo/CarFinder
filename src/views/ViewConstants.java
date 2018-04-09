@@ -2,15 +2,19 @@ package views;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.Locale;
 
 import javax.swing.text.NumberFormatter;
 
 public class ViewConstants {
 
+	public static NumberFormat CURRENCY;
 	public static NumberFormatter ZIP_FORMAT;
 	public static NumberFormatter DEALER_FORMAT;
 
 	static {
+		CURRENCY = NumberFormat.getCurrencyInstance(new Locale("en", "US"));
+
 		{
 			ZIP_FORMAT = new NumberFormatter(NumberFormat.getIntegerInstance()) {
 

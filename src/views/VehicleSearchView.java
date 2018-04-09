@@ -32,7 +32,6 @@ import search.DealerInventorySearch;
 
 public class VehicleSearchView extends JFrame {
 
-	private static final NumberFormat currency = NumberFormat.getCurrencyInstance(new Locale("en", "US"));
 	private JPanel mainContentPane;
 
 	private JComboBox<String> makeBox;
@@ -280,7 +279,7 @@ public class VehicleSearchView extends JFrame {
 		if (maxPrice != null && !maxPrice.equals("No Max Price")) {
 			Number number;
 			try {
-				number = currency.parse(maxPrice);
+				number = ViewConstants.CURRENCY.parse(maxPrice);
 				dealerInventorySearch.setMaxPrice(number.intValue());
 			} catch (ParseException ex) {
 				ex.printStackTrace(System.err);
@@ -342,7 +341,7 @@ public class VehicleSearchView extends JFrame {
 			int end = (int) (Math.ceil(largestPrice / 1000) * 1000);
 
 			for (int i = start; i <= end; i += Math.min(2000, end - start)) {
-				String amount = currency.format(i);
+				String amount = ViewConstants.CURRENCY.format(i);
 				base.add(amount);
 			}
 		}
