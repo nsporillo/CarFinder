@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
+import java.text.ParseException;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -13,10 +15,12 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.NumberFormatter;
 
 public class DealerSearchView extends JFrame {
 
@@ -24,6 +28,11 @@ public class DealerSearchView extends JFrame {
 	private JTextField nameField;
 	private JTextField streetField;
 	private JTextField cityField;
+	private JFormattedTextField zipField;
+	private JFormattedTextField phoneField;
+	private JFormattedTextField dealerIDField;
+	
+	private JPanel resultPanel;
 
 	/**
 	 * Create the frame.
@@ -42,6 +51,8 @@ public class DealerSearchView extends JFrame {
 		panel.setBounds(10, 11, 200, 324);
 		contentPane.add(panel);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+		
+
 
 		JLabel nameLabel = new JLabel("Name:");
 		nameLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -79,7 +90,7 @@ public class DealerSearchView extends JFrame {
 		zipLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panel.add(zipLabel);
 
-		JFormattedTextField zipField = new JFormattedTextField();
+		zipField = new JFormattedTextField(ViewConstants.ZIP_FORMAT);
 		panel.add(zipField);
 
 		JLabel phoneLabel = new JLabel("Phone:");
@@ -88,7 +99,7 @@ public class DealerSearchView extends JFrame {
 		phoneLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panel.add(phoneLabel);
 
-		JFormattedTextField phoneField = new JFormattedTextField();
+		phoneField = new JFormattedTextField();
 		panel.add(phoneField);
 
 		Component rigidArea = Box.createRigidArea(new Dimension(150, 20));
@@ -106,20 +117,28 @@ public class DealerSearchView extends JFrame {
 		dealerIdLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panel.add(dealerIdLabel);
 
-		JFormattedTextField dealerIDField = new JFormattedTextField();
+		dealerIDField = new JFormattedTextField(ViewConstants.DEALER_FORMAT);
 		panel.add(dealerIDField);
+		
+		/*
+		 * Create scrollable result pane to be filled in with dealer results
+		 */
+		JScrollPane scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBounds(220, 11, 551, 400);
+		contentPane.add(scrollPane);
 
-		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(220, 11, 551, 400);
-		contentPane.add(panel_1);
-		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.PAGE_AXIS));
+		resultPanel = new JPanel();
+		resultPanel.setLayout(new BoxLayout(resultPanel, BoxLayout.PAGE_AXIS));
+		scrollPane.setViewportView(resultPanel);
 
 		JButton searchButton = new JButton("Search");
 		searchButton.setFont(new Font("Tahoma", Font.BOLD, 18));
 		searchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
 			}
 		});
+		
 		searchButton.setBounds(10, 359, 200, 52);
 		contentPane.add(searchButton);
 

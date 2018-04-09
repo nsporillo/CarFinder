@@ -1,13 +1,6 @@
 package views;
 
-import main.Team01Driver;
-import models.Vehicle;
-import search.DealerInventorySearch;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.text.NumberFormatter;
-import java.awt.*;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -18,6 +11,24 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
+
+import main.Team01Driver;
+import models.Vehicle;
+import search.DealerInventorySearch;
 
 public class VehicleSearchView extends JFrame {
 
@@ -131,40 +142,11 @@ public class VehicleSearchView extends JFrame {
 			}
 		});
 
-		NumberFormatter zipFormatter = new NumberFormatter(NumberFormat.getIntegerInstance()) {
-
-			@Override
-			public Object stringToValue(String text) throws ParseException {
-				if (text.length() == 0) {
-					return null;
-				}
-				return super.stringToValue(text);
-			}
-		};
-		zipFormatter.setValueClass(Integer.class);
-		zipFormatter.setAllowsInvalid(false);
-		zipFormatter.setMinimum(0);
-		zipFormatter.setMaximum(99999); // dont bother finding "max" zip code in the DB
-		zipField = new JFormattedTextField(zipFormatter);
-
-		NumberFormatter dealerFormatter = new NumberFormatter(NumberFormat.getIntegerInstance()) {
-
-			@Override
-			public Object stringToValue(String text) throws ParseException {
-				if (text.length() == 0) {
-					return null;
-				}
-				return super.stringToValue(text);
-			}
-		};
-		dealerFormatter.setValueClass(Integer.class);
-		dealerFormatter.setAllowsInvalid(false);
-		dealerFormatter.setMinimum(0);
-
-		//TODO: Query DealerInventory for the max dealer id
-		//dealerFormatter.setMaximum();
-
-		dealerField = new JFormattedTextField(dealerFormatter);
+		/*
+		 * Uses constant formatted text field formatters
+		 */
+		zipField = new JFormattedTextField(ViewConstants.ZIP_FORMAT);
+		dealerField = new JFormattedTextField(ViewConstants.DEALER_FORMAT);
 
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 		panel.add(lblMake);
