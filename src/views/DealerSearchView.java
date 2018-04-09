@@ -1,26 +1,17 @@
 package views;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
+import main.Team01Driver;
+import models.Dealer;
+import models.Vehicle;
+import search.DealerSearch;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.NumberFormat;
 import java.text.ParseException;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
-import javax.swing.text.NumberFormatter;
+import java.util.List;
 
 public class DealerSearchView extends JFrame {
 
@@ -28,11 +19,13 @@ public class DealerSearchView extends JFrame {
 	private JTextField nameField;
 	private JTextField streetField;
 	private JTextField cityField;
+	private JTextField stateField;
 	private JFormattedTextField zipField;
 	private JFormattedTextField phoneField;
 	private JFormattedTextField dealerIDField;
-	
+
 	private JPanel resultPanel;
+	private DealerSearch dealerSearch;
 
 	/**
 	 * Create the frame.
@@ -51,7 +44,6 @@ public class DealerSearchView extends JFrame {
 		panel.setBounds(10, 11, 200, 324);
 		contentPane.add(panel);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-		
 
 
 		JLabel nameLabel = new JLabel("Name:");
@@ -83,6 +75,16 @@ public class DealerSearchView extends JFrame {
 		cityField = new JTextField();
 		panel.add(cityField);
 		cityField.setColumns(10);
+
+		JLabel stateLabel = new JLabel("State:");
+		stateLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		stateLabel.setAlignmentY(Component.TOP_ALIGNMENT);
+		stateLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		panel.add(stateLabel);
+
+		stateField = new JTextField();
+		panel.add(stateField);
+		stateField.setColumns(10);
 
 		JLabel zipLabel = new JLabel("ZIP:    ");
 		zipLabel.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -133,18 +135,86 @@ public class DealerSearchView extends JFrame {
 
 		JButton searchButton = new JButton("Search");
 		searchButton.setFont(new Font("Tahoma", Font.BOLD, 18));
-		searchButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
+		searchButton.addActionListener(arg0 -> {
+			try {
+				dealerSearch = fromFields();
+				List<Dealer> results = dealerSearch.execute(Team01Driver.getDriver().getDB().getConnection());
+
+
+				// Remove any possible previous results
+				resultPanel.removeAll();
+				resultPanel.revalidate();
+
+				// Add header
+				resultPanel.add(fromDealer(Dealer.label(), false));
+
+				// Display all vehicle results
+				for (Dealer d : results) {
+					resultPanel.add(fromDealer(d, true));
+				}
+
+				resultPanel.revalidate();
+			} catch (Exception ex) {
+				ex.printStackTrace(System.err);
 			}
 		});
-		
+
 		searchButton.setBounds(10, 359, 200, 52);
 		contentPane.add(searchButton);
 
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setBounds(10, 346, 200, 2);
 		contentPane.add(separator_1);
+	}
+
+	private JButton fromDealer(final Dealer dealer, boolean clickable) {
+		JButton jButton = new JButton(dealer.getSearchView());
+
+		if (clickable) {
+			jButton.addActionListener(e -> {
+				DealerView view = Team01Driver.getDriver().getViewManager().getDealerView();
+				view.setDealer(dealer);
+				if (!view.isVisible()) {
+					view.setVisible(true);
+				}
+			});
+		}
+
+		return jButton;
+	}
+
+	private DealerSearch fromFields() {
+		DealerSearch dealerSearch = new DealerSearch();
+		dealerSearch.setName(nameField.getText());
+		dealerSearch.setStreet(streetField.getText());
+		dealerSearch.setCity(cityField.getText());
+		dealerSearch.setState(stateField.getText());
+
+		Integer dealer = null;
+
+		try {
+			/* Parse dealer number from the dealer field*/
+			dealer = (Integer) dealerIDField.getFormatter().stringToValue(dealerIDField.getText());
+		} catch (ParseException e) {
+			e.printStackTrace(System.err);
+		}
+
+		dealerSearch.setDealerID(dealer);
+
+		Integer zip = null;
+
+		try {
+			/* Parse dealer number from the dealer field*/
+			zip = (Integer) zipField.getFormatter().stringToValue(zipField.getText());
+		} catch (ParseException e) {
+			e.printStackTrace(System.err);
+		}
+
+		dealerSearch.setZIP(zip);
+
+		dealerSearch.setPhone(phoneField.getText());
+
+		return dealerSearch;
 	}
 
 	private void filterDealersByName(String name) {

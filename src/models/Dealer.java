@@ -82,4 +82,21 @@ public class Dealer {
 		return "Dealer [name=" + name + ", street=" + street + ", city=" + city + ", state=" + state + ", phone="
 				+ phone + ", zip=" + zip + ", id=" + id + "]";
 	}
+
+	public String getSearchView() {
+		// NAME ID STREET CITY STATE ZIP PHONE
+		String template = "| %s | %s | %s | %s | %s | %s | %s |";
+		return String.format(template,
+				name,
+				id >= 0 ? String.valueOf(id) : "ID",
+				street,
+				city,
+				state,
+				zip > 0 ? String.valueOf(zip) : "ZIP",
+				phone);
+	}
+
+	public static Dealer label() {
+		return new Dealer("NAME", -1, "STREET", "CITY", "STATE", -1,  "PHONE");
+	}
 }
