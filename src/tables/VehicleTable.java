@@ -114,6 +114,22 @@ public class VehicleTable {
 		}
 	}
 
+	public static void addVehicle( Connection conn, int VIN, int ModelID, int optionID, int year, int price)  {
+		StringBuilder sb = new StringBuilder();
+		String query = String.format("IF EXISTS (SELECT VIN FROM Vehicle WHERE VIN = %d)" +
+				"		PASS" +
+				"	ELSE" +
+				"		INSERT INTO Vehicle (%d, %d, %d, %d, %d)", VIN, VIN, ModelID, optionID, year, price );
+		try {
+			Statement stmt = conn.createStatement();
+			stmt.execute(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+
 	public static PreparedStatement createVehicleInsertSQL(Connection conn, List<Vehicle> vehicles) throws SQLException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("INSERT INTO Vehicle (VIN, ModelID, OptionID, Year, Price) VALUES ");
