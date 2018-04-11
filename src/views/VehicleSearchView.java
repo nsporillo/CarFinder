@@ -1,34 +1,20 @@
 package views;
 
-import java.awt.Font;
+import main.Team01Driver;
+import models.Vehicle;
+import search.DealerInventorySearch;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.Connection;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-
-import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.border.EmptyBorder;
-
-import main.Team01Driver;
-import models.Vehicle;
-import search.DealerInventorySearch;
 
 public class VehicleSearchView extends JFrame {
 
@@ -212,22 +198,23 @@ public class VehicleSearchView extends JFrame {
 				dealerInventorySearch = createSearch();
 				List<Vehicle> results = dealerInventorySearch.execute(Team01Driver.getDriver().getDB().getConnection());
 
-				// Arbitrary results limit to avoid overloading JScrollPane
-				if (results == null || results.size() == 0) {
-					System.out.println("No results");
-					return;
-				} else if (results.size() > 1000) {
-					results = results.subList(0, 1000);
-				}
-
-				lblDisplayResults.setText("Displaying " + results.size() + " Results");
-
 				// Remove any possible previous results
 				searchResultPanel.removeAll();
 				searchResultPanel.revalidate();
 
 				// Add header
 				searchResultPanel.add(fromVehicle(Vehicle.label(), false));
+
+				// Arbitrary results limit to avoid overloading JScrollPane
+				if (results == null || results.size() == 0) {
+					System.out.println("No results");
+					lblDisplayResults.setText("Displaying 0 Results");
+					return;
+				} else if (results.size() > 1000) {
+					results = results.subList(0, 1000);
+				}
+
+				lblDisplayResults.setText("Displaying " + results.size() + " Results");
 
 				// Display all vehicle results
 				for (Vehicle v : results) {
