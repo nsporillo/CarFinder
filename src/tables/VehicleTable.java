@@ -116,10 +116,15 @@ public class VehicleTable {
 
 	public static void addVehicle( Connection conn, int VIN, int ModelID, int optionID, int year, int price)  {
 		StringBuilder sb = new StringBuilder();
-		String query = String.format("IF EXISTS (SELECT VIN FROM Vehicle WHERE VIN = %d)" +
-				"		PASS" +
-				"	ELSE" +
-				"		INSERT INTO Vehicle (%d, %d, %d, %d, %d)", VIN, VIN, ModelID, optionID, year, price );
+		////////////////////
+		/////////////////
+		/// This may be an issue, Theoretically one of the vins generated could collide with one already made
+		/// its a 9 digit number tho. I couldnt get the below query to work. but the idea is there
+		/*
+		String query = String.format("IF (SELECT VIN FROM Vehicle WHERE VIN = %d) NOT IN (SELECT VIN FROM Vehicle) " +
+				"INSERT INTO Vehicle (%d, %d, %d, %d, %d);", VIN, VIN, ModelID, optionID, year, price );
+				*/
+		String query = String.format("INSERT INTO Vehicle (VIN, ModelID, OptionID, Year, Price) VALUES (%d, %d, %d, %d, %d);", VIN, ModelID, optionID, year, price) ;
 		try {
 			Statement stmt = conn.createStatement();
 			stmt.execute(query);

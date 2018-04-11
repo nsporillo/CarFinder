@@ -85,6 +85,7 @@ public class DBConnector {
 			List<Dealer> dealers = DealerTable.populateDealerTableFromCSV(main.getConnection(), "DealershipData.csv");
 			List<Vehicle> vehicles = VehicleTable.populateVehicleTableFromCSV(optionList, main.getConnection(), "Vehicles.csv", "VehicleOptions.csv");
 			DealerInventoryTable.addAllVehiclesToAllDealers(main.getConnection(), vehicles, dealers);
+			SaleTable.populateSaleTable(main.getConnection(), "smallVehicle.csv", "newCustomerData.csv", "CarOptions.csv");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -94,5 +95,6 @@ public class DBConnector {
 		//ModelTable.printModelTable(main.getConnection());
 		//DealerTable.printDealerTables(main.getConnection());
 		//VehicleTable.printVehicleTable(main.getConnection());
+		SaleTable.printSaleTable(main.getConnection());
 	}
 }

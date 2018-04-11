@@ -3,10 +3,13 @@ package tables;
 import models.Sale;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class SaleTable {
 
@@ -16,35 +19,65 @@ public class SaleTable {
      * Does not create the table. It must already be created
      *
      * @param conn     database connection to work with
-     * @param fileName fileName of CSV file containing model table data
+     * @param smallVehicleCsv of CSV file containing model table data
      * @throws SQLException
      */
-    public static void populateSaleTableFromCSV(Connection conn, String fileName) throws SQLException {
-        ArrayList<Sale> sales = new ArrayList<>();
+
+    public static void populateSaleTable(Connection conn, String smallVehicleCsv, String customerCsv, String carOptionsCsv){
+        List<Sale> sales = new ArrayList<>();
+        Random random = new Random();
+        int vin;
         try {
-            BufferedReader br = new BufferedReader(new FileReader(fileName));
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] split = line.split(",");
-                sales.add(new Sale(Integer.parseInt(split[0]),
-                        Integer.parseInt(split[1]),
-                        Integer.parseInt(split[2]),
-                        new Timestamp(Long.parseLong(split[3])),
-                        split[4]));
+            ArrayList<Sale> s = new ArrayList<>();
+            BufferedReader vehicle = new BufferedReader(new FileReader(smallVehicleCsv));
+            BufferedReader customer = new BufferedReader(new FileReader(customerCsv));
+            String vehicleLine;
+            String customerLine;
+            String optionLine;
+            int saleID = 0;
+            boolean dealerInc = true;
+            int dealerID = 0;
+            while((vehicleLine = vehicle.readLine()) != null){
+                String[] VSplit = vehicleLine.split(",");
+                BufferedReader option = new BufferedReader(new FileReader(carOptionsCsv));
+                while((optionLine = option.readLine())!= null){
+                    String[] OSplit = optionLine.split(",");
+                    customerLine = customer.readLine();
+                    if(customerLine == null){
+                        break;
+                    }
+                    String[] CSplit = customerLine.split(",");
+                    // for every vehicle in the short csv add to table and make sale to customer
+                    int modelID = ModelTable.getModelId(conn, VSplit[1], VSplit[2]);
+                    vin = random.nextInt(10000000);
+                    VehicleTable.addVehicle(conn,vin,modelID,Integer.parseInt(OSplit[0]),Integer.parseInt(VSplit[0]), Integer.parseInt(VSplit[3]));
+                    long time = 123456L;
+                    Timestamp date = new Timestamp(time);
+                    Sale saleRecord = new Sale(saleID,dealerID,Integer.parseInt(CSplit[0]),date,"" + vin);
+                    if(dealerInc){
+                        dealerID ++;
+                        dealerInc = false;
+                    }
+                    else
+                        dealerInc = true;
+                    s.add(saleRecord);
+                    saleID++;
+                }
+                option.close();
             }
-            br.close();
+            vehicle.close();
+            customer.close();
+            String sql = createSaleInsertSQL(s);
+            Statement stmt = conn.createStatement();
+            stmt.execute(sql);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (NumberFormatException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        String sql = createSaleInsertSQL(sales);
-
-        Statement stmt = conn.createStatement();
-        stmt.execute(sql);
     }
-
     /**
      * Adds a single sale to the database
      *
@@ -72,23 +105,20 @@ public class SaleTable {
     }
 
 
-    public static String createSaleInsertSQL(ArrayList<Sale> sale) {
+
+    public static String createSaleInsertSQL(List<Sale> sales){
         StringBuilder sb = new StringBuilder();
-
-        sb.append("INSERT INTO Sale (SaleID, DealerID, CustomerID, Timestamp, VIN) VALUES");
-
-        for (int i = 0; i < sale.size(); i++) {
-            Sale s = sale.get(i);
-            sb.append(String.format("(%d,\'%d\',\'%d\',\'%tD\',\'%d\')",
-                    s.getId(), s.getDealerID(), s.getCustomerID(), s.getTimestamp(), s.getVin()));
-            if (i != sale.size() - 1) {
-                sb.append(",");
-            } else {
-                sb.append(";");
-            }
+        sb.append("INSERT INTO Sale (SaleID, DealerID, CustomerID, Date, VIN) VALUES ");
+        for (Sale i : sales) {
+            sb.append(String.format("(%d,\'%d\',\'%d\',CURRENT_TIMESTAMP(),\'%s\')",
+                    i.getId(), i.getDealerID(), i.getCustomerID(),
+                    i.getVin()));
+            sb.append(",");
         }
-
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append(";");
         return sb.toString();
+
     }
 
     /**

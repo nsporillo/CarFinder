@@ -1,16 +1,16 @@
 package models;
 
+import tables.ModelTable;
+import tables.VehicleTable;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import static com.sun.org.apache.xalan.internal.lib.ExsltStrings.split;
 
 /**
  * Class containing Sale details: SaleID, DealerID, CustomerID, Date, and VIN
@@ -31,36 +31,7 @@ public class Sale {
         this.vin = vin;
     }
 
-    public void populateSaleTable(Connection conn, String smallVehicleCsv, String customerCsv, String carOptionsCsv){
-        List<Sale> sales = new ArrayList<>();
-        Random random = new Random();
-        int vin = random.nextInt(10000000);
-        try {
-            BufferedReader vehicle = new BufferedReader(new FileReader(smallVehicleCsv));
-            BufferedReader customer = new BufferedReader(new FileReader(customerCsv));
-            String vehicleLine;
-            String customerLine;
-            String optionLine;
-            int saleID;
-            while((vehicleLine = vehicle.readLine()) != null){
-                String[] VSplit = vehicleLine.split(",");
-                BufferedReader option = new BufferedReader(new FileReader(carOptionsCsv));
-                while((optionLine = option.readLine())!= null){
-                    String[] OSplit = optionLine.split(",");
-                    customerLine = customer.readLine();
-                    String[] CSplit = customerLine.split(",");
-                    // for every vehicle in the short csv add to table and make sale to customer
-                }
 
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-    }
 
     public int getId() {
         return id;
