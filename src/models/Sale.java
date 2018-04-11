@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static com.sun.org.apache.xalan.internal.lib.ExsltStrings.split;
-
 /**
  * Class containing Sale details: SaleID, DealerID, CustomerID, Date, and VIN
  */
