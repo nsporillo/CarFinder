@@ -76,7 +76,7 @@ public class DBConnector {
 				// found a query, execute it
 				if (line.endsWith(";")) {
 					Statement stmt = main.getConnection().createStatement();
-					System.out.println(query.toString());
+					Team01Driver.log(query.toString().substring(0, query.indexOf("(")).toLowerCase());
 					stmt.execute(query.toString());
 					query = new StringBuilder();
 				}
@@ -89,7 +89,7 @@ public class DBConnector {
 		}
 
 		try {
-			CustomerTable.populateCustomerTableFromCSV(main.getConnection(), "newCustomerData.csv"); // TODO
+			CustomerTable.populateCustomerTableFromCSV(main.getConnection(), "newCustomerData.csv");
 			List<Option> optionList = OptionTable.populateOptionTableFromCSV(main.getConnection(), "CarOptions.csv");
 			ModelTable.populateModelTableFromCSV(main.getConnection(), "Vehicles.csv");
 			List<Dealer> dealers = DealerTable.populateDealerTableFromCSV(main.getConnection(), "DealershipData.csv");
@@ -98,11 +98,5 @@ public class DBConnector {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
-		//CustomerTable.printCustomerTable(main.getConnection());
-		//OptionTable.printOptionTable(main.getConnection());
-		//ModelTable.printModelTable(main.getConnection());
-		//DealerTable.printDealerTables(main.getConnection());
-		//VehicleTable.printVehicleTable(main.getConnection());
 	}
 }

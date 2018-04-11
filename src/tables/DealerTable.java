@@ -1,5 +1,6 @@
 package tables;
 
+import main.Team01Driver;
 import models.Dealer;
 
 import java.io.BufferedReader;
@@ -15,6 +16,7 @@ public class DealerTable {
 	private static final String table = "Dealer";
 
 	public static List<Dealer> populateDealerTableFromCSV(Connection conn, String filename) throws SQLException {
+		Team01Driver.log("Populating Dealer table from " + filename);
 		List<Dealer> dealers = new ArrayList<>();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filename));

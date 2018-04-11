@@ -1,5 +1,6 @@
 package tables;
 
+import main.Team01Driver;
 import models.Model;
 import models.Option;
 import models.Vehicle;
@@ -18,6 +19,8 @@ import java.util.UUID;
 public class VehicleTable {
 
 	public static List<Vehicle> populateVehicleTableFromCSV(List<Option> options, Connection conn, String carCSV, String opCSV) throws SQLException {
+		long timer = -System.currentTimeMillis();
+		Team01Driver.log("Populating Vehicle table from " + carCSV + " and " + opCSV);
 		List<Vehicle> vehicles = new ArrayList<>();
 
 		try {
@@ -65,6 +68,9 @@ public class VehicleTable {
 			PreparedStatement stmt = createVehicleInsertSQL(conn, lst);
 			stmt.executeUpdate();
 		}
+
+		timer += System.currentTimeMillis();
+		Team01Driver.log("VehicleTable population took " + (timer / 1000) + "s. Added " + vehicles.size() + " vehicles.");
 
 		return vehicles;
 	}

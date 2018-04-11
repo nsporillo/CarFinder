@@ -1,5 +1,6 @@
 package tables;
 
+import main.Team01Driver;
 import models.Option;
 
 import java.io.BufferedReader;
@@ -24,6 +25,7 @@ public class OptionTable {
      * @throws SQLException
      */
     public static List<Option> populateOptionTableFromCSV(Connection conn, String fileName) throws SQLException {
+        Team01Driver.log("Populating Option table from " + fileName);
         ArrayList<Option> option = new ArrayList<>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(fileName));
