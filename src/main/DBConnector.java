@@ -61,15 +61,25 @@ public class DBConnector {
 
 		File file = new File("database/SQLTables.sql");
 		String path = file.getAbsolutePath();
-		String line = null;
 
 		try { // Reads and Executes SQL commands to create tables under /tables
-			FileReader fileReader = new FileReader(path);
-			BufferedReader bufferedReader = new BufferedReader(fileReader);
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
 
+			StringBuilder query = new StringBuilder();
+			String line = "";
 			while ((line = bufferedReader.readLine()) != null) {
-				Statement stmt = main.getConnection().createStatement();
-				stmt.execute(line);
+				if (line.startsWith("--")) {
+					continue; // skip sql comments
+				}
+				query.append(line);
+
+				// found a query, execute it
+				if (line.endsWith(";")) {
+					Statement stmt = main.getConnection().createStatement();
+					System.out.println(query.toString());
+					stmt.execute(query.toString());
+					query = new StringBuilder();
+				}
 			}
 
 			bufferedReader.close();
