@@ -1,5 +1,6 @@
 package tables;
 
+import main.Team01Driver;
 import models.Dealer;
 import models.Vehicle;
 
@@ -21,12 +22,13 @@ public class DealerInventoryTable {
 
 
 	public static void addAllVehiclesToAllDealers(Connection conn, List<Vehicle> vehicles, List<Dealer> dealers) throws SQLException {
+		Team01Driver.log("Distributing " + vehicles.size() + " vehicles across " + dealers.size() + " dealers");
 		int dealerSize = dealers.size();
 
 		for (int i = 0; i < dealerSize; i++) {
 			int mod = (int)(vehicles.size() / dealerSize);
 
-			System.out.println(String.format("Putting vehicles (%d,%d) into Dealer %d", (i * mod), (i * mod + mod), dealers.get(i).getId()));
+			Team01Driver.debug(String.format("Putting vehicles (%d,%d) into Dealer %d", (i * mod), (i * mod + mod), dealers.get(i).getId()));
 			PreparedStatement ps = createDealerInventoryInsert(conn, vehicles.subList(i * mod, i * mod + mod), dealers.get(i).getId());
 			ps.executeUpdate();
 		}

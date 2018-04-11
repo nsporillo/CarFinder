@@ -3,6 +3,7 @@ package main;
 import views.ViewManager;
 
 import javax.swing.*;
+import java.util.Date;
 
 public class Team01Driver {
 
@@ -47,5 +48,15 @@ public class Team01Driver {
 
 	public void setUserType(UserType userType) {
 		this.userType = userType;
+	}
+
+	public static void log(String message) {
+		String date = String.format("(INFO) [%1$tH:%1$tM:%1$tS] ", new Date());
+		System.out.println(date + message);
+	}
+
+	public static void debug(String message) {
+		String date = String.format("(DEBUG) [%1$tH:%1$tM:%1$tS] ", new Date());
+		System.out.println(date + message);
 	}
 }

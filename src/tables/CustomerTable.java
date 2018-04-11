@@ -1,5 +1,6 @@
 package tables;
 
+import main.Team01Driver;
 import models.Customer;
 
 import java.io.BufferedReader;
@@ -24,7 +25,8 @@ public class CustomerTable {
 	 * @throws SQLException
 	 */
 	public static void populateCustomerTableFromCSV(Connection conn, String fileName) throws SQLException {
-		List<Customer> customer = new ArrayList<Customer>();
+		Team01Driver.log("Populating Customer table from " + fileName);
+		List<Customer> customer = new ArrayList<>();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(fileName));
 			String line;
@@ -63,7 +65,7 @@ public class CustomerTable {
 	                               String street, String city, String state, int zip, String phone, int gender, int income) {
 
 		String query = String.format("INSERT INTO Customer "
-						+ "VALUES(%d,\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%d\',\'%s\',\'%d\',\'%d\');", customerID,
+						+ "VALUES(\'%s\',\'%s\',\'%s\',\'%s\',\'%s\',\'%d\',\'%s\',\'%d\',\'%d\');",
 				firstName, lastName, street, city, state, zip, phone, gender, income);
 
 		try {

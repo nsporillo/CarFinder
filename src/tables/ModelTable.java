@@ -1,5 +1,6 @@
 package tables;
 
+import main.Team01Driver;
 import models.Model;
 
 import java.io.BufferedReader;
@@ -21,6 +22,7 @@ public class ModelTable {
      * @throws SQLException
      */
     public static List<Model> populateModelTableFromCSV(Connection conn, String fileName) throws SQLException {
+        Team01Driver.log("Populating Model table from " + fileName);
         List<Model> models = new ArrayList<>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(fileName));
