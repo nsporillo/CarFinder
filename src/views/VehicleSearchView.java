@@ -42,7 +42,7 @@ public class VehicleSearchView extends JFrame {
 		setResizable(false);
 		setTitle("Search By Make");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 800, 500);
+		setBounds(100, 100, 850, 500);
 		mainContentPane = new JPanel();
 		mainContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(mainContentPane);
@@ -181,7 +181,8 @@ public class VehicleSearchView extends JFrame {
 		mainContentPane.add(lblDisplayResults);
 
 		JScrollPane scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setBounds(210, 30, 575, 430);
+		scrollPane.setBounds(210, 30, 625, 430);
+		scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 		mainContentPane.add(scrollPane);
 
 		searchResultPanel = new JPanel();
