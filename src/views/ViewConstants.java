@@ -16,7 +16,9 @@ public class ViewConstants {
 		CURRENCY = NumberFormat.getCurrencyInstance(new Locale("en", "US"));
 
 		{
-			ZIP_FORMAT = new NumberFormatter(NumberFormat.getIntegerInstance()) {
+			NumberFormat format = NumberFormat.getNumberInstance();
+			format.setGroupingUsed(false);
+			ZIP_FORMAT = new NumberFormatter(format) {
 
 				private static final long serialVersionUID = 1L;
 

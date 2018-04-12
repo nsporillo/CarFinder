@@ -92,6 +92,7 @@ public class DealerSearchView extends JFrame {
 		zipLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panel.add(zipLabel);
 
+
 		zipField = new JFormattedTextField(ViewConstants.ZIP_FORMAT);
 		panel.add(zipField);
 
