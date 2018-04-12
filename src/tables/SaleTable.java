@@ -1,5 +1,6 @@
 package tables;
 
+import main.Team01Driver;
 import models.Sale;
 
 import java.io.BufferedReader;
@@ -127,19 +128,19 @@ public class SaleTable {
      * @param conn connection
      */
     public static void printSaleTable(Connection conn) {
-
+        Team01Driver.debug("Listing all Sale records");
         String query = "SELECT * FROM Sale;";
         try {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
             while (result.next()) {
-                System.out.printf("Sale %d: %d %d %tD %s\n",
+                Team01Driver.debug(String.format("Sale %d: %d %d %tD %s",
                         result.getInt(1),
                         result.getInt(2),
                         result.getInt(3),
                         result.getDate(4),
-                        result.getString(5));
+                        result.getString(5)));
             }
         } catch (SQLException e) {
             e.printStackTrace();

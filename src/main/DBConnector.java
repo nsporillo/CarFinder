@@ -17,25 +17,74 @@ import java.util.List;
 
 public class DBConnector {
 
+	private static final File dbFile = new File("database/SQLTables.sql.mv.db");
+	private static final File dbPath = new File("database/SQLTables.sql");
+
 	// The connection to the database
 	private Connection conn;
-	private String databasePath = new File("database/SQLTables.sql").getAbsolutePath();
 
 	public DBConnector() {
-		createConnection(databasePath, "admin", "password");
+		if (dbFile.exists()) {
+			createConnection(dbPath.getAbsolutePath());
+			Team01Driver.log("Database exists: Skipping table creation and population");
+		} else {
+			Team01Driver.log("Existing database not found: Creating one and loading data from CSV.");
+			createDatabase(dbPath.getAbsolutePath());
+			populateDatabase();
+		}
+
+	}
+
+	private void createDatabase(String path) {
+		createConnection(path);
+		try {
+			BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+
+			StringBuilder query = new StringBuilder();
+			String line = "";
+			while ((line = bufferedReader.readLine()) != null) {
+				if (line.startsWith("--")) {
+					continue; // skip sql comments
+				}
+				query.append(line);
+
+				// found a query, execute it
+				if (line.endsWith(";")) {
+					Statement stmt = conn.createStatement();
+					Team01Driver.log(query.toString().substring(0, query.indexOf("(")).toLowerCase());
+					stmt.execute(query.toString());
+					query = new StringBuilder();
+				}
+			}
+
+			bufferedReader.close();
+		} catch (SQLException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void populateDatabase() {
+		try {
+			CustomerTable.populateCustomerTableFromCSV(conn, "newCustomerData.csv");
+			List<Option> optionList = OptionTable.populateOptionTableFromCSV(conn, "CarOptions.csv");
+			ModelTable.populateModelTableFromCSV(conn, "Vehicles.csv");
+			List<Dealer> dealers = DealerTable.populateDealerTableFromCSV(conn, "DealershipData.csv");
+			List<Vehicle> vehicles = VehicleTable.populateVehicleTableFromCSV(optionList, conn, "Vehicles.csv", "VehicleOptions.csv");
+			DealerInventoryTable.addAllVehiclesToAllDealers(conn, vehicles, dealers);
+			SaleTable.populateSaleTable(conn, "smallVehicle.csv", "newCustomerData.csv", "CarOptions.csv");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * Create a database connection with the given params
-	 *
-	 * @param location: path of where to place the database
-	 * @param user:     user name for the owner of the database
-	 * @param password: password of the database owner
-	 */
-	private void createConnection(String location, String user, String password) {
+	 *  @param location : path of where to place the database
+	 * */
+	private void createConnection(String location) {
 		try {
 			Class.forName("org.h2.Driver");
-			conn = DriverManager.getConnection("jdbc:h2:file:" + location, user, password);
+			conn = DriverManager.getConnection("jdbc:h2:file:" + location, "admin", "password");
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -58,53 +107,6 @@ public class DBConnector {
 
 	public static void main(String[] args) {
 		DBConnector main = new DBConnector();
-
-		File file = new File("database/SQLTables.sql");
-		String path = file.getAbsolutePath();
-
-		try { // Reads and Executes SQL commands to create tables under /tables
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
-
-			StringBuilder query = new StringBuilder();
-			String line = "";
-			while ((line = bufferedReader.readLine()) != null) {
-				if (line.startsWith("--")) {
-					continue; // skip sql comments
-				}
-				query.append(line);
-
-				// found a query, execute it
-				if (line.endsWith(";")) {
-					Statement stmt = main.getConnection().createStatement();
-					Team01Driver.log(query.toString().substring(0, query.indexOf("(")).toLowerCase());
-					stmt.execute(query.toString());
-					query = new StringBuilder();
-				}
-			}
-
-			bufferedReader.close();
-
-		} catch (SQLException | IOException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			CustomerTable.populateCustomerTableFromCSV(main.getConnection(), "newCustomerData.csv");
-			List<Option> optionList = OptionTable.populateOptionTableFromCSV(main.getConnection(), "CarOptions.csv");
-			ModelTable.populateModelTableFromCSV(main.getConnection(), "Vehicles.csv");
-			List<Dealer> dealers = DealerTable.populateDealerTableFromCSV(main.getConnection(), "DealershipData.csv");
-			List<Vehicle> vehicles = VehicleTable.populateVehicleTableFromCSV(optionList, main.getConnection(), "Vehicles.csv", "VehicleOptions.csv");
-			DealerInventoryTable.addAllVehiclesToAllDealers(main.getConnection(), vehicles, dealers);
-			SaleTable.populateSaleTable(main.getConnection(), "smallVehicle.csv", "newCustomerData.csv", "CarOptions.csv");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		//CustomerTable.printCustomerTable(main.getConnection());
-		//OptionTable.printOptionTable(main.getConnection());
-		//ModelTable.printModelTable(main.getConnection());
-		//DealerTable.printDealerTables(main.getConnection());
-		//VehicleTable.printVehicleTable(main.getConnection());
 		SaleTable.printSaleTable(main.getConnection());
 	}
 }
