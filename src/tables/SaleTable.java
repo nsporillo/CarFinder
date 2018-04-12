@@ -26,7 +26,7 @@ public class SaleTable {
     public static void populateSaleTable(Connection conn, String smallVehicleCsv, String customerCsv, String carOptionsCsv){
         List<Sale> sales = new ArrayList<>();
         Random random = new Random();
-        int vin;
+        String vin;
         try {
             ArrayList<Sale> s = new ArrayList<>();
             BufferedReader vehicle = new BufferedReader(new FileReader(smallVehicleCsv));
@@ -49,7 +49,7 @@ public class SaleTable {
                     String[] CSplit = customerLine.split(",");
                     // for every vehicle in the short csv add to table and make sale to customer
                     int modelID = ModelTable.getModelId(conn, VSplit[1], VSplit[2]);
-                    vin = random.nextInt(10000000);
+                    vin = Integer.toString(random.nextInt(10000000));
                     VehicleTable.addVehicle(conn,vin,modelID,Integer.parseInt(OSplit[0]),Integer.parseInt(VSplit[0]), Integer.parseInt(VSplit[3]));
                     long time = 123456L;
                     Timestamp date = new Timestamp(time);
@@ -88,10 +88,10 @@ public class SaleTable {
      * @param timestamp
      * @param vin
      */
-    public static void addSale(Connection conn, int saleID, int dealerID, int customerID, Date timestamp, int vin) {
+    public static void addSale(Connection conn, int saleID, int dealerID, int customerID, Date timestamp, String vin) {
 
         String query = String.format("INSERT INTO Sale "
-                + "VALUES(%d,\'%d\',\'%d\',\'%tD\',\'%d\');", saleID, dealerID, customerID, timestamp, vin);
+                + "VALUES('%d\',\'%d\',\'%tD\',\'%s\');", dealerID, customerID, timestamp, vin);
 
         try {
             /**
@@ -134,12 +134,12 @@ public class SaleTable {
             ResultSet result = stmt.executeQuery(query);
 
             while (result.next()) {
-                System.out.printf("Sale %d: %d %d %tD %d\n",
+                System.out.printf("Sale %d: %d %d %tD %s\n",
                         result.getInt(1),
                         result.getInt(2),
                         result.getInt(3),
                         result.getDate(4),
-                        result.getInt(5));
+                        result.getString(5));
             }
         } catch (SQLException e) {
             e.printStackTrace();

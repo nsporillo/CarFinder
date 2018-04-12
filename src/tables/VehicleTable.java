@@ -107,8 +107,8 @@ public class VehicleTable {
 			ResultSet result = stmt.executeQuery(query);
 
 			while (result.next()) {
-				System.out.printf("Vehicle %d: %d %d %d %d %d\n",
-						result.getInt(1),
+				System.out.printf("Vehicle %s: %d %d %d %d %d\n",
+						result.getString(1),
 						result.getInt(2),
 						result.getInt(3),
 						result.getInt(4),
@@ -120,7 +120,7 @@ public class VehicleTable {
 		}
 	}
 
-	public static void addVehicle( Connection conn, int VIN, int ModelID, int optionID, int year, int price)  {
+	public static void addVehicle( Connection conn, String VIN, int ModelID, int optionID, int year, int price)  {
 		StringBuilder sb = new StringBuilder();
 		////////////////////
 		/////////////////
@@ -130,7 +130,7 @@ public class VehicleTable {
 		String query = String.format("IF (SELECT VIN FROM Vehicle WHERE VIN = %d) NOT IN (SELECT VIN FROM Vehicle) " +
 				"INSERT INTO Vehicle (%d, %d, %d, %d, %d);", VIN, VIN, ModelID, optionID, year, price );
 				*/
-		String query = String.format("INSERT INTO Vehicle (VIN, ModelID, OptionID, Year, Price) VALUES (%d, %d, %d, %d, %d);", VIN, ModelID, optionID, year, price) ;
+		String query = String.format("INSERT INTO Vehicle (VIN, ModelID, OptionID, Year, Price) VALUES (%s, %d, %d, %d, %d);", VIN, ModelID, optionID, year, price) ;
 		try {
 			Statement stmt = conn.createStatement();
 			stmt.execute(query);
