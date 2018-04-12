@@ -1,12 +1,19 @@
 package views;
 
+import main.DBConnector;
+import main.Team01Driver;
+import models.Dealer;
 import models.Vehicle;
+import tables.DealerTable;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.*;
+
+import static tables.DealerTable.getById;
 
 public class VehicleView extends JFrame {
 
@@ -109,6 +116,22 @@ public class VehicleView extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				//TODO: Open either customer view if the car is owned by a customer
 				//TODO: Or a dealer view if the car isnt sold yet
+				DealerView view = Team01Driver.getDriver().getViewManager().getDealerView();
+				Connection conn = Team01Driver.getDriver().getDB().getConnection();
+				try {
+					String query = "SELECT DealerID FROM DealerInventory WHERE VIN =?";
+					PreparedStatement ps = conn.prepareStatement(query);
+					ps.setString(1,vehicle.getVin());
+					ResultSet rs = ps.executeQuery();
+					System.out.println(rs);
+					System.out.println(rs.getRow());
+					int dealerID = rs.getInt("DealerID");
+					Dealer owner = DealerTable.getById(conn,dealerID);
+					view.setDealer(owner);
+					view.setVisible(true);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
 		});
 		btnNewButton.setFont(new Font("Tahoma", Font.BOLD, 18));
