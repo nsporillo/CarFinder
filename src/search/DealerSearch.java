@@ -95,7 +95,8 @@ public class DealerSearch extends Search {
 				Dealer dealer = new Dealer();
 				dealer.setId(rs.getInt("DealerID"));
 				dealer.setName(rs.getString("Name"));
-				dealer.setState(rs.getString("Street"));
+				dealer.setStreet(rs.getString("Street"));
+				dealer.setCity(rs.getString("City"));
 				dealer.setState(rs.getString("State"));
 				dealer.setZip(rs.getInt("ZIP"));
 				dealer.setPhone(rs.getString("Phone"));
