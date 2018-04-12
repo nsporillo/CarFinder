@@ -54,7 +54,7 @@ public class SaleTable {
                     long time = 123456L;
                     Timestamp date = new Timestamp(time);
                     Sale saleRecord = new Sale(saleID,dealerID,Integer.parseInt(CSplit[0]),date,"" + vin);
-                    if(dealerInc){
+                    if(dealerInc && dealerID < 249){
                         dealerID ++;
                         dealerInc = false;
                     }
