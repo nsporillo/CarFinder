@@ -34,7 +34,7 @@ public class DealerInventorySearch extends Search {
 
 	public void setDealerName(String dealerName) {
 		if (!dealerFields.containsKey("DealerID")) {
-			dealerFields.put("LikeDealerName", "%" + dealerName + "%");
+			dealerFields.put("LikeName", "%" + dealerName + "%");
 		}
 	}
 
@@ -100,6 +100,10 @@ public class DealerInventorySearch extends Search {
 
 		/* Filter results by any number of vehicle or model fields */
 		if (vehicleFields.size() > 0 || modelFields.size() > 0 || optionFields.size() > 0 || dealerFields.size() > 0) {
+			if (dealerFields.containsKey("LikeName")) {
+				query += " INNER JOIN Dealer on Dealer.DealerID = DealerInventory.DealerID";
+			}
+
 			StringBuilder builder = new StringBuilder(" WHERE ");
 
 			/* Filter results with vehicle only fields*/
@@ -269,7 +273,8 @@ public class DealerInventorySearch extends Search {
 		ResultSet rs = null;
 
 		try {
-			ps = super.prepareStatement(connection, prepareSQL());
+			String sql = prepareSQL() + " ORDER BY Vehicle.Price DESC";
+			ps = super.prepareStatement(connection, sql);
 			rs = ps.executeQuery();
 			super.clearParameterIndex();
 

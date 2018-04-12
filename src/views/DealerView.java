@@ -16,6 +16,7 @@ import javax.swing.border.EmptyBorder;
 import main.Team01Driver;
 import main.UserType;
 import models.Dealer;
+import tables.DealerInventoryTable;
 
 public class DealerView extends JFrame {
 
@@ -89,10 +90,11 @@ public class DealerView extends JFrame {
 		JButton btnSearchInventory = new JButton("Search Inventory");
 		btnSearchInventory.setBackground(SystemColor.inactiveCaption);
 		btnSearchInventory.setFont(new Font("Tahoma", Font.BOLD, 18));
-		btnSearchInventory.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//TODO: Load MakeSearch with the dealer filter enabled
-			}
+		btnSearchInventory.addActionListener(e -> {
+			VehicleSearchView search = Team01Driver.getDriver().getViewManager().getVehicleSearch();
+			search.fillInDealerName(dealer.getName());
+			search.setVisible(true);
+			setVisible(false);
 		});
 		btnSearchInventory.setBounds(0, 138, 484, 123);
 		contentPane.add(btnSearchInventory);
@@ -114,8 +116,7 @@ public class DealerView extends JFrame {
 		contentPane.add(lblTotalCarInventory);
 		
 		invField = new JTextField();
-		invField.setBounds(100, 96, 65, 20);
-		invField.setColumns(10);
+		invField.setBounds(100, 96, 120, 20);
 		invField.setEditable(false);
 		contentPane.add(invField);
 	}
@@ -139,5 +140,9 @@ public class DealerView extends JFrame {
 		this.idField.setText(String.valueOf(dealer.getId()));
 		this.phoneField.setText(dealer.getPhone());
 		this.addressField.setText(dealer.getAddress());
+
+		String template = "%d Vehicles";
+		int size = DealerInventoryTable.getDealerInventorySize(Team01Driver.getDriver().getDB().getConnection(), dealer.getId());
+		this.invField.setText(String.format(template, size));
 	}
 }

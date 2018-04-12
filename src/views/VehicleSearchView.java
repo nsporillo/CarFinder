@@ -189,6 +189,10 @@ public class VehicleSearchView extends JFrame {
 		scrollPane.setViewportView(searchResultPanel);
 	}
 
+	public void fillInDealerName(String dealerName) {
+		this.dealerField.setText(dealerName);
+	}
+
 	/**
 	 * ActionListener ror
 	 */
@@ -200,7 +204,7 @@ public class VehicleSearchView extends JFrame {
 
 				// Remove any possible previous results
 				searchResultPanel.removeAll();
-				searchResultPanel.revalidate();
+				searchResultPanel.validate();
 
 				// Add header
 				searchResultPanel.add(fromVehicle(Vehicle.label(), false));
@@ -221,7 +225,7 @@ public class VehicleSearchView extends JFrame {
 					searchResultPanel.add(fromVehicle(v, true));
 				}
 
-				searchResultPanel.revalidate();
+				searchResultPanel.validate();
 			} catch (Exception ex) {
 				ex.printStackTrace(System.err);
 			}
@@ -279,7 +283,9 @@ public class VehicleSearchView extends JFrame {
 			/* Parse dealer number from the dealer field*/
 			dealer = (Integer) dealerField.getFormatter().stringToValue(dealerField.getText());
 		} catch (ParseException e) {
-			e.printStackTrace(System.err);
+			if (dealerField.getText().length() > 0) {
+				dealerInventorySearch.setDealerName(dealerField.getText());
+			}
 		}
 
 		if (dealer != null) {

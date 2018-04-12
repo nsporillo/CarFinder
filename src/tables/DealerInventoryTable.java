@@ -66,6 +66,26 @@ public class DealerInventoryTable {
 		return stmt;
 	}
 
+	public static int getDealerInventorySize(Connection conn, int dealerID) {
+		int size = 0;
+
+		String query = "SELECT COUNT(*) FROM DealerInventory WHERE DealerID=?";
+
+		try {
+			PreparedStatement preparedStatement = conn.prepareStatement(query);
+			preparedStatement.setInt(1, dealerID);
+			ResultSet rs = preparedStatement.executeQuery();
+
+			if (rs.next()) {
+				size = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return size;
+	}
+
 	/**
 	 * Prints out DealerInventory
 	 *
