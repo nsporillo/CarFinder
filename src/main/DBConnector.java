@@ -23,7 +23,7 @@ public class DBConnector {
     // The connection to the database
     private Connection conn;
 
-    public DBConnector(String username, String password) {
+    DBConnector(String username, String password) {
         if (dbFile.exists()) {
             createConnection(dbPath.getAbsolutePath(), username, password);
             Team01Driver.log("Database exists: Skipping table creation and population");
@@ -41,7 +41,7 @@ public class DBConnector {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
 
             StringBuilder query = new StringBuilder();
-            String line = "";
+            String line;
             while ((line = bufferedReader.readLine()) != null) {
                 if (line.startsWith("--")) {
                     continue; // skip sql comments
