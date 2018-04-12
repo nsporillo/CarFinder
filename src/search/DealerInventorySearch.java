@@ -96,14 +96,11 @@ public class DealerInventorySearch extends Search {
 		String query = "SELECT * FROM DealerInventory " +
 				"INNER JOIN Vehicle ON DealerInventory.VIN = Vehicle.VIN " +
 				"INNER JOIN Model ON Vehicle.ModelID = Model.ModelID " +
-				"INNER JOIN Option ON Vehicle.OptionID = Option.OptionID";
+				"INNER JOIN Option ON Vehicle.OptionID = Option.OptionID " +
+				"INNER JOIN Dealer on Dealer.DealerID = DealerInventory.DealerID";
 
 		/* Filter results by any number of vehicle or model fields */
 		if (vehicleFields.size() > 0 || modelFields.size() > 0 || optionFields.size() > 0 || dealerFields.size() > 0) {
-			if (dealerFields.containsKey("LikeName")) {
-				query += " INNER JOIN Dealer on Dealer.DealerID = DealerInventory.DealerID";
-			}
-
 			StringBuilder builder = new StringBuilder(" WHERE ");
 
 			/* Filter results with vehicle only fields*/
@@ -130,20 +127,14 @@ public class DealerInventorySearch extends Search {
 				super.setParameterIndex(entry.getValue());
 			}
 
-			/* Filter results by dealerID */
-			if (dealerFields.containsKey("DealerID") && dealerFields.size() == 1) {
-				builder.append("DealerInventory.DealerID=?");
-				super.setParameterIndex(dealerFields.get("DealerID"));
-			} else {
-				for (Map.Entry<String, Object> entry : dealerFields.entrySet()) {
-					if (entry.getKey().startsWith("Like")) {
-						builder.append("Dealer.").append(entry.getKey().replaceAll("Like", "")).append(" LIKE ? AND ");
-					} else {
-						builder.append("Dealer.").append(entry.getKey()).append("=? AND ");
-					}
-
-					super.setParameterIndex(entry.getValue());
+			for (Map.Entry<String, Object> entry : dealerFields.entrySet()) {
+				if (entry.getKey().startsWith("Like")) {
+					builder.append("Dealer.").append(entry.getKey().replaceAll("Like", "")).append(" LIKE ? AND ");
+				} else {
+					builder.append("Dealer.").append(entry.getKey()).append("=? AND ");
 				}
+
+				super.setParameterIndex(entry.getValue());
 			}
 
 			query += builder.substring(0, builder.lastIndexOf("?") + 1);
@@ -294,6 +285,8 @@ public class DealerInventorySearch extends Search {
 						option,
 						rs.getInt("Year"),
 						rs.getInt("Price"));
+				vehicle.setOwner(rs.getString("Name"));
+				
 				vehicles.add(vehicle);
 			}
 

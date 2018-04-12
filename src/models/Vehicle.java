@@ -2,6 +2,7 @@ package models;
 
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Class containing Vehicle details: VIN, ModelID, OptionID, SaleID, Year, Price
@@ -14,6 +15,9 @@ public class Vehicle {
     private int year;
     private int price;
 
+    // Optional field, populated by ResultSet to denote a dealer name or customer name
+    private String owner;
+
     public Vehicle(){}
 
     public Vehicle(String vin, Model model, Option option, int year, int price) {
@@ -24,7 +28,15 @@ public class Vehicle {
         this.price = price;
     }
 
-    public String getVin() {
+    public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+	public String getVin() {
         return vin;
     }
 
@@ -79,25 +91,48 @@ public class Vehicle {
                 '}';
     }
 
-    public String getSearchView() {
-    	// YEAR COLOR MAKE MODEL PRICE ENGINE TRANSMISSION
-        String template = "| %s | %s | %s | %s | %s | %s | %s |";
-        String sYear = year > 0 ? String.valueOf(year) : "YEAR";
-        return String.format(template, 
-        		padText(sYear, 6),
-        		padText(option.getColor(), 7),
-        		padText(model.getBrandName(), 10),
-        		padText(model.getBodyStyle(), 20),
-        		padText(price(), 14),
-        		padText(option.getEngine(), 6),
-        		padText(option.getTransmission(), 12));
-    }
+	private String getSearchColumn(String column) {
+		switch (column) {
+			case "Dealer":
+				return padText(owner, 16);
+			case "Year":
+				return padText(year > 0 ? String.valueOf(year) : "YEAR", 6);
+			case "Color":
+				return padText(option.getColor(), 7);
+			case "Make":
+				return padText(model.getBrandName(), 10);
+			case "Model":
+				return padText(model.getBodyStyle(), 20);
+			case "Price":
+				return padText(price(), 14);
+			case "Engine":
+				return padText(option.getEngine(), 6);
+			case "Transmission":
+				return padText(option.getTransmission(), 12);
+		}
+
+		return "NONE";
+	}
+
+	public String getSearchView(Map<String, Boolean> columnToggle) {
+		// DEALER YEAR COLOR MAKE MODEL PRICE ENGINE TRANSMISSION
+		StringBuilder searchView = new StringBuilder();
+
+		for (Map.Entry<String, Boolean> column : columnToggle.entrySet()) {
+			if (column.getValue()) {
+				searchView.append("| ").append(getSearchColumn(column.getKey())).append(" ");
+			}
+		}
+		searchView.append("|");
+
+		return searchView.toString();
+	}
 
     public String price() {
     	if (price < 0) {
     		return "PRICE";
     	}
-    	
+
         return NumberFormat.getCurrencyInstance(new Locale("en", "US")).format(price);
     }
 
@@ -110,11 +145,13 @@ public class Vehicle {
 
         return color;
     }
-    
+
     public static final Vehicle label() {
-    	return new Vehicle("VIN", 
-				new Model(-1, "MAKE", "MODEL"), 
-				new Option(-1, "COLOR", "ENGINE", "TRANSMISSION"), 
+    	Vehicle label = new Vehicle("VIN",
+				new Model(-1, "MAKE", "MODEL"),
+				new Option(-1, "COLOR", "ENGINE", "TRANSMISSION"),
 				-1, -1);
+    	label.setOwner("DEALER");
+    	return label;
     }
 }

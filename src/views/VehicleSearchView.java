@@ -14,7 +14,9 @@ import java.awt.event.ItemListener;
 import java.sql.Connection;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class VehicleSearchView extends JFrame {
 
@@ -34,6 +36,12 @@ public class VehicleSearchView extends JFrame {
 
 	private DealerInventorySearch dealerInventorySearch;
 
+	/**
+	 * Column Toggling Variables
+	 */
+	protected Map<String, Boolean> columnToggle = new LinkedHashMap<>(); // LinkedHashMap preserves insertion order
+	private List<Vehicle> displayedVehicles;
+
 
 	/**
 	 * Create the frame.
@@ -42,14 +50,14 @@ public class VehicleSearchView extends JFrame {
 		setResizable(false);
 		setTitle("Search By Make");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 850, 500);
+		setBounds(100, 100, 850, 550);
 		mainContentPane = new JPanel();
 		mainContentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(mainContentPane);
 		mainContentPane.setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(5, 5, 190, 380);
+		panel.setBounds(5, 5, 190, 370);
 		mainContentPane.add(panel);
 
 		JLabel lblMake = new JLabel("Make");
@@ -173,11 +181,11 @@ public class VehicleSearchView extends JFrame {
 
 		JSeparator vertSeparator = new JSeparator();
 		vertSeparator.setOrientation(SwingConstants.VERTICAL);
-		vertSeparator.setBounds(200, 0, 2, 470);
+		vertSeparator.setBounds(200, 0, 2, 520);
 		mainContentPane.add(vertSeparator);
 
 		lblDisplayResults = new JLabel("Displaying 0 Results");
-		lblDisplayResults.setBounds(210, 8, 140, 14);
+		lblDisplayResults.setBounds(210, 8, 200, 14);
 		mainContentPane.add(lblDisplayResults);
 
 		JScrollPane scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -188,20 +196,115 @@ public class VehicleSearchView extends JFrame {
 		searchResultPanel = new JPanel();
 		searchResultPanel.setLayout(new BoxLayout(searchResultPanel, BoxLayout.PAGE_AXIS));
 		scrollPane.setViewportView(searchResultPanel);
+
+		JSeparator separator = new JSeparator();
+		separator.setBounds(0, 464, 850, 2);
+		mainContentPane.add(separator);
+
+		JLabel lblNewLabel = new JLabel("Toggle Columns ");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblNewLabel.setBounds(5, 468, 190, 52);
+		mainContentPane.add(lblNewLabel);
+
+		JCheckBox columnMake = new JCheckBox("Make");
+		columnMake.setSelected(true);
+		columnToggle.put("Make", true);
+		columnMake.setBounds(300, 467, 100, 23);
+		columnMake.addActionListener(new ColumnListener("Make"));
+		mainContentPane.add(columnMake);
+
+		JCheckBox columnModel = new JCheckBox("Model");
+		columnModel.setSelected(true);
+		columnToggle.put("Model", true);
+		columnModel.setBounds(300, 497, 100, 23);
+		columnModel.addActionListener(new ColumnListener("Model"));
+		mainContentPane.add(columnModel);
+
+		JCheckBox columnYear = new JCheckBox("Year");
+		columnYear.setSelected(true);
+		columnToggle.put("Year", true);
+		columnYear.setBounds(200, 497, 100, 23);
+		columnYear.addActionListener(new ColumnListener("Year"));
+		mainContentPane.add(columnYear);
+
+		JCheckBox columnPrice = new JCheckBox("Price");
+		columnPrice.setSelected(true);
+		columnToggle.put("Price", true);
+		columnPrice.addActionListener(new ColumnListener("Price"));
+		columnPrice.setBounds(500, 467, 100, 23);
+		mainContentPane.add(columnPrice);
+
+		JCheckBox columnColor = new JCheckBox("Color");
+		columnColor.setSelected(true);
+		columnToggle.put("Color", true);
+		columnColor.setBounds(400, 467, 100, 23);
+		columnColor.addActionListener(new ColumnListener("Color"));
+		mainContentPane.add(columnColor);
+
+		JCheckBox columnEngine = new JCheckBox("Engine");
+		columnEngine.setBounds(400, 497, 100, 23);
+		columnToggle.put("Engine", false);
+		columnEngine.addActionListener(new ColumnListener("Engine"));
+		mainContentPane.add(columnEngine);
+
+		JCheckBox columnTransmission = new JCheckBox("Transmission");
+		columnTransmission.setBounds(500, 497, 150, 23);
+		columnToggle.put("Transmission", false);
+		columnTransmission.addActionListener(new ColumnListener("Transmission"));
+		mainContentPane.add(columnTransmission);
+
+		JCheckBox columnDealer = new JCheckBox("Dealer");
+		columnDealer.setSelected(true);
+		columnToggle.put("Dealer", true);
+		columnDealer.setBounds(200, 467, 100, 23);
+		columnDealer.addActionListener(new ColumnListener("Dealer"));
+		mainContentPane.add(columnDealer);
 	}
 
 	public void fillInDealerName(String dealerName) {
 		this.dealerField.setText(dealerName);
 	}
 
-	/**
-	 * ActionListener ror
-	 */
+	protected void renderResults() {
+		if (displayedVehicles != null) {
+			// Remove any possible previous results
+			searchResultPanel.removeAll();
+			searchResultPanel.validate();
+
+			// Add header
+			searchResultPanel.add(fromVehicle(Vehicle.label(), false));
+
+			// Display all vehicle results
+			for (Vehicle v : displayedVehicles) {
+				searchResultPanel.add(fromVehicle(v, true));
+			}
+
+			searchResultPanel.updateUI();
+		}
+	}
+
+	class ColumnListener implements ActionListener {
+
+		private String column;
+
+		ColumnListener(String column) {
+			this.column = column;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			Boolean oldValue = columnToggle.get(column);
+			columnToggle.put(column, !oldValue);
+			SwingUtilities.invokeLater(VehicleSearchView.this::renderResults);
+		}
+	}
+
 	final ActionListener searchListener = new ActionListener() {
 		public void actionPerformed(ActionEvent arg0) {
 			try {
 				dealerInventorySearch = createSearch();
-				List<Vehicle> results = dealerInventorySearch.execute(Team01Driver.getDriver().getDB().getConnection());
+				displayedVehicles = dealerInventorySearch.execute(Team01Driver.getDriver().getDB().getConnection());
 
 				// Remove any possible previous results
 				searchResultPanel.removeAll();
@@ -210,23 +313,30 @@ public class VehicleSearchView extends JFrame {
 				// Add header
 				searchResultPanel.add(fromVehicle(Vehicle.label(), false));
 
+				int resultSize = displayedVehicles.size();
+
 				// Arbitrary results limit to avoid overloading JScrollPane
-				if (results == null || results.size() == 0) {
+				if (resultSize == 0) {
 					System.out.println("No results");
 					lblDisplayResults.setText("Displaying 0 Results");
 					return;
-				} else if (results.size() > 1000) {
-					results = results.subList(0, 1000);
+				} else if (resultSize > 1000) {
+					displayedVehicles = displayedVehicles.subList(0, 1000);
 				}
 
-				lblDisplayResults.setText("Displaying " + results.size() + " Results");
+				if (resultSize != displayedVehicles.size()) {
+					lblDisplayResults.setText("Displaying " + displayedVehicles.size() + " / " + resultSize + " Results");
+				} else {
+					lblDisplayResults.setText("Displaying " + displayedVehicles.size() + " Results");
+				}
+
 
 				// Display all vehicle results
-				for (Vehicle v : results) {
+				for (Vehicle v : displayedVehicles) {
 					searchResultPanel.add(fromVehicle(v, true));
 				}
 
-				searchResultPanel.validate();
+				searchResultPanel.updateUI();
 			} catch (Exception ex) {
 				ex.printStackTrace(System.err);
 			}
@@ -234,7 +344,7 @@ public class VehicleSearchView extends JFrame {
 	};
 
 	private JButton fromVehicle(final Vehicle vehicle, boolean clickable) {
-		JButton jButton = new JButton(vehicle.getSearchView());
+		JButton jButton = new JButton(vehicle.getSearchView(columnToggle));
 
 		if (clickable) {
 			jButton.addActionListener(e -> {
