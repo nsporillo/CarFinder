@@ -84,13 +84,13 @@ public class Vehicle {
         String template = "| %s | %s | %s | %s | %s | %s | %s |";
         String sYear = year > 0 ? String.valueOf(year) : "YEAR";
         return String.format(template, 
-        		sYear, 
-        		option.getColor(), 
-        		model.getBrandName(), 
-        		model.getBodyStyle(), 
-        		price(), 
-        		option.getEngine(), 
-        		option.getTransmission());
+        		padText(sYear, 6),
+        		padText(option.getColor(), 7),
+        		padText(model.getBrandName(), 10),
+        		padText(model.getBodyStyle(), 20),
+        		padText(price(), 14),
+        		padText(option.getEngine(), 6),
+        		padText(option.getTransmission(), 12));
     }
 
     public String price() {
@@ -99,6 +99,16 @@ public class Vehicle {
     	}
     	
         return NumberFormat.getCurrencyInstance(new Locale("en", "US")).format(price);
+    }
+
+    private static String padText(String color, int size) {
+        int padSize = size - color.length();
+        int padStart = color.length() + padSize / 2;
+
+        color = String.format("%" + padStart + "s", color);
+        color = String.format("%-" + size  + "s", color);
+
+        return color;
     }
     
     public static final Vehicle label() {
