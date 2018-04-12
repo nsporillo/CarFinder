@@ -65,16 +65,30 @@ public class DealerSearch extends Search {
 	@Override
 	public String prepareSQL() {
 		String query = "SELECT * FROM DEALER";
-
+		boolean firstTime = true;
 		if (dealerFields.size() > 0) {
 			StringBuilder builder = new StringBuilder(" WHERE ");
-
 			for (Map.Entry<String, Object> entry : dealerFields.entrySet()) {
-				builder.append(entry.getKey()).append("=? AND ");
-				super.setParameterIndex(entry.getValue());
+				if (entry.getKey().equals("ZIP")) {
+					int zip = (Integer) entry.getValue();
+					if (firstTime) {
+						builder.append(entry.getKey()).append(" BETWEEN ").append((zip - 100)).append(" AND ").append(zip + 100).append(" ");
+						firstTime = false;
+					} else {
+						builder.append(" AND ").append(entry.getKey()).append(" BETWEEN ").append((zip - 100)).append(" AND ").append(zip + 100);
+					}
+				} else {
+					if (firstTime) {
+						builder.append(entry.getKey()).append("=? ");
+						super.setParameterIndex(entry.getValue());
+						firstTime = false;
+					} else {
+						builder.append(" AND ").append(entry.getKey()).append(" =? ");
+						super.setParameterIndex(entry.getValue());
+					}
+				}
 			}
-
-			query += builder.substring(0, builder.lastIndexOf("?") + 1);
+			query += builder.substring(0, builder.length());
 		}
 
 		return query;
