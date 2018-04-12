@@ -49,7 +49,7 @@ public class SaleTable {
                     String[] CSplit = customerLine.split(",");
                     // for every vehicle in the short csv add to table and make sale to customer
                     int modelID = ModelTable.getModelId(conn, VSplit[1], VSplit[2]);
-                    vin = Integer.toString(random.nextInt(10000000));
+                    vin = Integer.toString(100000000 + random.nextInt(900000000));
                     VehicleTable.addVehicle(conn,vin,modelID,Integer.parseInt(OSplit[0]),Integer.parseInt(VSplit[0]), Integer.parseInt(VSplit[3]));
                     long time = 123456L;
                     Timestamp date = new Timestamp(time);
