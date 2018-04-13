@@ -311,33 +311,4 @@ public class DealerInventorySearch extends Search {
 			}
 		}
 	}
-
-	public Map<String, Object> getDealerFields() {
-		return dealerFields;
-	}
-
-	public Map<String, Object> getVehicleFields() {
-		return vehicleFields;
-	}
-
-	public Map<String, Object> getModelFields() {
-		return modelFields;
-	}
-
-	public Map<String, Object> getOptionFields() {
-		return optionFields;
-	}
-
-	public static void main(String[] args) {
-		DealerInventorySearch search = new DealerInventorySearch();
-		search.setDealerName("Sick Autos");
-		search.setColor("Silver");
-		search.setBodyStyle("325xi");
-		search.setBrandName("BMW");
-		search.setEngine("V6");
-		search.setTransmission("Automatic");
-		search.setYear(2005);
-
-		System.out.println(search.injectParameters());
-	}
 }
