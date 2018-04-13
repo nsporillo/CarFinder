@@ -15,6 +15,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+/**
+ * This class is run to create a database from given csv
+ */
 public class DBConnector {
 
     private static final File dbFile = new File("database/SQLTables.sql.mv.db");
@@ -23,6 +26,12 @@ public class DBConnector {
     // The connection to the database
     private Connection conn;
 
+    /**
+     * checks if there is a database already created if it is not created already it will populate a new database
+     * @param username  Username used to log in
+     * @param password  Password to the database.
+     *                  These params are usually admin and password for our basic implementation
+     */
     DBConnector(String username, String password) {
         if (dbFile.exists()) {
             createConnection(dbPath.getAbsolutePath(), username, password);
@@ -35,6 +44,12 @@ public class DBConnector {
 
     }
 
+    /**
+     * Executes the file with all the sql statements to create our tables
+     * @param path  Path to the file
+     * @param username  username to be used in database
+     * @param password  password to the database
+     */
     private void createDatabase(String path, String username, String password) {
         createConnection(path, username, password);
         try {
@@ -63,6 +78,10 @@ public class DBConnector {
         }
     }
 
+    /**
+     * Populates all the tables with information from the csv or previously computed lists.
+     * After this every table is populated into the database
+     */
     private void populateDatabase() {
         try {
             CustomerTable.populateCustomerTableFromCSV(conn, "newCustomerData.csv");
@@ -104,10 +123,18 @@ public class DBConnector {
         }
     }
 
+    /**
+     * Gets connection to the database
+     * @return  Connection to the database
+     */
     public Connection getConnection() {
         return this.conn;
     }
 
+    /**
+     * Starts a new database with admin and password
+     * @param args  empty
+     */
     public static void main(String[] args) {
         DBConnector main = new DBConnector("admin", "password");
     }

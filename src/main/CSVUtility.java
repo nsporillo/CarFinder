@@ -11,6 +11,10 @@ import static java.nio.charset.Charset.forName;
 
 public class CSVUtility {
 
+	/**
+	 * This parses and creates a new csv used to create vehicles
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		try {
 			Scanner scanner = new Scanner(new FileReader(new File("Vehicles.csv")));

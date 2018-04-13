@@ -17,6 +17,19 @@ public class Customer {
 	private int gender;
 	private int annualIncome;
 
+	/**
+	 * Constructor to create a new customer object
+	 * @param customerID	Unique ID
+	 * @param firstName		Name of Customer
+	 * @param lastName		LastName of Customer
+	 * @param street		Street of Customer
+	 * @param city			City of Customer
+	 * @param state			State of Customer
+	 * @param zip			Zip of Customer
+	 * @param phone			Phone of Customer
+	 * @param gender		Gender of Customer
+	 * @param annualIncome	Annual Income of Customer
+	 */
 	public Customer(int customerID, String firstName, String lastName, String street, String city, String state,
 			int zip, String phone, int gender, int annualIncome) {
 		this.id = customerID;

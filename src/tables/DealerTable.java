@@ -15,6 +15,15 @@ public class DealerTable {
 
 	private static final String table = "Dealer";
 
+	/**
+	 * Takes in csv file and populates the appropriate tables
+	 * Reads through the file and creates a dealer object for every line
+	 * then sends that list to be inserted into the table
+	 * @param conn		Connection to database
+	 * @param filename	csv file with information about the Dealers
+	 * @return			List of Dealers that are then used to populate tables
+	 * @throws SQLException
+	 */
 	public static List<Dealer> populateDealerTableFromCSV(Connection conn, String filename) throws SQLException {
 		Team01Driver.log("Populating Dealer table from " + filename);
 		List<Dealer> dealers = new ArrayList<>();
@@ -46,6 +55,11 @@ public class DealerTable {
 		return dealers;
 	}
 
+	/**
+	 * Generates the SQL statement to enter in a list of Dealer objects
+	 * @param dealers List of Dealers to be inserted into the table
+	 * @return 	String representation of the query
+	 */
 	public static String createDealerInsertSQL(List<Dealer> dealers) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("INSERT INTO Dealer (DealerID, Name, Street, City, State, ZIP, Phone) VALUES ");
@@ -61,6 +75,10 @@ public class DealerTable {
 		return sb.toString();
 	}
 
+	/**
+	 * Print out the Dealer table for debugging purposes
+	 * @param conn Connection to the database
+	 */
 	public static void printDealerTables(Connection conn) {
 		String query = "SELECT * FROM Dealer;";
 		try {
@@ -81,6 +99,11 @@ public class DealerTable {
 		}
 	}
 
+	/**
+	 * Generates a name for the Dealer
+	 * @param name Name from the csv file
+	 * @return A Name that is much cooler than the name in the csv
+	 */
 	private static String nameGen(String name) {
 		Random r = new Random();
 		int coolified = Math.abs(r.nextInt() % 6);
@@ -107,6 +130,12 @@ public class DealerTable {
 		return "errored";
 	}
 
+	/**
+	 * Searches the database based on a DealerID and returns that Dealer
+	 * @param conn 		Connection to the database
+	 * @param dealerId 	DealerID that is needed
+	 * @return 			Dealer with the given ID
+	 */
 	public static Dealer getById(Connection conn, int dealerId) {
 		PreparedStatement ps = null;
 		String query = "SELECT * FROM " + table + " WHERE DealerID = ?";
@@ -138,8 +167,8 @@ public class DealerTable {
 	/**
 	 * Filters dealers on a given name
 	 *
-	 * @param conn
-	 * @param name
+	 * @param conn Connection to database
+	 * @param name Name of Dealer requested
 	 * @return list of dealer objects
 	 */
 	public static List<Dealer> filterDealersByName(Connection conn, String name) {

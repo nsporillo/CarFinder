@@ -8,7 +8,17 @@ public class Dealer {
 	private int zip, id;
 
 	public Dealer() {}
-	
+
+	/**
+	 * Constructor to create Dealer
+	 * @param name	Name of dealer
+	 * @param id	Unique ID
+	 * @param street	Street of Dealer
+	 * @param city	City of Dealer
+	 * @param state	State of Dealer
+	 * @param zip	ZIP of dealer
+	 * @param phone	Phone of dealer
+	 */
 	public Dealer(String name, int id, String street, String city, String state, int zip, String phone) {
 		this.name = name;
 		this.id = id;
@@ -96,6 +106,11 @@ public class Dealer {
 		return color;
 	}
 
+	/**
+	 * Format text within the GUi display
+	 * @param column Which column to display
+	 * @return Formatted String of dealer object
+	 */
 	private String getSearchColumn(String column) {
 		switch (column) {
 			case "Name":
@@ -117,6 +132,11 @@ public class Dealer {
 		return "NONE";
 	}
 
+	/**
+	 * Used to get information about the dealer to be displayed in searches
+	 * @param columnToggle	Choosing which columns to be displayed
+	 * @return	Return string of Dealer object
+	 */
 	public String getSearchView(Map<String, Boolean> columnToggle) {
 		// DEALER YEAR COLOR MAKE MODEL PRICE ENGINE TRANSMISSION
 		StringBuilder searchView = new StringBuilder();

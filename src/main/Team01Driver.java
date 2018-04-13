@@ -5,6 +5,10 @@ import views.ViewManager;
 import javax.swing.*;
 import java.util.Date;
 
+/**
+ * This class is the main driver for the database
+ * Launches the GUI to access the database
+ */
 public class Team01Driver {
 
     private static Team01Driver driver;
@@ -12,6 +16,10 @@ public class Team01Driver {
     private ViewManager viewManager;
     private UserType userType;
 
+    /**
+     * Creates a new driver to the database with admin and password
+     * @param args
+     */
     public static void main(String[] args) {
         String user = "admin";
         String password = "password";
@@ -25,6 +33,11 @@ public class Team01Driver {
         return driver;
     }
 
+    /**
+     * Calls DB connector to make a database if one does not exist yet and starts the GUI
+     * @param username  username to log in with
+     * @param password  password to log in with
+     */
     public Team01Driver(String username, String password) {
         dbConnector = new DBConnector(username, password);
 
@@ -35,6 +48,10 @@ public class Team01Driver {
 
     }
 
+    /**
+     * standard geters and setters below
+     * @return  DBconnector object
+     */
     public DBConnector getDB() {
         return dbConnector;
     }

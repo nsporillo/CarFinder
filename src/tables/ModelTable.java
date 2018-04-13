@@ -68,6 +68,11 @@ public class ModelTable {
         }
     }
 
+    /**
+     * Create the SQL statement to insert a list of Model Objects
+     * @param model list of model objects to be inserted
+     * @return String representation of the query
+     */
     public static String createModelInsertSQL(List<Model> model) {
         StringBuilder sb = new StringBuilder();
 
@@ -86,6 +91,14 @@ public class ModelTable {
         return sb.toString();
     }
 
+    /**
+     * Return the Model of a vehicle based on brand and body
+     * @param conn
+     * @param brandName
+     * @param bodyStyle
+     * @return ModelID of the model
+     * @throws SQLException
+     */
     public static Integer getModelId(Connection conn, String brandName, String bodyStyle) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement("SELECT * FROM Model WHERE BrandName = ? AND BodyStyle = ?");
         stmt.setString(1, brandName.toUpperCase());

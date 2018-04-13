@@ -18,6 +18,15 @@ import java.util.UUID;
 
 public class VehicleTable {
 
+	/**
+	 * Populated the Vehicle table from CSV files
+	 * @param options 	Option list
+	 * @param conn 		Connection to database
+	 * @param carCSV	CSV containing vehicle information
+	 * @param opCSV		CSV with all the option codes
+	 * @return			List of Vehicle objects to be inserted
+	 * @throws SQLException
+	 */
 	public static List<Vehicle> populateVehicleTableFromCSV(List<Option> options, Connection conn, String carCSV, String opCSV) throws SQLException {
 		long timer = -System.currentTimeMillis();
 		Team01Driver.log("Populating Vehicle table from " + carCSV + " and " + opCSV);
@@ -75,6 +84,12 @@ public class VehicleTable {
 		return vehicles;
 	}
 
+	/**
+	 * Make the SQL Query the correct size. SQL bulk inserts cannot handle large inserts
+	 * @param vehicles 	List of vehicles to be insert
+	 * @param size
+	 * @return
+	 */
 	private static List<List<Vehicle>> partition(List<Vehicle> vehicles, Integer size) {
 		if (vehicles == null) {
 			return Collections.emptyList();
@@ -120,6 +135,15 @@ public class VehicleTable {
 		}
 	}
 
+	/**
+	 * Create a new vehicle and add it to the database
+	 * @param conn 		Connection to the database
+	 * @param VIN		VIN of car to be added
+	 * @param ModelID	Model of car
+	 * @param optionID	Options of car
+	 * @param year 		Year of car
+	 * @param price		price of car
+	 */
 	public static void addVehicle( Connection conn, String VIN, int ModelID, int optionID, int year, int price)  {
 		StringBuilder sb = new StringBuilder();
 		////////////////////
@@ -140,7 +164,13 @@ public class VehicleTable {
 
 	}
 
-
+	/**
+	 * Create the SQL query that will add vehicles to the database
+	 * @param conn		Connection to the database
+	 * @param vehicles	Vehicles to be inserted
+	 * @return
+	 * @throws SQLException
+	 */
 	public static PreparedStatement createVehicleInsertSQL(Connection conn, List<Vehicle> vehicles) throws SQLException {
 		StringBuilder sb = new StringBuilder();
 		sb.append("INSERT INTO Vehicle (VIN, ModelID, OptionID, Year, Price) VALUES ");

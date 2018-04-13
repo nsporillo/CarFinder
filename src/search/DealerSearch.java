@@ -11,6 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Wrapper class that is used to search Dealers
+ */
 public class DealerSearch extends Search {
 
 	private Map<String, Object> dealerFields;
@@ -62,6 +65,10 @@ public class DealerSearch extends Search {
 		}
 	}
 
+	/**
+	 * Create a String containing the sql query based on input from the GUI
+	 * @return String containing the query
+	 */
 	@Override
 	public String prepareSQL() {
 		String query = "SELECT * FROM DEALER";
@@ -94,6 +101,11 @@ public class DealerSearch extends Search {
 		return query;
 	}
 
+	/**
+	 * Execute the query based on the options in the GUI
+	 * @param connection Connection to database
+	 * @return			List of dealers that fulfill the query
+	 */
 	@Override
 	public List<Dealer> execute(Connection connection) {
 		List<Dealer> dealers = new ArrayList<>();
