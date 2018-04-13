@@ -111,11 +111,9 @@ public class VehicleView extends JFrame {
 		engineField.setEditable(false);
 		engineField.setColumns(10);
 
-		JButton btnNewButton = new JButton("View Owner/Dealer");
+		JButton btnNewButton = new JButton("View Dealer");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO: Open either customer view if the car is owned by a customer
-				//TODO: Or a dealer view if the car isnt sold yet
 				DealerView view = Team01Driver.getDriver().getViewManager().getDealerView();
 				Connection conn = Team01Driver.getDriver().getDB().getConnection();
 				try {
@@ -125,11 +123,10 @@ public class VehicleView extends JFrame {
 					ResultSet rs = ps.executeQuery();
 					if (rs.next()) {
 						int dealerID = rs.getInt("DealerID");
-						Dealer owner = DealerTable.getById(conn,dealerID);
+						Dealer owner = DealerTable.getById(conn, dealerID);
 						view.setDealer(owner);
 						view.setVisible(true);
 					}
-					
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
