@@ -124,6 +124,9 @@ public class Dealer {
 			case "State":
 				return padText(state, 20);
 			case "Zip":
+				if (zip == -1) {
+					return padText("ZIP", 14);
+				}
 				return padText(String.valueOf(zip), 14);
 			case "Phone":
 				return padText(phone, 6);
