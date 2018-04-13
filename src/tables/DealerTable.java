@@ -118,13 +118,13 @@ public class DealerTable {
 			Dealer dealer = new Dealer();
 
 			while (rs.next()) {
-				dealer.setId(rs.getInt(0));
-				dealer.setName(rs.getString(1));
-				dealer.setState(rs.getString(2));
-				dealer.setCity(rs.getString(3));
-				dealer.setZip(rs.getInt(rs.getInt(4)));
-				dealer.setState(rs.getString(5));
-				dealer.setPhone(rs.getString(6));
+				dealer.setId(rs.getInt("DealerID"));
+				dealer.setName(rs.getString("Name"));
+				dealer.setState(rs.getString("State"));
+				dealer.setCity(rs.getString("City"));
+				dealer.setZip(rs.getInt("Zip"));
+				dealer.setStreet(rs.getString("Street"));
+				dealer.setPhone(rs.getString("Phone"));
 			}
 
 			ps.close();

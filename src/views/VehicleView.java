@@ -123,12 +123,13 @@ public class VehicleView extends JFrame {
 					PreparedStatement ps = conn.prepareStatement(query);
 					ps.setString(1,vehicle.getVin());
 					ResultSet rs = ps.executeQuery();
-					System.out.println(rs);
-					System.out.println(rs.getRow());
-					int dealerID = rs.getInt("DealerID");
-					Dealer owner = DealerTable.getById(conn,dealerID);
-					view.setDealer(owner);
-					view.setVisible(true);
+					if (rs.next()) {
+						int dealerID = rs.getInt("DealerID");
+						Dealer owner = DealerTable.getById(conn,dealerID);
+						view.setDealer(owner);
+						view.setVisible(true);
+					}
+					
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
