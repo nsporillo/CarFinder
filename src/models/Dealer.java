@@ -1,5 +1,7 @@
 package models;
 
+import java.util.Map;
+
 public class Dealer {
 
 	private String name, street, city, state, phone;
@@ -83,18 +85,52 @@ public class Dealer {
 				+ phone + ", zip=" + zip + ", id=" + id + "]";
 	}
 
-	public String getSearchView() {
-		// NAME ID STREET CITY STATE ZIP PHONE
-		String template = "| %s | %s | %s | %s | %s | %s | %s |";
-		return String.format(template,
-				name,
-				id >= 0 ? String.valueOf(id) : "ID",
-				street,
-				city,
-				state,
-				zip > 0 ? String.valueOf(zip) : "ZIP",
-				phone);
+
+	private static String padText(String color, int size) {
+		int padSize = size - color.length();
+		int padStart = color.length() + padSize / 2;
+
+		color = String.format("%" + padStart + "s", color);
+		color = String.format("%-" + size  + "s", color);
+
+		return color;
 	}
+
+	private String getSearchColumn(String column) {
+		switch (column) {
+			case "Name":
+				return padText(name, 16);
+			case "ID":
+				return padText(String.valueOf(id), 6);
+			case "Street":
+				return padText(street, 7);
+			case "City":
+				return padText(city, 10);
+			case "State":
+				return padText(state, 20);
+			case "Zip":
+				return padText(String.valueOf(zip), 14);
+			case "Phone":
+				return padText(phone, 6);
+		}
+
+		return "NONE";
+	}
+
+	public String getSearchView(Map<String, Boolean> columnToggle) {
+		// DEALER YEAR COLOR MAKE MODEL PRICE ENGINE TRANSMISSION
+		StringBuilder searchView = new StringBuilder();
+
+		for (Map.Entry<String, Boolean> column : columnToggle.entrySet()) {
+			if (column.getValue()) {
+				searchView.append("| ").append(getSearchColumn(column.getKey())).append(" ");
+			}
+		}
+		searchView.append("|");
+
+		return searchView.toString();
+	}
+
 
 	public static Dealer label() {
 		return new Dealer("NAME", -1, "STREET", "CITY", "STATE", -1,  "PHONE");
