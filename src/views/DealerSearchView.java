@@ -277,6 +277,7 @@ public class DealerSearchView extends JFrame {
 			jButton.addActionListener(e -> {
 				DealerView view = Team01Driver.getDriver().getViewManager().getDealerView();
 				view.setDealer(dealer);
+				view.prepareView();
 				if (!view.isVisible()) {
 					view.setVisible(true);
 				}

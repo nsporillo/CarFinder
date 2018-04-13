@@ -126,8 +126,9 @@ public class DealerView extends JFrame {
 	}
 	
 	public void prepareView() {
+		UserType userType = Team01Driver.getDriver().getUserType();
 		// If the user isn't an analyst, dont let them see Sales view
-		if (Team01Driver.getDriver().getUserType() != UserType.ANALYST) {
+		if (userType != null && userType != UserType.ANALYST) {
 			btnSales.setEnabled(false);
 			btnSales.setVisible(false);
 		}
