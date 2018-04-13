@@ -320,14 +320,4 @@ public class DealerSearchView extends JFrame {
 		return dealerSearch;
 	}
 
-	private void filterDealersByName(String name) {
-
-	}
-
-	private void loadDealerById(String id) {
-		// TODO: Load dealer view for the specified dealer
-
-	}
-
-
 }
