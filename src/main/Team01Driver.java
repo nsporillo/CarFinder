@@ -18,6 +18,7 @@ public class Team01Driver {
 
     /**
      * Creates a new driver to the database with admin and password
+     *
      * @param args
      */
     public static void main(String[] args) {
@@ -35,8 +36,9 @@ public class Team01Driver {
 
     /**
      * Calls DB connector to make a database if one does not exist yet and starts the GUI
-     * @param username  username to log in with
-     * @param password  password to log in with
+     *
+     * @param username username to log in with
+     * @param password password to log in with
      */
     public Team01Driver(String username, String password) {
         dbConnector = new DBConnector(username, password);
@@ -49,8 +51,9 @@ public class Team01Driver {
     }
 
     /**
-     * standard geters and setters below
-     * @return  DBconnector object
+     * Standard getters and setters below
+     *
+     * @return DBConnector object
      */
     public DBConnector getDB() {
         return dbConnector;

@@ -70,6 +70,7 @@ public class ModelTable {
 
     /**
      * Create the SQL statement to insert a list of Model Objects
+     *
      * @param model list of model objects to be inserted
      * @return String representation of the query
      */
@@ -93,6 +94,7 @@ public class ModelTable {
 
     /**
      * Return the Model of a vehicle based on brand and body
+     *
      * @param conn
      * @param brandName
      * @param bodyStyle

@@ -19,12 +19,12 @@ public class SaleTable {
      * <p>
      * Does not create the table. It must already be created
      *
-     * @param conn     database connection to work with
+     * @param conn            database connection to work with
      * @param smallVehicleCsv of CSV file containing model table data
      * @throws SQLException
      */
 
-    public static void populateSaleTable(Connection conn, String smallVehicleCsv, String customerCsv, String carOptionsCsv){
+    public static void populateSaleTable(Connection conn, String smallVehicleCsv, String customerCsv, String carOptionsCsv) {
         List<Sale> sales = new ArrayList<>();
         Random random = new Random();
         String vin;
@@ -38,28 +38,27 @@ public class SaleTable {
             int saleID = 0;
             boolean dealerInc = true;
             int dealerID = 0;
-            while((vehicleLine = vehicle.readLine()) != null){
+            while ((vehicleLine = vehicle.readLine()) != null) {
                 String[] VSplit = vehicleLine.split(",");
                 BufferedReader option = new BufferedReader(new FileReader(carOptionsCsv));
-                while((optionLine = option.readLine())!= null){
+                while ((optionLine = option.readLine()) != null) {
                     String[] OSplit = optionLine.split(",");
                     customerLine = customer.readLine();
-                    if(customerLine == null){
+                    if (customerLine == null) {
                         break;
                     }
                     String[] CSplit = customerLine.split(",");
                     // for every vehicle in the short csv add to table and make sale to customer
                     int modelID = ModelTable.getModelId(conn, VSplit[1], VSplit[2]);
                     vin = Integer.toString(100000000 + random.nextInt(900000000));
-                    VehicleTable.addVehicle(conn,vin,modelID,Integer.parseInt(OSplit[0]),Integer.parseInt(VSplit[0]), Integer.parseInt(VSplit[3]));
+                    VehicleTable.addVehicle(conn, vin, modelID, Integer.parseInt(OSplit[0]), Integer.parseInt(VSplit[0]), Integer.parseInt(VSplit[3]));
                     long time = 123456L;
                     Timestamp date = new Timestamp(time);
-                    Sale saleRecord = new Sale(saleID,dealerID,Integer.parseInt(CSplit[0]),date,"" + vin);
-                    if(dealerInc && dealerID < 249){
-                        dealerID ++;
+                    Sale saleRecord = new Sale(saleID, dealerID, Integer.parseInt(CSplit[0]), date, "" + vin);
+                    if (dealerInc && dealerID < 249) {
+                        dealerID++;
                         dealerInc = false;
-                    }
-                    else
+                    } else
                         dealerInc = true;
                     s.add(saleRecord);
                     saleID++;
@@ -79,6 +78,7 @@ public class SaleTable {
             e.printStackTrace();
         }
     }
+
     /**
      * Adds a single sale to the database
      *
@@ -106,8 +106,7 @@ public class SaleTable {
     }
 
 
-
-    public static String createSaleInsertSQL(List<Sale> sales){
+    public static String createSaleInsertSQL(List<Sale> sales) {
         StringBuilder sb = new StringBuilder();
         sb.append("INSERT INTO Sale (SaleID, DealerID, CustomerID, Date, VIN) VALUES ");
         for (Sale i : sales) {

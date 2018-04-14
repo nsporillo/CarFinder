@@ -11,8 +11,9 @@ public class DealerInventory {
     /**
      * Constructor for making a dealer Inventory object which holds a vin for a car
      * and the dealer that owns that car
-     * @param vin       VIN of the car
-     * @param dealerID  ID of dealer who owns car
+     *
+     * @param vin      VIN of the car
+     * @param dealerID ID of dealer who owns car
      */
     public DealerInventory(String vin, int dealerID) {
         this.vin = vin;

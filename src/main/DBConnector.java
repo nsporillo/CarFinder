@@ -28,9 +28,10 @@ public class DBConnector {
 
     /**
      * checks if there is a database already created if it is not created already it will populate a new database
-     * @param username  Username used to log in
-     * @param password  Password to the database.
-     *                  These params are usually admin and password for our basic implementation
+     *
+     * @param username Username used to log in
+     * @param password Password to the database.
+     *                 These params are usually admin and password for our basic implementation
      */
     DBConnector(String username, String password) {
         if (dbFile.exists()) {
@@ -46,9 +47,10 @@ public class DBConnector {
 
     /**
      * Executes the file with all the sql statements to create our tables
-     * @param path  Path to the file
-     * @param username  username to be used in database
-     * @param password  password to the database
+     *
+     * @param path     Path to the file
+     * @param username username to be used in database
+     * @param password password to the database
      */
     private void createDatabase(String path, String username, String password) {
         createConnection(path, username, password);
@@ -99,7 +101,7 @@ public class DBConnector {
     /**
      * Create a database connection with the given params
      *
-     * @param location : path of where to place the database
+     * @param location  path of where to place the database
      * @param user:     username
      * @param password: password
      */
@@ -113,19 +115,9 @@ public class DBConnector {
     }
 
     /**
-     * When your database program exits you should close the connection
-     */
-    public void closeConnection() {
-        try {
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Gets connection to the database
-     * @return  Connection to the database
+     *
+     * @return Connection to the database
      */
     public Connection getConnection() {
         return this.conn;
@@ -133,7 +125,8 @@ public class DBConnector {
 
     /**
      * Starts a new database with admin and password
-     * @param args  empty
+     *
+     * @param args empty
      */
     public static void main(String[] args) {
         DBConnector main = new DBConnector("admin", "password");

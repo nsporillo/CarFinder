@@ -31,16 +31,8 @@ public class Model {
         return brandName;
     }
 
-    public void setBrandName(String brandName) {
-        this.brandName = brandName;
-    }
-
     public String getBodyStyle() {
         return bodyStyle;
-    }
-
-    public void setBodyStyle(String bodyStyle) {
-        this.bodyStyle = bodyStyle;
     }
 
     @Override

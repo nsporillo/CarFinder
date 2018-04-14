@@ -47,14 +47,6 @@ public class ViewManager {
         userSelect.setVisible(true);
     }
 
-    public UserSelectView getUserSelect() {
-        return userSelect;
-    }
-
-    public MainMenuView getMainMenu() {
-        return mainMenu;
-    }
-
     public VehicleSearchView getVehicleSearch() {
         return vehicleSearch;
     }
@@ -71,15 +63,7 @@ public class ViewManager {
         return dealerView;
     }
 
-    public SalesView getSalesView() {
-        return salesView;
-    }
-
     public SalesSearchView getSalesSearchView() {
         return salesSearchView;
-    }
-
-    public CustomerView getCustomerView() {
-        return customerView;
     }
 }

@@ -37,16 +37,8 @@ public class Option {
         return engine;
     }
 
-    public void setEngine(String engine) {
-        this.engine = engine;
-    }
-
     public String getTransmission() {
         return transmission;
-    }
-
-    public void setTransmission(String transmission) {
-        this.transmission = transmission;
     }
 
     @Override

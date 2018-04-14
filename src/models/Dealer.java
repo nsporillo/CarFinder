@@ -4,158 +4,161 @@ import java.util.Map;
 
 public class Dealer {
 
-	private String name, street, city, state, phone;
-	private int zip, id;
+    private String name, street, city, state, phone;
+    private int zip, id;
 
-	public Dealer() {}
+    public Dealer() {
+    }
 
-	/**
-	 * Constructor to create Dealer
-	 * @param name	Name of dealer
-	 * @param id	Unique ID
-	 * @param street	Street of Dealer
-	 * @param city	City of Dealer
-	 * @param state	State of Dealer
-	 * @param zip	ZIP of dealer
-	 * @param phone	Phone of dealer
-	 */
-	public Dealer(String name, int id, String street, String city, String state, int zip, String phone) {
-		this.name = name;
-		this.id = id;
-		this.street = street;
-		this.city = city;
-		this.state = state;
-		this.zip = zip;
-		this.phone = phone;
-	}
-	
-	public String getName() {
-		return name;
-	}
+    /**
+     * Constructor to create Dealer
+     *
+     * @param name   Name of dealer
+     * @param id     Unique ID
+     * @param street Street of Dealer
+     * @param city   City of Dealer
+     * @param state  State of Dealer
+     * @param zip    ZIP of dealer
+     * @param phone  Phone of dealer
+     */
+    public Dealer(String name, int id, String street, String city, String state, int zip, String phone) {
+        this.name = name;
+        this.id = id;
+        this.street = street;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+        this.phone = phone;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getStreet() {
-		return street;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setStreet(String street) {
-		this.street = street;
-	}
-	
-	public String getCity() {
-		return city;
-	}
+    public String getStreet() {
+        return street;
+    }
 
-	public void setCity(String city) {
-		this.city = city;
-	}
+    public void setStreet(String street) {
+        this.street = street;
+    }
 
-	public String getState() {
-		return state;
-	}
+    public String getCity() {
+        return city;
+    }
 
-	public void setState(String state) {
-		this.state = state;
-	}
+    public void setCity(String city) {
+        this.city = city;
+    }
 
-	public String getPhone() {
-		return phone;
-	}
+    public String getState() {
+        return state;
+    }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    public void setState(String state) {
+        this.state = state;
+    }
 
-	public int getZip() {
-		return zip;
-	}
+    public String getPhone() {
+        return phone;
+    }
 
-	public void setZip(int zip) {
-		this.zip = zip;
-	}
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
-	public int getId() {
-		return id;
-	}
+    public int getZip() {
+        return zip;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public void setZip(int zip) {
+        this.zip = zip;
+    }
 
-	public String getAddress() {
-		return street + ", " + state + ", " + zip;
-	}
+    public int getId() {
+        return id;
+    }
 
-	@Override
-	public String toString() {
-		return "Dealer [name=" + name + ", street=" + street + ", city=" + city + ", state=" + state + ", phone="
-				+ phone + ", zip=" + zip + ", id=" + id + "]";
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
 
+    public String getAddress() {
+        return street + ", " + state + ", " + zip;
+    }
 
-	private static String padText(String color, int size) {
-		int padSize = size - color.length();
-		int padStart = color.length() + padSize / 2;
-
-		color = String.format("%" + padStart + "s", color);
-		color = String.format("%-" + size  + "s", color);
-
-		return color;
-	}
-
-	/**
-	 * Format text within the GUi display
-	 * @param column Which column to display
-	 * @return Formatted String of dealer object
-	 */
-	private String getSearchColumn(String column) {
-		switch (column) {
-			case "Name":
-				return padText(name, 16);
-			case "ID":
-				return padText(String.valueOf(id), 6);
-			case "Street":
-				return padText(street, 7);
-			case "City":
-				return padText(city, 10);
-			case "State":
-				return padText(state, 20);
-			case "Zip":
-				if (zip == -1) {
-					return padText("ZIP", 14);
-				}
-				return padText(String.valueOf(zip), 14);
-			case "Phone":
-				return padText(phone, 6);
-		}
-
-		return "NONE";
-	}
-
-	/**
-	 * Used to get information about the dealer to be displayed in searches
-	 * @param columnToggle	Choosing which columns to be displayed
-	 * @return	Return string of Dealer object
-	 */
-	public String getSearchView(Map<String, Boolean> columnToggle) {
-		// DEALER YEAR COLOR MAKE MODEL PRICE ENGINE TRANSMISSION
-		StringBuilder searchView = new StringBuilder();
-
-		for (Map.Entry<String, Boolean> column : columnToggle.entrySet()) {
-			if (column.getValue()) {
-				searchView.append("| ").append(getSearchColumn(column.getKey())).append(" ");
-			}
-		}
-		searchView.append("|");
-
-		return searchView.toString();
-	}
+    @Override
+    public String toString() {
+        return "Dealer [name=" + name + ", street=" + street + ", city=" + city + ", state=" + state + ", phone="
+                + phone + ", zip=" + zip + ", id=" + id + "]";
+    }
 
 
-	public static Dealer label() {
-		return new Dealer("NAME", -1, "STREET", "CITY", "STATE", -1,  "PHONE");
-	}
+    private static String padText(String color, int size) {
+        int padSize = size - color.length();
+        int padStart = color.length() + padSize / 2;
+
+        color = String.format("%" + padStart + "s", color);
+        color = String.format("%-" + size + "s", color);
+
+        return color;
+    }
+
+    /**
+     * Format text within the GUi display
+     *
+     * @param column Which column to display
+     * @return Formatted String of dealer object
+     */
+    private String getSearchColumn(String column) {
+        switch (column) {
+            case "Name":
+                return padText(name, 16);
+            case "ID":
+                return padText(String.valueOf(id), 6);
+            case "Street":
+                return padText(street, 7);
+            case "City":
+                return padText(city, 10);
+            case "State":
+                return padText(state, 20);
+            case "Zip":
+                if (zip == -1) {
+                    return padText("ZIP", 14);
+                }
+                return padText(String.valueOf(zip), 14);
+            case "Phone":
+                return padText(phone, 6);
+        }
+
+        return "NONE";
+    }
+
+    /**
+     * Used to get information about the dealer to be displayed in searches
+     *
+     * @param columnToggle Choosing which columns to be displayed
+     * @return Return string of Dealer object
+     */
+    public String getSearchView(Map<String, Boolean> columnToggle) {
+        // DEALER YEAR COLOR MAKE MODEL PRICE ENGINE TRANSMISSION
+        StringBuilder searchView = new StringBuilder();
+
+        for (Map.Entry<String, Boolean> column : columnToggle.entrySet()) {
+            if (column.getValue()) {
+                searchView.append("| ").append(getSearchColumn(column.getKey())).append(" ");
+            }
+        }
+        searchView.append("|");
+
+        return searchView.toString();
+    }
+
+    public static Dealer label() {
+        return new Dealer("NAME", -1, "STREET", "CITY", "STATE", -1, "PHONE");
+    }
 }

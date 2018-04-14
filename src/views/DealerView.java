@@ -105,8 +105,7 @@ public class DealerView extends JFrame {
         btnSales.setBackground(new Color(255, 222, 173));
         btnSales.setFont(new Font("Tahoma", Font.BOLD, 18));
         btnSales.setBounds(384, 0, 100, 80);
-        contentPane.add(btnSales);
-
+        //contentPane.add(btnSales);
 
         JLabel lblTotalCarInventory = new JLabel("Total Inventory:");
         lblTotalCarInventory.setBounds(5, 100, 120, 14);
